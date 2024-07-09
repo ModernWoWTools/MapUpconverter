@@ -32,10 +32,10 @@ namespace MapUpconverter
             Warcraft.NET.Settings.logLevel = LogLevel.None;
             Warcraft.NET.Settings.throwOnMissingChunk = false;
 
-            var inputDir = "G:\\WinterWonderland\\world\\maps\\winterwonderland"; 
+            var inputDir = "G:\\WinterWonderland\\world\\maps\\winterwonderland";
             var outputDir = "output";
 
-            if(!Directory.Exists(outputDir))
+            if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
 
             var adts = Directory.GetFiles(inputDir, "*.adt");

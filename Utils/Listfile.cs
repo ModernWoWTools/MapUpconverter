@@ -7,7 +7,7 @@
 
         public static void Initialize(string listfilePath)
         {
-            if(!File.Exists(listfilePath))
+            if (!File.Exists(listfilePath))
                 throw new FileNotFoundException("Listfile not found at " + listfilePath);
 
             var listfileLines = File.ReadAllLines(listfilePath);
