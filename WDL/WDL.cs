@@ -1,11 +1,13 @@
 ﻿using Warcraft.NET;
+using Warcraft.NET.Files.ADT.Chunks.Legion;
+using Warcraft.NET.Files.ADT.Entries.Legion;
 using Warcraft.NET.Files.WDL.Chunks;
 
 namespace MapUpconverter.WDL
 {
     public static class WDL
     {
-        public static Warcraft.NET.Files.WDL.Legion.WorldDataLod Generate(string inputDir, Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs)
+        public static Warcraft.NET.Files.WDL.Legion.WorldDataLod Generate(string inputDir, Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs, Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs)
         {
             var adtDict = new Dictionary<(byte, byte), string>();
 
@@ -39,6 +41,8 @@ namespace MapUpconverter.WDL
 
             const float stepSize = Metrics.TileSize / 16.0f;
 
+            var mlmxEntries = new Dictionary<uint, MLMXEntry>();
+
             for (byte ai = 0; ai < 64; ++ai)
             {
                 for (byte aj = 0; aj < 64; ++aj)
@@ -49,6 +53,12 @@ namespace MapUpconverter.WDL
                         {
                             Console.WriteLine("Loading uncached root ADT");
                             rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(inputDir, adtName + ".adt")));
+                        }
+
+                        if (!cachedOBJ1ADTs.TryGetValue(adtName + "_obj1", out var OBJ1ADT))
+                        {
+                            Console.WriteLine("Loading uncached OBJ1 ADT");
+                            OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(inputDir, adtName + "_obj1.adt")));
                         }
 
                         var mare = new MARE();
@@ -104,8 +114,31 @@ namespace MapUpconverter.WDL
                         }
 
                         wdl.MapAreas[aj * 64 + ai] = mare;
+
+                        var bigWMOIndexes = OBJ1ADT.LevelWorldObjectExtent.Entries.Select((i, s) => new { Entry = i, Index = s }).Where(x => x.Entry.Radius > 1000).Select(x => x.Index).ToList();
+
+                        foreach (var bigWMOIndex in bigWMOIndexes)
+                        {
+                            var bigWMO = OBJ1ADT.LevelWorldObjectDetail.MLMDEntries[bigWMOIndex];
+
+                            if (mlmxEntries.ContainsKey(bigWMO.UniqueID))
+                                continue;
+
+                            var newEntry = OBJ1ADT.LevelWorldObjectExtent.Entries[bigWMOIndex];
+                            newEntry.Radius = 17066 * 2;
+                            mlmxEntries.Add(bigWMO.UniqueID, newEntry);
+                            wdl.LevelWorldObjectDetail.MLMDEntries.Add(bigWMO);
+                        }
                     }
                 }
+            }
+
+            if (mlmxEntries.Count > 0)
+            {
+                mlmxEntries = mlmxEntries.OrderByDescending(e => e.Value.Radius).ToDictionary(e => e.Key, e => e.Value);
+
+                wdl.LevelWorldObjectDetail.MLMDEntries = wdl.LevelWorldObjectDetail.MLMDEntries.OrderBy(entry => mlmxEntries.Keys.ToList().IndexOf(entry.UniqueID)).ToList();
+                wdl.LevelWorldObjectExtent = new MLMX() { Entries = mlmxEntries.Values.ToList() };
             }
 
             return wdl;

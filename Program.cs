@@ -40,6 +40,7 @@ namespace MapUpconverter
                 Directory.CreateDirectory(outputDir);
 
             var cachedRootADTs = new Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain>();
+            var cachedOBJ1ADTs = new Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne>();
 
             var adts = Directory.GetFiles(inputDir, "*.adt");
             Console.Write("Converting " + adts.Length + " adts..");
@@ -59,6 +60,7 @@ namespace MapUpconverter
                 File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileNameWithoutExtension(adt) + "_obj1.adt"), obj1.Serialize());
 
                 cachedRootADTs[Path.GetFileNameWithoutExtension(adt)] = root;
+                cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(adt) + "_obj1"] = obj1;
 
             });
 
@@ -68,7 +70,7 @@ namespace MapUpconverter
             timer.Restart();
 
             Console.Write("Generating WDL from converted ADTs..");
-            var wdl = WDL.WDL.Generate(inputDir, cachedRootADTs);
+            var wdl = WDL.WDL.Generate(outputDir, cachedRootADTs, cachedOBJ1ADTs);
             File.WriteAllBytes(Path.Combine(outputDir, mapName + ".wdl"), wdl.Serialize());
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             totalTimesMS += timer.ElapsedMilliseconds;
