@@ -50,10 +50,16 @@ namespace MapUpconverter.WDL
                     if (adtDict.TryGetValue((ai, aj), out var adtName))
                     {
                         if (!cachedRootADTs.TryGetValue(adtName, out var rootADT))
+                        {
                             rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(inputDir, adtName + ".adt")));
+                            cachedRootADTs.Add(adtName, rootADT);
+                        }
 
                         if (!cachedOBJ1ADTs.TryGetValue(adtName + "_obj1", out var OBJ1ADT))
+                        {
                             OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(inputDir, adtName + "_obj1.adt")));
+                            cachedOBJ1ADTs.Add(adtName + "_obj1", OBJ1ADT);
+                        }
 
                         var mare = new MARE();
 

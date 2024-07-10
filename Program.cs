@@ -1,4 +1,5 @@
 ﻿using MapUpconverter.Utils;
+using System.Collections.Concurrent;
 
 namespace MapUpconverter
 {
@@ -6,6 +7,8 @@ namespace MapUpconverter
     {
         private static readonly Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
         private static readonly Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
+
+        private static BlockingCollection<string> adtQueue = [];
 
         static void Main(string[] args)
         {
@@ -107,15 +110,90 @@ namespace MapUpconverter
             if (!Settings.ConvertOnSave)
             {
                 Console.WriteLine("On-save mode is disabled, starting one-time map conversion..");
-                ConvertMap();
+                try
+                {
+                    ConvertMap();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to convert map: " + e.Message);
+                }
                 return;
             }
             else
             {
                 Console.WriteLine("On-save mode is enabled, watching for changes in " + Settings.InputDir + "..");
-                // Spawn watcher
-                // TODO: Handle batch saves, hand to changedADTs in one go
+                var monitorDirWatcher = new FileSystemWatcher();
+                monitorDirWatcher.Path = Settings.InputDir;
+                monitorDirWatcher.NotifyFilter = NotifyFilters.LastWrite;
+                monitorDirWatcher.Filter = "*.adt";
+                monitorDirWatcher.Changed += new FileSystemEventHandler(OnADTChanged);
+                monitorDirWatcher.EnableRaisingEvents = true;
+
+                Task.Run(() =>
+                {
+                    while (!adtQueue.IsCompleted)
+                    {
+                        string adtFilename = null;
+
+                        try
+                        {
+                            adtFilename = adtQueue.Take();
+                        }
+                        catch (InvalidOperationException) { }
+
+                        if (adtFilename != null)
+                        {
+                            var timer = new System.Diagnostics.Stopwatch();
+                            try
+                            {
+                                timer.Start();
+                                ConvertWotLKADT(adtFilename);
+                                timer.Stop();
+                                Console.WriteLine("Converting ADT " + Path.GetFileNameWithoutExtension(adtFilename) + " took " + timer.ElapsedMilliseconds + "ms");
+                            }
+                            catch (IOException ioE)
+                            {
+                                if (ioE.Message.Contains("because it is being used by another process"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.WriteLine("Requeuing ADT " + Path.GetFileNameWithoutExtension(adtFilename) + " because it was still being used..");
+                                    Console.ResetColor();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + ioE.Message);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + e.Message);
+                            }
+
+                            try
+                            {
+                                timer.Restart();
+                                ConvertWDL();
+                                timer.Stop();
+                                Console.WriteLine("Generating WDL took " + timer.ElapsedMilliseconds + "ms");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Failed to generate WDL: " + e.Message);
+                            }
+                        }
+                    }
+                });
+
+                Console.WriteLine("Press enter to stop watching and exit");
+                Console.ReadLine();
             }
+        }
+
+        private static void OnADTChanged(object sender, FileSystemEventArgs e)
+        {
+            if (!adtQueue.Contains(e.FullPath))
+                adtQueue.Add(e.FullPath);
         }
 
         private static void ConvertMap()
