@@ -5,8 +5,8 @@ namespace MapUpconverter
 {
     internal class Program
     {
-        private static readonly Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
-        private static readonly Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
+        private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
+        private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
 
         private static BlockingCollection<string> adtQueue = [];
 
@@ -54,6 +54,8 @@ namespace MapUpconverter
                 Console.ReadLine();
                 return;
             }
+
+            // TODO: Copy merged listfile to epsilon
 
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
@@ -205,7 +207,14 @@ namespace MapUpconverter
             var adts = Directory.GetFiles(Settings.InputDir, "*.adt");
 
             Console.Write("Converting " + adts.Length + " adts..");
+//#if !DEBUG
             Parallel.ForEach(adts, ConvertWotLKADT);
+//#elif DEBUG
+//            foreach (var adt in adts)
+//            {
+//                ConvertWotLKADT(adt);
+//            }
+//#endif
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             totalTimeMS += timer.ElapsedMilliseconds;
 
@@ -216,7 +225,11 @@ namespace MapUpconverter
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             totalTimeMS += timer.ElapsedMilliseconds;
 
+            // TODO: Make WDT if none exists?
+
             Console.WriteLine("Conversion took " + totalTimeMS + "ms");
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
         }
 
         private static void ConvertWotLKADT(string inputADT)

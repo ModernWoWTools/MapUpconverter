@@ -1,4 +1,5 @@
-﻿using Warcraft.NET;
+﻿using System.Collections.Concurrent;
+using Warcraft.NET;
 using Warcraft.NET.Files.ADT.Chunks.Legion;
 using Warcraft.NET.Files.ADT.Entries.Legion;
 using Warcraft.NET.Files.WDL.Chunks;
@@ -7,7 +8,7 @@ namespace MapUpconverter.WDL
 {
     public static class WDL
     {
-        public static Warcraft.NET.Files.WDL.Legion.WorldDataLod Generate(string inputDir, Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs, Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs)
+        public static Warcraft.NET.Files.WDL.Legion.WorldDataLod Generate(string inputDir, ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs, ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs)
         {
             var adtDict = new Dictionary<(byte, byte), string>();
 
@@ -51,14 +52,14 @@ namespace MapUpconverter.WDL
                     {
                         if (!cachedRootADTs.TryGetValue(adtName, out var rootADT))
                         {
-                            rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(inputDir, adtName + ".adt")));
-                            cachedRootADTs.Add(adtName, rootADT);
+                            rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(Settings.OutputDir, adtName + ".adt")));
+                            cachedRootADTs.TryAdd(adtName, rootADT);
                         }
 
                         if (!cachedOBJ1ADTs.TryGetValue(adtName + "_obj1", out var OBJ1ADT))
                         {
-                            OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(inputDir, adtName + "_obj1.adt")));
-                            cachedOBJ1ADTs.Add(adtName + "_obj1", OBJ1ADT);
+                            OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(Settings.OutputDir, adtName + "_obj1.adt")));
+                            cachedOBJ1ADTs.TryAdd(adtName + "_obj1", OBJ1ADT);
                         }
 
                         var mare = new MARE();
@@ -68,7 +69,7 @@ namespace MapUpconverter.WDL
                         {
                             for (var j = 0; j < 16; ++j)
                             {
-                                heights[i * 16 + j] = rootADT.Chunks[i * 16 + j].Heightmap.Vertices;
+                                heights[i * 16 + j] = (float[])rootADT.Chunks[i * 16 + j].Heightmap.Vertices.Clone();
 
                                 for (var k = 0; k < heights[i * 16 + j].Length; ++k)
                                     heights[i * 16 + j][k] += rootADT.Chunks[i * 16 + j].Header.MapTilePosition.Y;
@@ -84,10 +85,11 @@ namespace MapUpconverter.WDL
                                 var posx = j * stepSize;
                                 var posy = i * stepSize;
 
+                                var landHeight = GetLandHeight(heights, posx, posy);
                                 mare.HighResVertices[i * 17 + j] = (short)
                                     Math.Min(
                                         Math.Max(
-                                            Math.Round(GetLandHeight(heights, posx, posy)),
+                                            Math.Round(landHeight),
                                             short.MinValue),
                                         short.MaxValue);
                             }
@@ -104,10 +106,11 @@ namespace MapUpconverter.WDL
                                 posx += stepSize / 2.0f;
                                 posy += stepSize / 2.0f;
 
+                                var landHeight = GetLandHeight(heights, posx, posy);
                                 mare.LowResVertices[i * 16 + j] = (short)
                                     Math.Min(
                                         Math.Max(
-                                            Math.Round(GetLandHeight(heights, posx, posy)),
+                                            Math.Round(landHeight),
                                             short.MinValue),
                                         short.MaxValue);
                             }
