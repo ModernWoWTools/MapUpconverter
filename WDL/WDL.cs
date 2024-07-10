@@ -20,8 +20,8 @@ namespace MapUpconverter.WDL
                 var mapName = "";
                 var splitName = filename.Split('_');
 
-                var x = byte.Parse(splitName[splitName.Length - 2]);
-                var y = byte.Parse(splitName[splitName.Length - 1].Replace(".adt", ""));
+                var x = byte.Parse(splitName[^2]);
+                var y = byte.Parse(splitName[^1].Replace(".adt", ""));
                 adtDict[(x, y)] = filename;
 
                 mapName = filename.Replace("_" + x + "_" + y + ".adt", "");
@@ -50,16 +50,10 @@ namespace MapUpconverter.WDL
                     if (adtDict.TryGetValue((ai, aj), out var adtName))
                     {
                         if (!cachedRootADTs.TryGetValue(adtName, out var rootADT))
-                        {
-                            Console.WriteLine("Loading uncached root ADT");
                             rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(inputDir, adtName + ".adt")));
-                        }
 
                         if (!cachedOBJ1ADTs.TryGetValue(adtName + "_obj1", out var OBJ1ADT))
-                        {
-                            Console.WriteLine("Loading uncached OBJ1 ADT");
                             OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(inputDir, adtName + "_obj1.adt")));
-                        }
 
                         var mare = new MARE();
 
