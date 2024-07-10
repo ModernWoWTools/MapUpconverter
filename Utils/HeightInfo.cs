@@ -36,14 +36,14 @@ namespace MapUpconverter.Utils
 
     public static class HeightInfo
     {
-        public static Dictionary<string, TextureInfo> textureInfoMap;
+        public static Dictionary<string, TextureInfo> textureInfoMap = [];
 
         public static void Initialize(string configPath)
         {
             if (!File.Exists(configPath))
                 throw new FileNotFoundException("Height texturing config not found at " + configPath);
 
-            textureInfoMap = JsonConvert.DeserializeObject<Dictionary<string, TextureInfo>>(File.ReadAllText(configPath));
+            textureInfoMap = JsonConvert.DeserializeObject<Dictionary<string, TextureInfo>>(File.ReadAllText(configPath)) ?? throw new Exception("Failed to read height texturing info config");
         }
     }
 }
