@@ -2,7 +2,7 @@
 {
     public static class Listfile
     {
-        //public static Dictionary<uint, string> NameMap;
+        public static Dictionary<uint, string> NameMap = [];
         public static Dictionary<string, uint> ReverseMap = [];
 
         public static void Initialize(string listfileDir)
@@ -13,7 +13,7 @@
 
             var listfileLines = File.ReadAllLines(listfilePath);
 
-            //NameMap = new Dictionary<uint, string>(listfileLines.Length);
+            NameMap = new Dictionary<uint, string>(listfileLines.Length);
             ReverseMap = new Dictionary<string, uint>(listfileLines.Length);
 
             foreach (var line in listfileLines)
@@ -23,7 +23,7 @@
                     continue;
 
                 var fdid = uint.Parse(parts[0]);
-                //NameMap[fdid] = parts[1];
+                NameMap[fdid] = parts[1];
                 ReverseMap[parts[1]] = fdid;
             }
 
@@ -37,7 +37,7 @@
                         continue;
 
                     var fdid = uint.Parse(parts[0]);
-                    //NameMap[fdid] = parts[1];
+                    NameMap[fdid] = parts[1];
                     ReverseMap[parts[1]] = fdid;
                 }
             }

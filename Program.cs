@@ -55,7 +55,25 @@ namespace MapUpconverter
                 return;
             }
 
-            // TODO: Copy merged listfile to epsilon
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
+
+            if (!string.IsNullOrEmpty(Settings.EpsilonDir))
+            {
+                try
+                {
+                    Console.Write("Generating temp listfile and copying to Epsilon..");
+                    var epsilonExtBlacklist = new string[] { ".unk", ".pd4", ".pm4", ".meta", ".dat", ".col" };
+                    var epsilonListfilePath = Path.Combine(Settings.EpsilonDir, "_retail_", "Tools", "listfile.csv");
+                    File.Delete(epsilonListfilePath);
+                    File.WriteAllLines(epsilonListfilePath, Listfile.NameMap.Where(x => !epsilonExtBlacklist.Contains(Path.GetExtension(x.Value))).Select(x => x.Key + ";" + x.Value));
+                    Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to copy listfile to Epsilon, launcher might not accept our patches: " + e.Message);
+                }
+            }
 
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
@@ -136,7 +154,7 @@ namespace MapUpconverter
                 {
                     while (!adtQueue.IsCompleted)
                     {
-                        string adtFilename = null;
+                        string adtFilename = "";
 
                         try
                         {
@@ -144,7 +162,7 @@ namespace MapUpconverter
                         }
                         catch (InvalidOperationException) { }
 
-                        if (adtFilename != null)
+                        if (!string.IsNullOrEmpty(adtFilename))
                         {
                             var timer = new System.Diagnostics.Stopwatch();
                             try
@@ -183,6 +201,21 @@ namespace MapUpconverter
                             {
                                 Console.WriteLine("Failed to generate WDL: " + e.Message);
                             }
+
+                            if (!string.IsNullOrEmpty(Settings.EpsilonDir))
+                            {
+                                try
+                                {
+                                    timer.Restart();
+                                    Epsilon.PatchManifest.Update();
+                                    timer.Stop();
+                                    Console.WriteLine("Updating Epsilon patch manifest took " + timer.ElapsedMilliseconds + "ms");
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("Failed to update Epsilon patch manifest: " + e.Message);
+                                }
+                            }
                         }
                     }
                 });
@@ -207,14 +240,14 @@ namespace MapUpconverter
             var adts = Directory.GetFiles(Settings.InputDir, "*.adt");
 
             Console.Write("Converting " + adts.Length + " adts..");
-//#if !DEBUG
+            //#if !DEBUG
             Parallel.ForEach(adts, ConvertWotLKADT);
-//#elif DEBUG
-//            foreach (var adt in adts)
-//            {
-//                ConvertWotLKADT(adt);
-//            }
-//#endif
+            //#elif DEBUG
+            //            foreach (var adt in adts)
+            //            {
+            //                ConvertWotLKADT(adt);
+            //            }
+            //#endif
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             totalTimeMS += timer.ElapsedMilliseconds;
 
@@ -226,6 +259,9 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
 
             // TODO: Make WDT if none exists?
+
+            if (!string.IsNullOrEmpty(Settings.EpsilonDir))
+                Epsilon.PatchManifest.Update();
 
             Console.WriteLine("Conversion took " + totalTimeMS + "ms");
             Console.WriteLine("Press enter to exit");
