@@ -33,10 +33,13 @@ namespace MapUpconverter
             Warcraft.NET.Settings.throwOnMissingChunk = false;
 
             var inputDir = "G:\\WinterWonderland\\world\\maps\\winterwonderland";
+            var mapName = "winterwonderland";
             var outputDir = "output";
 
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
+
+            var cachedRootADTs = new Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain>();
 
             var adts = Directory.GetFiles(inputDir, "*.adt");
             Console.Write("Converting " + adts.Length + " adts..");
@@ -55,10 +58,21 @@ namespace MapUpconverter
                 File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileNameWithoutExtension(adt) + "_obj0.adt"), obj0.Serialize());
                 File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileNameWithoutExtension(adt) + "_obj1.adt"), obj1.Serialize());
 
+                cachedRootADTs[Path.GetFileNameWithoutExtension(adt)] = root;
+
             });
 
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             totalTimesMS += timer.ElapsedMilliseconds;
+
+            timer.Restart();
+
+            Console.Write("Generating WDL from converted ADTs..");
+            var wdl = WDL.WDL.Generate(inputDir, cachedRootADTs);
+            File.WriteAllBytes(Path.Combine(outputDir, mapName + ".wdl"), wdl.Serialize());
+            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            totalTimesMS += timer.ElapsedMilliseconds;
+
             Console.WriteLine("Took " + totalTimesMS + "ms in total.");
         }
     }
