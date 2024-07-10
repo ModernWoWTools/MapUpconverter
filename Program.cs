@@ -1,81 +1,168 @@
 ﻿using MapUpconverter.Utils;
-using Warcraft.NET;
 
 namespace MapUpconverter
 {
     internal class Program
     {
+        private static readonly Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
+        private static readonly Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
+
         static void Main(string[] args)
         {
-            long totalTimesMS = 0;
+            string toolFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly()?.Location) ?? "";
+
+            // Load settings from settings.json
+            try
+            {
+                Settings.Load(toolFolder);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to load settings: " + e.Message);
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
+
+            if (!Directory.Exists(Settings.InputDir))
+            {
+                Console.WriteLine("Input directory " + Settings.InputDir + " does not exist");
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
+
+            long totalTimeMS = 0;
             var timer = new System.Diagnostics.Stopwatch();
             timer.Start();
 
-            Console.Write("Loading listfile..");
-            Listfile.Initialize(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "listfile.csv"));
-            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimesMS += timer.ElapsedMilliseconds;
-            timer.Restart();
-
-            Console.Write("Loading height info..");
-            HeightInfo.Initialize(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "TextureInfoByFilePath.json"));
-            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimesMS += timer.ElapsedMilliseconds;
-            timer.Restart();
-
-            Console.Write("Loading bounding box info..");
-            BoundingBoxInfo.Initialize(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "blob.json"));
-            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimesMS += timer.ElapsedMilliseconds;
-            timer.Restart();
-
-            Warcraft.NET.Settings.logLevel = LogLevel.None;
-            Warcraft.NET.Settings.throwOnMissingChunk = false;
-
-            var inputDir = "G:\\WinterWonderland\\world\\maps\\winterwonderland";
-            var mapName = "winterwonderland";
-            var outputDir = "output";
-
-            if (!Directory.Exists(outputDir))
-                Directory.CreateDirectory(outputDir);
-
-            var cachedRootADTs = new Dictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain>();
-            var cachedOBJ1ADTs = new Dictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne>();
-
-            var adts = Directory.GetFiles(inputDir, "*.adt");
-            Console.Write("Converting " + adts.Length + " adts..");
-            Parallel.ForEach(adts, adt =>
+            // Load listfile from listfile.csv
+            // TODO: Auto-download? Expiration warnings?
+            try
             {
-                var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(adt));
+                Console.Write("Loading listfile..");
+                Listfile.Initialize(toolFolder);
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to load listfile: " + e.Message);
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
 
-                var root = ADT.Root.Convert(wotlkADT);
-                var tex0 = ADT.Tex0.Convert(wotlkADT);
-                var obj0 = ADT.Obj0.Convert(wotlkADT);
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
 
-                var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
+            // Load texture height/scale information
+            // TODO: Updating?
+            try
+            {
+                Console.Write("Loading height info..");
+                HeightInfo.Initialize(Path.Combine(toolFolder, "TextureInfoByFilePath.json"));
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to load height info: " + e.Message);
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
 
-                File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileName(adt)), root.Serialize());
-                File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileNameWithoutExtension(adt) + "_tex0.adt"), tex0.Serialize());
-                File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileNameWithoutExtension(adt) + "_obj0.adt"), obj0.Serialize());
-                File.WriteAllBytes(Path.Combine(outputDir, Path.GetFileNameWithoutExtension(adt) + "_obj1.adt"), obj1.Serialize());
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
 
-                cachedRootADTs[Path.GetFileNameWithoutExtension(adt)] = root;
-                cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(adt) + "_obj1"] = obj1;
+            // Load texture height/scale information
+            // TODO: Updating?
+            try
+            {
+                Console.Write("Loading bounding box info..");
+                BoundingBoxInfo.Initialize(Path.Combine(toolFolder, "blob.json"));
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to load bounding box info: " + e.Message);
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
 
-            });
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Stop();
 
+#if DEBUG
+            Warcraft.NET.Settings.throwOnMissingChunk = false;
+#endif
+            if (!Directory.Exists(Settings.OutputDir))
+            {
+                Console.WriteLine("Output directory " + Settings.OutputDir + " does not exist, creating..");
+                Directory.CreateDirectory(Settings.OutputDir);
+            }
+
+            Console.WriteLine("Startup took " + totalTimeMS + "ms");
+
+            if (!Settings.ConvertOnSave)
+            {
+                Console.WriteLine("On-save mode is disabled, starting one-time map conversion..");
+                ConvertMap();
+                return;
+            }
+            else
+            {
+                Console.WriteLine("On-save mode is enabled, watching for changes in " + Settings.InputDir + "..");
+                // Spawn watcher
+                // TODO: Handle batch saves, hand to changedADTs in one go
+            }
+        }
+
+        private static void ConvertMap()
+        {
+            var timer = new System.Diagnostics.Stopwatch();
+            var totalTimeMS = 0L;
+            timer.Start();
+
+            var adts = Directory.GetFiles(Settings.InputDir, "*.adt");
+
+            Console.Write("Converting " + adts.Length + " adts..");
+            Parallel.ForEach(adts, ConvertWotLKADT);
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimesMS += timer.ElapsedMilliseconds;
+            totalTimeMS += timer.ElapsedMilliseconds;
 
             timer.Restart();
 
             Console.Write("Generating WDL from converted ADTs..");
-            var wdl = WDL.WDL.Generate(outputDir, cachedRootADTs, cachedOBJ1ADTs);
-            File.WriteAllBytes(Path.Combine(outputDir, mapName + ".wdl"), wdl.Serialize());
+            ConvertWDL();
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimesMS += timer.ElapsedMilliseconds;
+            totalTimeMS += timer.ElapsedMilliseconds;
 
-            Console.WriteLine("Took " + totalTimesMS + "ms in total.");
+            Console.WriteLine("Conversion took " + totalTimeMS + "ms");
+        }
+
+        private static void ConvertWotLKADT(string inputADT)
+        {
+            var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(inputADT));
+
+            var root = ADT.Root.Convert(wotlkADT);
+            var tex0 = ADT.Tex0.Convert(wotlkADT);
+            var obj0 = ADT.Obj0.Convert(wotlkADT);
+            var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
+
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileName(inputADT)), root.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt"), tex0.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt"), obj0.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt"), obj1.Serialize());
+
+            cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
+            cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
+        }
+
+        private static void ConvertWDL()
+        {
+            var wdl = WDL.WDL.Generate(Settings.OutputDir, cachedRootADTs, cachedOBJ1ADTs);
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Settings.MapName + ".wdl"), wdl.Serialize());
         }
     }
 }

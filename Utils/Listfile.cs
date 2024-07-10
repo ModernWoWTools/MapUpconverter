@@ -3,10 +3,11 @@
     public static class Listfile
     {
         //public static Dictionary<uint, string> NameMap;
-        public static Dictionary<string, uint> ReverseMap;
+        public static Dictionary<string, uint> ReverseMap = [];
 
-        public static void Initialize(string listfilePath)
+        public static void Initialize(string listfileDir)
         {
+            var listfilePath = Path.Combine(listfileDir, "listfile.csv");
             if (!File.Exists(listfilePath))
                 throw new FileNotFoundException("Listfile not found at " + listfilePath);
 
