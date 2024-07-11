@@ -294,6 +294,13 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
+            Console.Write("Converting minimaps..");
+            ConvertMinimaps();
+            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
+
             if (!string.IsNullOrEmpty(Settings.EpsilonDir))
                 Epsilon.PatchManifest.Update();
 
@@ -340,6 +347,9 @@ namespace MapUpconverter
             File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
         }
 
+        private static void ConvertMinimaps()
+        {
+            Minimaps.Minimaps.Convert();
         }
     }
 }

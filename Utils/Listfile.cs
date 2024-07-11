@@ -52,7 +52,7 @@
 
         public static uint GetNextFreeFileDataID()
         {
-            return baseCustomFileDataID++;
+            return ++baseCustomFileDataID;
         }
 
         public static void AddCustomFileDataIDToListfile(uint fileDataID, string filename)
