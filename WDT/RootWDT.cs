@@ -10,9 +10,12 @@ namespace MapUpconverter.WDT
         {
             var wotlkWDTPath = Path.Combine(Settings.InputDir, Settings.MapName + ".wdt");
             var wotlkFlags = new MPHDFlags();
-            if (File.Exists(wotlkWDTPath))
+            var wotlkWDTExists = File.Exists(wotlkWDTPath);
+            Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable wotlkWDT = new();
+
+            if (wotlkWDTExists)
             {
-                var wotlkWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(wotlkWDTPath));
+                wotlkWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(wotlkWDTPath));
                 wotlkFlags = wotlkWDT.Header.Flags;
             }
 
@@ -28,7 +31,11 @@ namespace MapUpconverter.WDT
             {
                 // We need to generate an entirely new WDT, oh dear.
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Generating an entirely new WDT. This is not fully implemented yet, and will not work as expected.");
+                if(wotlkWDTExists)
+                    Console.WriteLine("Generating WDT based on WotLK input WDT. This is not fully implemented yet, and will not work as expected.");
+                else
+                    Console.WriteLine("Generating an entirely new WDT. This is not fully implemented yet, and will not work as expected.");
+
                 Console.ResetColor();
 
                 rootWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable()
@@ -71,6 +78,12 @@ namespace MapUpconverter.WDT
                         if(hasADT)
                             rootWDT.Tiles.Entries[x, y].Flags |= MAINFlags.HasAdt;
 
+                        if(wotlkWDTExists)
+                        {
+                            rootWDT.Tiles.Entries[x, y].Flags |= wotlkWDT.Tiles.Entries[x, y].Flags;
+                            rootWDT.Tiles.Entries[x, y].AsyncId = wotlkWDT.Tiles.Entries[x, y].AsyncId;
+                        }
+
                         rootWDT.Ids.Entries[x, y] = new Warcraft.NET.Files.WDT.Entries.BfA.MAIDEntry()
                         {
                             RootAdtFileId = hasADT ? GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_" + x + "_" + y + ".adt") : 0,
@@ -98,9 +111,16 @@ namespace MapUpconverter.WDT
             else
             {
                 if (defaultFileDataID != 0)
+                {
                     return defaultFileDataID;
+                }
                 else
-                    throw new NotImplementedException("File ID assignment is not yet implemented. Requested FDID for " + filename);
+                {
+                    var newFileDataID = Listfile.GetNextFreeFileDataID();
+                    Console.WriteLine("Assigning new file data ID " + newFileDataID + " for " + filename + ".");
+                    Listfile.AddCustomFileDataIDToListfile(newFileDataID, filename);
+                    return newFileDataID;
+                }
             }
         }
     }

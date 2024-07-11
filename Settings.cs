@@ -13,6 +13,8 @@ namespace MapUpconverter
         public static string EpsilonDir = "";
         public static string EpsilonPatchName = "";
 
+        public static uint RootWDTFileDataID = 0;
+
         public static bool ConvertOnSave = false;
 
         public static void Load(string toolFolder)
@@ -32,6 +34,8 @@ namespace MapUpconverter
 
             EpsilonDir = settingsJSON.epsilonDir;
             EpsilonPatchName = settingsJSON.epsilonPatchName;
+
+            RootWDTFileDataID = settingsJSON.rootWDTFileDataID;
 
             ConvertOnSave = settingsJSON.convertOnSave;
         }

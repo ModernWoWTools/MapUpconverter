@@ -10,7 +10,7 @@ namespace MapUpconverter.Epsilon
             if (string.IsNullOrEmpty(Settings.EpsilonDir))
                 return;
 
-            if(!Directory.Exists(Path.Combine(Settings.EpsilonDir, "_retail_", "Patches")))
+            if (!Directory.Exists(Path.Combine(Settings.EpsilonDir, "_retail_", "Patches")))
                 return;
 
             foreach (var manifest in Directory.GetFiles(Path.Combine(Settings.EpsilonDir, "_retail_", "Patches"), "patch.json", SearchOption.AllDirectories))
@@ -20,32 +20,32 @@ namespace MapUpconverter.Epsilon
                 // Assume there is a max of 1 map per patch (the case for out patches, maybe not for other patches)
                 var mapNameForPatch = "";
 
-                foreach(var patchFile in epsilonPatchManifest.files)
+                foreach (var patchFile in epsilonPatchManifest.files)
                 {
                     if (Listfile.NameMap.TryGetValue(patchFile.id, out var currentFilename))
                     {
                         // FileDataID exists in listfile, check if the filename matches for informational purposes (we skip it anyways)
 
-                        if (patchFile.file.Contains('/'))
-                        {
-                            // File is in a subdirectory, assume proper game directory structure was used for overrides/custom files
-                            if (currentFilename != patchFile.file.ToLower())
-                                Console.WriteLine("Notice: " + currentFilename + " (listfile) is not the same as " + patchFile.file + " (patch.json) for file data ID " + patchFile.id + ".");
-                        }
-                        else
-                        {
-                            // File is in root patch directory, assume only basename is provided
-                            var currentBasename = Path.GetFileName(currentFilename);
-                            if (currentBasename != patchFile.file.ToLower())
-                                Console.WriteLine("Notice: " + currentBasename + " (listfile) is not the same as " + patchFile.file + " (patch.json) for file data ID " + patchFile.id + ".");
-                        }
-                     
+                        //if (patchFile.file.Contains('/'))
+                        //{
+                        //    // File is in a subdirectory, assume proper game directory structure was used for overrides/custom files
+                        //    if (currentFilename != patchFile.file.ToLower())
+                        //        Console.WriteLine("Notice: " + currentFilename + " (listfile) is not the same as " + patchFile.file + " (patch.json) for file data ID " + patchFile.id + ".");
+                        //}
+                        //else
+                        //{
+                        //    // File is in root patch directory, assume only basename is provided
+                        //    var currentBasename = Path.GetFileName(currentFilename);
+                        //    if (currentBasename != patchFile.file.ToLower())
+                        //        Console.WriteLine("Notice: " + currentBasename + " (listfile) is not the same as " + patchFile.file + " (patch.json) for file data ID " + patchFile.id + ".");
+                        //}
+
                         continue;
                     }
                     else
                     {
                         // FileDataID does not exist in listfile
-                        if(patchFile.file.Contains('/'))
+                        if (patchFile.file.Contains('/'))
                         {
                             // File is in a subdirectory, assume proper game directory structure was used for overrides/custom files
                             Listfile.AddCustomFileDataIDToListfile(patchFile.id, patchFile.file);
@@ -87,68 +87,85 @@ namespace MapUpconverter.Epsilon
         {
             var epsilonPatchManifestPath = Path.Combine(Settings.EpsilonDir, "_retail_", "Patches", Settings.EpsilonPatchName, "patch.json");
 
+            var epsilonPatchManifest = new EpsilonPatchManifest();
+
+            var isNew = true;
+
             if (File.Exists(epsilonPatchManifestPath))
             {
-                var epsilonPatchManifest = JsonConvert.DeserializeObject<EpsilonPatchManifest>(File.ReadAllText(epsilonPatchManifestPath));
+                isNew = false;
+                epsilonPatchManifest = JsonConvert.DeserializeObject<EpsilonPatchManifest>(File.ReadAllText(epsilonPatchManifestPath));
+            }
 
-                // Update patch version
-                if (string.IsNullOrEmpty(epsilonPatchManifest.version))
-                    epsilonPatchManifest.version = "MU-1";
-                else if (int.TryParse(epsilonPatchManifest.version.Replace("MU-", ""), out int version))
-                    epsilonPatchManifest.version = "MU-" + (version + 1).ToString();
+            if (isNew)
+                epsilonPatchManifest.name = Settings.EpsilonPatchName;
 
-                // Update patch files
+            // Update patch version
+            if (string.IsNullOrEmpty(epsilonPatchManifest.version))
+                epsilonPatchManifest.version = "MU-1";
+            else if (int.TryParse(epsilonPatchManifest.version.Replace("MU-", ""), out int version))
+                epsilonPatchManifest.version = "MU-" + (version + 1).ToString();
+
+            // Update patch files
+            if(isNew)
+                epsilonPatchManifest.files = new List<EpsilonPatchManifestFile>();
+            else
                 epsilonPatchManifest.files = new List<EpsilonPatchManifestFile>(epsilonPatchManifest.files);
 
-                var patchManifestFilesChanged = false;
+            var patchManifestFilesChanged = false;
 
-                foreach (var outputFile in Directory.GetFiles(Settings.OutputDir, "*.*"))
+            foreach (var outputFile in Directory.GetFiles(Settings.OutputDir, "*.*"))
+            {
+                var outputFileName = Path.GetFileName(outputFile);
+                if (outputFileName == "patch.json" || outputFileName == "desktop.ini")
+                    continue;
+
+                if (!epsilonPatchManifest.files.Any(x => x.file == outputFileName))
                 {
-                    var outputFileName = Path.GetFileName(outputFile);
-                    if (outputFileName == "patch.json" || outputFileName == "desktop.ini")
-                        continue;
+                    patchManifestFilesChanged = true;
 
-                    if (!epsilonPatchManifest.files.Any(x => x.file == outputFileName))
+                    Console.WriteLine("Adding " + outputFileName + " to Epsilon patch manifest.");
+
+                    var fileDataID = Listfile.NameMap.FirstOrDefault(x => x.Value.EndsWith(outputFileName)).Key;
+                    if (fileDataID == 0)
                     {
-                        patchManifestFilesChanged = true;
-
-                        Console.WriteLine("Adding " + outputFileName + " to Epsilon patch manifest.");
-
-                        var fileDataID = Listfile.NameMap.FirstOrDefault(x => x.Value.EndsWith(outputFileName)).Key;
-                        if (fileDataID == 0)
+                        if(outputFileName.EndsWith(Settings.MapName + ".wdt"))
                         {
-                            Console.WriteLine("Could not find file data ID for " + outputFileName + ", skipping! Epsilon patch might be invalid/disabled now.");
-                            continue;
+                            // Special case -- for overriding maps users can use existing Blizzard WDT FDIDs referenced from Map.db2, this means we need to add an official FDID to the patch.
+                            fileDataID = Settings.RootWDTFileDataID;
                         }
-
-                        epsilonPatchManifest.files.Add(new EpsilonPatchManifestFile
+                        else
                         {
-                            id = fileDataID,
-                            file = outputFileName
-                        });
+                            var newFileDataID = Listfile.GetNextFreeFileDataID();
+                            Console.WriteLine("Assigning new file data ID " + newFileDataID + " for " + outputFileName + ".");
+                            Listfile.AddCustomFileDataIDToListfile(newFileDataID, outputFileName);
+                            fileDataID = newFileDataID;
+                        }
                     }
-                }
 
-                foreach (var file in epsilonPatchManifest.files.ToList())
-                {
-                    if (!File.Exists(Path.Combine(Settings.OutputDir, file.file)))
+                    epsilonPatchManifest.files.Add(new EpsilonPatchManifestFile
                     {
-                        patchManifestFilesChanged = true;
-                        epsilonPatchManifest.files.Remove(file);
-                    }
-                }
-
-                if (patchManifestFilesChanged)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Epsilon patch manifest file list updated. A re-launch is required to load any new files in-game.");
-                    Console.ResetColor();
-                    File.WriteAllText(epsilonPatchManifestPath, JsonConvert.SerializeObject(epsilonPatchManifest, Formatting.Indented));
+                        id = fileDataID,
+                        file = outputFileName
+                    });
                 }
             }
-            else
+
+            foreach (var file in epsilonPatchManifest.files.ToList())
             {
-                Console.WriteLine("Epsilon patch not found. Skipping patch update. Either create a patch by the name you set in settings or leave the name in settings empty to skip this step.");
+                if (!File.Exists(Path.Combine(Settings.OutputDir, file.file)))
+                {
+                    patchManifestFilesChanged = true;
+                    epsilonPatchManifest.files.Remove(file);
+                }
+            }
+
+            if (patchManifestFilesChanged)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Epsilon patch manifest file list updated. A re-launch is required to load any new files in-game.");
+                Console.ResetColor();
+                File.WriteAllText(epsilonPatchManifestPath, JsonConvert.SerializeObject(epsilonPatchManifest, Formatting.Indented));
             }
         }
 
