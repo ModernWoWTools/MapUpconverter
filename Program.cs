@@ -73,6 +73,20 @@ namespace MapUpconverter
                 {
                     Console.WriteLine("Failed to copy listfile to Epsilon, launcher might not accept our patches: " + e.Message);
                 }
+
+                totalTimeMS += timer.ElapsedMilliseconds;
+                timer.Restart();
+
+                try
+                {
+                    Console.Write("Checking existing Epsilon patches for used FileDataIDs..");
+                    Epsilon.PatchManifest.ScanUsedFileDataIDs();
+                    Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to scan Epsilon patches for used FileDataIDs: " + e.Message);
+                }
             }
 
             totalTimeMS += timer.ElapsedMilliseconds;
@@ -249,16 +263,23 @@ namespace MapUpconverter
             //            }
             //#endif
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimeMS += timer.ElapsedMilliseconds;
 
+            totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
             Console.Write("Generating WDL from converted ADTs..");
             ConvertWDL();
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-            totalTimeMS += timer.ElapsedMilliseconds;
 
-            // TODO: Make WDT if none exists?
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
+
+            Console.Write("Converting WDT..");
+            ConvertWDT();
+            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
 
             if (!string.IsNullOrEmpty(Settings.EpsilonDir))
                 Epsilon.PatchManifest.Update();
@@ -288,8 +309,14 @@ namespace MapUpconverter
 
         private static void ConvertWDL()
         {
-            var wdl = WDL.WDL.Generate(Settings.OutputDir, cachedRootADTs, cachedOBJ1ADTs);
+            var wdl = WDL.WDL.Generate(cachedRootADTs, cachedOBJ1ADTs);
             File.WriteAllBytes(Path.Combine(Settings.OutputDir, Settings.MapName + ".wdl"), wdl.Serialize());
+        }
+
+        private static void ConvertWDT()
+        {
+            var wdt = WDT.RootWDT.Generate();
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Settings.MapName + ".wdt"), wdt.Serialize());
         }
     }
 }

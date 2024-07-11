@@ -4,6 +4,7 @@
     {
         public static Dictionary<uint, string> NameMap = [];
         public static Dictionary<string, uint> ReverseMap = [];
+        public static List<uint> customFDIDs = [];
 
         public static void Initialize(string listfileDir)
         {
@@ -39,8 +40,34 @@
                     var fdid = uint.Parse(parts[0]);
                     NameMap[fdid] = parts[1];
                     ReverseMap[parts[1]] = fdid;
+
+                    customFDIDs.Add(fdid);
                 }
             }
+        }
+
+        public static void AddCustomFileDataIDToListfile(uint fileDataID, string filename)
+        {
+            filename = filename.ToLower();
+
+            if (NameMap.ContainsKey(fileDataID))
+                Console.WriteLine("File data ID " + fileDataID + " is already assigned to " + NameMap[fileDataID] + " , skipping addition of " + filename + ".");
+
+            NameMap[fileDataID] = filename;
+
+            if (!ReverseMap.TryGetValue(filename, out var currentFilename))
+            {
+                ReverseMap[filename] = fileDataID;
+            }
+            else
+            {
+                Console.WriteLine("Warning: File data ID " + fileDataID + " (" + filename + ") is already assigned to ID " + currentFilename + " ,skipping.");
+            }
+            
+            customFDIDs.Add(fileDataID);
+
+            // Update custom-listfile.csv
+            File.WriteAllLines("custom-listfile.csv", customFDIDs.Select(x => x + ";" + NameMap[x]));
         }
     }
 }

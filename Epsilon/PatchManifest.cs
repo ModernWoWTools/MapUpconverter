@@ -5,6 +5,83 @@ namespace MapUpconverter.Epsilon
 {
     public static class PatchManifest
     {
+        public static void ScanUsedFileDataIDs()
+        {
+            if (string.IsNullOrEmpty(Settings.EpsilonDir))
+                return;
+
+            if(!Directory.Exists(Path.Combine(Settings.EpsilonDir, "_retail_", "Patches")))
+                return;
+
+            foreach (var manifest in Directory.GetFiles(Path.Combine(Settings.EpsilonDir, "_retail_", "Patches"), "patch.json", SearchOption.AllDirectories))
+            {
+                var epsilonPatchManifest = JsonConvert.DeserializeObject<EpsilonPatchManifest>(File.ReadAllText(manifest));
+
+                // Assume there is a max of 1 map per patch (the case for out patches, maybe not for other patches)
+                var mapNameForPatch = "";
+
+                foreach(var patchFile in epsilonPatchManifest.files)
+                {
+                    if (Listfile.NameMap.TryGetValue(patchFile.id, out var currentFilename))
+                    {
+                        // FileDataID exists in listfile, check if the filename matches for informational purposes (we skip it anyways)
+
+                        if (patchFile.file.Contains('/'))
+                        {
+                            // File is in a subdirectory, assume proper game directory structure was used for overrides/custom files
+                            if (currentFilename != patchFile.file.ToLower())
+                                Console.WriteLine("Notice: " + currentFilename + " (listfile) is not the same as " + patchFile.file + " (patch.json) for file data ID " + patchFile.id + ".");
+                        }
+                        else
+                        {
+                            // File is in root patch directory, assume only basename is provided
+                            var currentBasename = Path.GetFileName(currentFilename);
+                            if (currentBasename != patchFile.file.ToLower())
+                                Console.WriteLine("Notice: " + currentBasename + " (listfile) is not the same as " + patchFile.file + " (patch.json) for file data ID " + patchFile.id + ".");
+                        }
+                     
+                        continue;
+                    }
+                    else
+                    {
+                        // FileDataID does not exist in listfile
+                        if(patchFile.file.Contains('/'))
+                        {
+                            // File is in a subdirectory, assume proper game directory structure was used for overrides/custom files
+                            Listfile.AddCustomFileDataIDToListfile(patchFile.id, patchFile.file);
+                        }
+                        else
+                        {
+                            // File is in root patch directory, assume only basename is provided, attempt to make an educated guess at the filename
+                            var normalizedFileName = patchFile.file.ToLower();
+                            if (normalizedFileName.EndsWith(".wdt") || normalizedFileName.EndsWith(".tex") || normalizedFileName.EndsWith(".wdl"))
+                            {
+                                mapNameForPatch = normalizedFileName.Replace(".wdt", "").Replace(".tex", "").Replace(".wdl", "").Replace("_occ", "").Replace("_lgt", "").Replace("_fogs", "").Replace("_mpv", "");
+                                Listfile.AddCustomFileDataIDToListfile(patchFile.id, "world/maps/" + mapNameForPatch + "/" + normalizedFileName);
+                            }
+                            else if (normalizedFileName.EndsWith(".adt"))
+                            {
+                                mapNameForPatch = normalizedFileName.Replace(".adt", "").Replace("_obj0", "").Replace("_obj1", "").Replace("_tex0", "").Replace("_lod", "");
+
+                                if (mapNameForPatch.Contains('_'))
+                                {
+                                    var splitName = mapNameForPatch.Split('_');
+                                    mapNameForPatch = mapNameForPatch.Replace("_" + splitName[^2] + "_" + splitName[^1], "");
+                                }
+
+                                Listfile.AddCustomFileDataIDToListfile(patchFile.id, "world/maps/" + mapNameForPatch + "/" + normalizedFileName);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Could not find a good match for " + normalizedFileName + " (file data ID " + patchFile.id + ") in listfile, adding as-is. Please verify manually.");
+                                Listfile.AddCustomFileDataIDToListfile(patchFile.id, normalizedFileName);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
 
         public static void Update()
         {

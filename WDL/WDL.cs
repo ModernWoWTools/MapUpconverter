@@ -8,11 +8,11 @@ namespace MapUpconverter.WDL
 {
     public static class WDL
     {
-        public static Warcraft.NET.Files.WDL.Legion.WorldDataLod Generate(string inputDir, ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs, ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs)
+        public static Warcraft.NET.Files.WDL.Legion.WorldDataLod Generate(ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs, ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs)
         {
             var adtDict = new Dictionary<(byte, byte), string>();
 
-            foreach (var file in Directory.GetFiles(inputDir, "*.adt"))
+            foreach (var file in Directory.GetFiles(Settings.OutputDir, "*.adt"))
             {
                 if (file.EndsWith("_lod.adt") || file.EndsWith("obj0.adt") || file.EndsWith("obj1.adt") || file.EndsWith("tex0.adt"))
                     continue;
