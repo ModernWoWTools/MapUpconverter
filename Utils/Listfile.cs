@@ -5,7 +5,7 @@
         public static Dictionary<uint, string> NameMap = [];
         public static Dictionary<string, uint> ReverseMap = [];
         public static List<uint> customFDIDs = [];
-        private static uint baseCustomFileDataID = 40_000_000;
+        private static uint baseCustomFileDataID = 927_000_000;
 
         public static void Initialize(string listfileDir)
         {
@@ -44,7 +44,7 @@
 
                     customFDIDs.Add(fdid);
 
-                    if(fdid > 40_000_000 && fdid < 50_000_000 && fdid > baseCustomFileDataID)
+                    if(fdid > 927_000_000 && fdid < 937_000_000 && fdid > baseCustomFileDataID)
                         baseCustomFileDataID = fdid;
                 }
             }
