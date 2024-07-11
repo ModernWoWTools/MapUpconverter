@@ -48,7 +48,7 @@ namespace MapUpconverter.ADT
             {
 
                 bfaObj0.Chunks[i] = new();
-                if (wotlkRootADT.Chunks[i].Header.ModelReferenceCount > 0)
+                if (wotlkRootADT.Chunks[i].Header.ModelReferenceCount > 0 && wotlkRootADT.Chunks[i].ModelReferences != null)
                 {
                     bfaObj0.Chunks[i].ModelReferences = new();
                     bfaObj0.Chunks[i].ModelReferences.ModelReferences = new uint[wotlkRootADT.Chunks[i].Header.ModelReferenceCount];
@@ -58,7 +58,7 @@ namespace MapUpconverter.ADT
                     }
                 }
 
-                if (wotlkRootADT.Chunks[i].Header.WorldModelObjectReferenceCount > 0)
+                if (wotlkRootADT.Chunks[i].Header.WorldModelObjectReferenceCount > 0 && wotlkRootADT.Chunks[i].ModelReferences != null)
                 {
                     bfaObj0.Chunks[i].WorldObjectReferences = new();
                     bfaObj0.Chunks[i].WorldObjectReferences.WorldObjectReferences = new uint[wotlkRootADT.Chunks[i].Header.WorldModelObjectReferenceCount];

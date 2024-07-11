@@ -12,7 +12,7 @@ namespace MapUpconverter.WDL
         {
             var adtDict = new Dictionary<(byte, byte), string>();
 
-            foreach (var file in Directory.GetFiles(Settings.OutputDir, "*.adt"))
+            foreach (var file in Directory.GetFiles(Settings.OutputDir, "*.adt", SearchOption.AllDirectories))
             {
                 if (file.EndsWith("_lod.adt") || file.EndsWith("obj0.adt") || file.EndsWith("obj1.adt") || file.EndsWith("tex0.adt"))
                     continue;
@@ -52,13 +52,13 @@ namespace MapUpconverter.WDL
                     {
                         if (!cachedRootADTs.TryGetValue(adtName, out var rootADT))
                         {
-                            rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(Settings.OutputDir, adtName + ".adt")));
+                            rootADT = new Warcraft.NET.Files.ADT.Terrain.BfA.Terrain(File.ReadAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, adtName + ".adt")));
                             cachedRootADTs.TryAdd(adtName, rootADT);
                         }
 
                         if (!cachedOBJ1ADTs.TryGetValue(adtName + "_obj1", out var OBJ1ADT))
                         {
-                            OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(Settings.OutputDir, adtName + "_obj1.adt")));
+                            OBJ1ADT = new Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne(File.ReadAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, adtName + "_obj1.adt")));
                             cachedOBJ1ADTs.TryAdd(adtName + "_obj1", OBJ1ADT);
                         }
 

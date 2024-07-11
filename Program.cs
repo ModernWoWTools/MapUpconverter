@@ -133,10 +133,18 @@ namespace MapUpconverter
 #if DEBUG
             Warcraft.NET.Settings.throwOnMissingChunk = false;
 #endif
+
             if (!Directory.Exists(Settings.OutputDir))
             {
                 Console.WriteLine("Output directory " + Settings.OutputDir + " does not exist, creating..");
                 Directory.CreateDirectory(Settings.OutputDir);
+            }
+
+            var mapDir = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName);
+            if (!Directory.Exists(mapDir))
+            {
+                Console.WriteLine("Map directory " + mapDir + " does not exist, creating..");
+                Directory.CreateDirectory(mapDir);
             }
 
             Console.WriteLine("Startup took " + totalTimeMS + "ms");
@@ -163,6 +171,7 @@ namespace MapUpconverter
                 monitorDirWatcher.Filter = "*.adt";
                 monitorDirWatcher.Changed += new FileSystemEventHandler(OnADTChanged);
                 monitorDirWatcher.EnableRaisingEvents = true;
+                monitorDirWatcher.IncludeSubdirectories = true;
 
                 Task.Run(() =>
                 {
@@ -241,6 +250,10 @@ namespace MapUpconverter
 
         private static void OnADTChanged(object sender, FileSystemEventArgs e)
         {
+            Console.WriteLine(e.ChangeType);
+            if(!e.FullPath.StartsWith(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName)))
+                Console.WriteLine("Ignoring ADT " + e.FullPath + " because it's not in the map directory " + Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName));
+            
             if (!adtQueue.Contains(e.FullPath))
                 adtQueue.Add(e.FullPath);
         }
@@ -251,7 +264,7 @@ namespace MapUpconverter
             var totalTimeMS = 0L;
             timer.Start();
 
-            var adts = Directory.GetFiles(Settings.InputDir, "*.adt");
+            var adts = Directory.GetFiles(Settings.InputDir, "*.adt", SearchOption.AllDirectories);
 
             Console.Write("Converting " + adts.Length + " adts..");
             //#if !DEBUG
@@ -291,32 +304,42 @@ namespace MapUpconverter
 
         private static void ConvertWotLKADT(string inputADT)
         {
-            var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(inputADT));
+            try
+            {
+                var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(inputADT));
 
-            var root = ADT.Root.Convert(wotlkADT);
-            var tex0 = ADT.Tex0.Convert(wotlkADT);
-            var obj0 = ADT.Obj0.Convert(wotlkADT);
-            var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
+                var root = ADT.Root.Convert(wotlkADT);
+                var tex0 = ADT.Tex0.Convert(wotlkADT);
+                var obj0 = ADT.Obj0.Convert(wotlkADT);
+                var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
 
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileName(inputADT)), root.Serialize());
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt"), tex0.Serialize());
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt"), obj0.Serialize());
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt"), obj1.Serialize());
+                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileName(inputADT)), root.Serialize());
+                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt"), tex0.Serialize());
+                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt"), obj0.Serialize());
+                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt"), obj1.Serialize());
 
-            cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
-            cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
+                cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
+                cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
+            }catch(Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Failed to convert " + inputADT + ": " + e.Message + ", press enter to ignore and continue or ctrl-c to exit.");
+                Console.ResetColor();
+            }
         }
 
         private static void ConvertWDL()
         {
             var wdl = WDL.WDL.Generate(cachedRootADTs, cachedOBJ1ADTs);
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Settings.MapName + ".wdl"), wdl.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdl"), wdl.Serialize());
         }
 
         private static void ConvertWDT()
         {
             var wdt = WDT.RootWDT.Generate();
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, Settings.MapName + ".wdt"), wdt.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
+        }
+
         }
     }
 }

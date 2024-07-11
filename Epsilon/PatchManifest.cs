@@ -114,22 +114,23 @@ namespace MapUpconverter.Epsilon
 
             var patchManifestFilesChanged = false;
 
-            foreach (var outputFile in Directory.GetFiles(Settings.OutputDir, "*.*"))
+            foreach (var outputFile in Directory.GetFiles(Settings.OutputDir, "*", SearchOption.AllDirectories))
             {
+                var gamePath = outputFile.Replace(Settings.OutputDir + "\\", "").Replace(Settings.OutputDir + "/", "").Replace("\\", "/");
+
                 var outputFileName = Path.GetFileName(outputFile);
                 if (outputFileName == "patch.json" || outputFileName == "desktop.ini")
                     continue;
 
-                if (!epsilonPatchManifest.files.Any(x => x.file == outputFileName))
+                if (!epsilonPatchManifest.files.Any(x => x.file == gamePath))
                 {
                     patchManifestFilesChanged = true;
 
-                    Console.WriteLine("Adding " + outputFileName + " to Epsilon patch manifest.");
+                    Console.WriteLine("Adding " + gamePath + " to Epsilon patch manifest.");
 
-                    var fileDataID = Listfile.NameMap.FirstOrDefault(x => x.Value.EndsWith(outputFileName)).Key;
-                    if (fileDataID == 0)
+                    if (!Listfile.ReverseMap.TryGetValue(gamePath.ToLower(), out var fileDataID))
                     {
-                        if(outputFileName.EndsWith(Settings.MapName + ".wdt"))
+                        if(gamePath.EndsWith(Settings.MapName + ".wdt"))
                         {
                             // Special case -- for overriding maps users can use existing Blizzard WDT FDIDs referenced from Map.db2, this means we need to add an official FDID to the patch.
                             fileDataID = Settings.RootWDTFileDataID;
@@ -137,8 +138,8 @@ namespace MapUpconverter.Epsilon
                         else
                         {
                             var newFileDataID = Listfile.GetNextFreeFileDataID();
-                            Console.WriteLine("Assigning new file data ID " + newFileDataID + " for " + outputFileName + ".");
-                            Listfile.AddCustomFileDataIDToListfile(newFileDataID, outputFileName);
+                            Console.WriteLine("Assigning new file data ID " + newFileDataID + " for " + gamePath + ".");
+                            Listfile.AddCustomFileDataIDToListfile(newFileDataID, gamePath);
                             fileDataID = newFileDataID;
                         }
                     }
@@ -146,7 +147,7 @@ namespace MapUpconverter.Epsilon
                     epsilonPatchManifest.files.Add(new EpsilonPatchManifestFile
                     {
                         id = fileDataID,
-                        file = outputFileName
+                        file = gamePath
                     });
                 }
             }

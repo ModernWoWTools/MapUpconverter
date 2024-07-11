@@ -19,7 +19,7 @@ namespace MapUpconverter.WDT
                 wotlkFlags = wotlkWDT.Header.Flags;
             }
 
-            var currentWDTPath = Path.Combine(Settings.OutputDir, Settings.MapName + ".wdt");
+            var currentWDTPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdt");
 
             Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable rootWDT;
 
@@ -63,11 +63,11 @@ namespace MapUpconverter.WDT
                 {
                     for (byte y = 0; y < 64; y++)
                     {
-                        var hasADT = File.Exists(Path.Combine(Settings.OutputDir, Settings.MapName + "_" + x + "_" + y + ".adt"));
-                        var hasLodADT = File.Exists(Path.Combine(Settings.OutputDir, Settings.MapName + "_" + x + "_" + y + "_lod.adt"));
-                        var hasMapTexture = File.Exists(Path.Combine(Settings.OutputDir, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
-                        var hasMapTextureN = File.Exists(Path.Combine(Settings.OutputDir, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + "_n.blp"));
-                        var hasMinimapTexture = File.Exists(Path.Combine(Settings.OutputDir, "map" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
+                        var hasADT = File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + ".adt"));
+                        var hasLodADT = File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + "_lod.adt"));
+                        var hasMapTexture = File.Exists(Path.Combine(Settings.OutputDir, "world", "maptextures", Settings.MapName, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
+                        var hasMapTextureN = File.Exists(Path.Combine(Settings.OutputDir, "world", "maptextures", Settings.MapName, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + "_n.blp"));
+                        var hasMinimapTexture = File.Exists(Path.Combine(Settings.OutputDir, "world", "minimaps", Settings.MapName, "map" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
 
                         rootWDT.Tiles.Entries[x, y] = new Warcraft.NET.Files.WDT.Entries.MAINEntry()
                         {
