@@ -269,7 +269,6 @@ namespace MapUpconverter
 
         private static void OnADTChanged(object sender, FileSystemEventArgs e)
         {
-            Console.WriteLine(e.ChangeType);
             if (!e.FullPath.StartsWith(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName)))
                 Console.WriteLine("Ignoring ADT " + e.FullPath + " because it's not in the map directory " + Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName));
 
@@ -330,29 +329,20 @@ namespace MapUpconverter
 
         private static void ConvertWotLKADT(string inputADT)
         {
-            try
-            {
-                var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(inputADT));
+            var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(inputADT));
 
-                var root = ADT.Root.Convert(wotlkADT);
-                var tex0 = ADT.Tex0.Convert(wotlkADT);
-                var obj0 = ADT.Obj0.Convert(wotlkADT);
-                var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
+            var root = ADT.Root.Convert(wotlkADT);
+            var tex0 = ADT.Tex0.Convert(wotlkADT);
+            var obj0 = ADT.Obj0.Convert(wotlkADT);
+            var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
 
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileName(inputADT)), root.Serialize());
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt"), tex0.Serialize());
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt"), obj0.Serialize());
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt"), obj1.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileName(inputADT)), root.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt"), tex0.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt"), obj0.Serialize());
+            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt"), obj1.Serialize());
 
-                cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
-                cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
-            }
-            catch (Exception e)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Failed to convert " + inputADT + ": " + e.Message);
-                Console.ResetColor();
-            }
+            cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
+            cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
         }
 
         private static void ConvertWDL()
