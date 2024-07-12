@@ -28,28 +28,60 @@ namespace MapUpconverterGUI
 
             toolFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly()?.Location) ?? "";
 
-            if (!File.Exists(Path.Combine(toolFolder, "settings.json")))
-                MapUpconverter.Settings.Save(toolFolder);
+            try
+            {
+                if (!File.Exists(Path.Combine(toolFolder, "settings.json")))
+                    MapUpconverter.Settings.Save(toolFolder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving new settings file: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown(1);
+            }
 
-            MapUpconverter.Settings.Load(toolFolder);
+            try
+            {
+                MapUpconverter.Settings.Load(toolFolder);
 
-            InputDir.Text = MapUpconverter.Settings.InputDir;
-            OutputDir.Text = MapUpconverter.Settings.OutputDir;
+                InputDir.Text = MapUpconverter.Settings.InputDir;
+                OutputDir.Text = MapUpconverter.Settings.OutputDir;
 
-            ConvertOnSaveCheckbox.IsChecked = MapUpconverter.Settings.ConvertOnSave;
+                ConvertOnSaveCheckbox.IsChecked = MapUpconverter.Settings.ConvertOnSave;
 
-            MapName.Text = MapUpconverter.Settings.MapName;
+                MapName.Text = MapUpconverter.Settings.MapName;
 
-            EpsilonDir.Text = MapUpconverter.Settings.EpsilonDir;
-            PatchName.Text = MapUpconverter.Settings.EpsilonPatchName;
-            WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
+                EpsilonDir.Text = MapUpconverter.Settings.EpsilonDir;
+                PatchName.Text = MapUpconverter.Settings.EpsilonPatchName;
+                WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading settings file, try deleting it and restarting. Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown(1);
+            }
 
             SaveButton.IsEnabled = false;
             StartButton.IsEnabled = false;
 
-            Downloads.Initialize(toolFolder);
+            try
+            {
+                Downloads.Initialize(toolFolder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error initializing downloads: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown(1);
+            }
 
-            CheckRequiredFiles();
+            try
+            {
+                CheckRequiredFiles();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error checking required files: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown(1);
+            }
         }
 
         private void InputDirButton_Click(object sender, RoutedEventArgs e)
