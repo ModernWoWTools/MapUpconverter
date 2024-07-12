@@ -31,7 +31,7 @@ namespace MapUpconverter.WDT
             {
                 // We need to generate an entirely new WDT, oh dear.
                 Console.ForegroundColor = ConsoleColor.Red;
-                if(wotlkWDTExists)
+                if (wotlkWDTExists)
                     Console.WriteLine("Generating WDT based on WotLK input WDT. This is not fully implemented yet, and will not work as expected.");
                 else
                     Console.WriteLine("Generating an entirely new WDT. This is not fully implemented yet, and will not work as expected.");
@@ -50,13 +50,36 @@ namespace MapUpconverter.WDT
 
                 rootWDT.Header.Flags = wotlkFlags | MPHDFlags.hasHeightTexturing | MPHDFlags.HasMAID;
 
-                // If filenames for these are not found in the listfile, use empty files from other maps
-                rootWDT.Header.LgtFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_lgt.wdt", 1249658);
-                rootWDT.Header.OccFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_occ.wdt", 1100613);
-                rootWDT.Header.FogsFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_fogs.wdt", 1668535);
-                rootWDT.Header.MpvFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_mpv.wdt", 2495665);
-                rootWDT.Header.TexFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + ".tex", 1249780);
-                rootWDT.Header.WdlFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + ".wdl");
+                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_lgt.wdt")))
+                    rootWDT.Header.LgtFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_lgt.wdt");
+                else
+                    rootWDT.Header.LgtFileID = 1249658;
+
+                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_occ.wdt")))
+                    rootWDT.Header.OccFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_occ.wdt");
+                else
+                    rootWDT.Header.OccFileID = 1100613;
+
+                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_fogs.wdt")))
+                    rootWDT.Header.FogsFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_fogs.wdt");
+                else
+                    rootWDT.Header.FogsFileID = 1668535;
+
+                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_mpv.wdt")))
+                    rootWDT.Header.MpvFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_mpv.wdt");
+                else
+                    rootWDT.Header.MpvFileID = 2495665;
+
+                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".tex")))
+                    rootWDT.Header.TexFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + ".tex");
+                else
+                    rootWDT.Header.TexFileID = 1249780;
+
+                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdl")))
+                    rootWDT.Header.WdlFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + ".wdl");
+                else
+                    throw new Exception("WDL not found in output directory for map " + Settings.MapName + ". This is required for the root WDT.");
+
                 rootWDT.Header.Pd4FileID = 0;
 
                 for (byte x = 0; x < 64; x++)
@@ -75,12 +98,14 @@ namespace MapUpconverter.WDT
                             AsyncId = 0
                         };
 
-                        if(hasADT)
+                        if (hasADT)
                             rootWDT.Tiles.Entries[x, y].Flags |= MAINFlags.HasAdt;
 
-                        if(wotlkWDTExists)
+                        if (wotlkWDTExists)
                         {
-                            rootWDT.Tiles.Entries[x, y].Flags |= wotlkWDT.Tiles.Entries[x, y].Flags;
+                            if(rootWDT.Tiles.Entries[x, y].Flags.HasFlag(MAINFlags.HasWater))
+                                rootWDT.Tiles.Entries[x, y].Flags |= MAINFlags.HasWater;
+
                             rootWDT.Tiles.Entries[x, y].AsyncId = wotlkWDT.Tiles.Entries[x, y].AsyncId;
                         }
 
@@ -102,7 +127,7 @@ namespace MapUpconverter.WDT
             return rootWDT;
         }
 
-        private static uint GetOrAssignFileDataID(string filename, uint defaultFileDataID = 0)
+        private static uint GetOrAssignFileDataID(string filename)
         {
             if (Listfile.ReverseMap.TryGetValue(filename.ToLower(), out var fileDataID))
             {
@@ -110,17 +135,10 @@ namespace MapUpconverter.WDT
             }
             else
             {
-                if (defaultFileDataID != 0)
-                {
-                    return defaultFileDataID;
-                }
-                else
-                {
-                    var newFileDataID = Listfile.GetNextFreeFileDataID();
-                    Console.WriteLine("Assigning new file data ID " + newFileDataID + " for " + filename + ".");
-                    Listfile.AddCustomFileDataIDToListfile(newFileDataID, filename);
-                    return newFileDataID;
-                }
+                var newFileDataID = Listfile.GetNextFreeFileDataID();
+                Console.WriteLine("Assigning new file data ID " + newFileDataID + " for " + filename + ".");
+                Listfile.AddCustomFileDataIDToListfile(newFileDataID, filename);
+                return newFileDataID;
             }
         }
     }
