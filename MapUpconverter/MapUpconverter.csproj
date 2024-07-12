@@ -7,7 +7,6 @@
     <Nullable>enable</Nullable>
     <BaseOutputPath>..\bin</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <Configurations>Debug;Release;CLIOnlyRelease</Configurations>
   </PropertyGroup>

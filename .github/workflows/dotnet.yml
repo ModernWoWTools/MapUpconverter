@@ -55,7 +55,7 @@ jobs:
     - name: Archive Release
       uses: thedoctor0/zip-release@main
       with:
-        directory: ${{ github.workspace }}/bin/${{ matrix.config }}/net8.0
+        directory: ${{ github.workspace }}/bin/${{ matrix.config }}
         type: 'zip'
         filename: ${{ github.workspace }}/${{ matrix.config }}-${{ matrix.target }}.zip
     - name: Release
