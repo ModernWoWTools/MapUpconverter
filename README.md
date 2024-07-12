@@ -57,7 +57,7 @@ If set to false, generates the map once and then exits. This is required the fir
 If set to true, the program will wait for updates in the input directory and convert them as soon as they are saved. This is useful for Noggit users who want to see their changes in-game quickly after they save them.
 
 ## License
-Licensed under GPLv3 instead of MIT (unlike my usual projects) to keep in line with 3rd-party licenses. 
+Unlike my other projects, this is licensed under GPLv3 instead of MIT to keep compatibility with 3rd-party licenses.
 
 ## Credits
 - implave for constant project discussion/testing throughout

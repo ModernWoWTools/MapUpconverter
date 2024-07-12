@@ -20,6 +20,9 @@ namespace MapUpconverterGUI
 
             toolFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly()?.Location) ?? "";
 
+            if(!File.Exists(Path.Combine(toolFolder, "settings.json")))
+                MapUpconverter.Settings.Save(toolFolder);
+
             MapUpconverter.Settings.Load(toolFolder);
 
             InputDir.Text = MapUpconverter.Settings.InputDir;
