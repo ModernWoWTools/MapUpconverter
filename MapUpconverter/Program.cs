@@ -177,7 +177,8 @@ namespace MapUpconverter
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Failed to convert map: " + e.Message);
+                    Console.WriteLine("Failed to convert map: " + e.Message + "\n" + e.StackTrace);
+                    Console.ReadLine();
                 }
                 return;
             }
@@ -285,14 +286,14 @@ namespace MapUpconverter
             var adts = Directory.GetFiles(Settings.InputDir, "*.adt", SearchOption.AllDirectories);
 
             Console.Write("Converting " + adts.Length + " adts..");
-            //#if !DEBUG
+#if !DEBUG
             Parallel.ForEach(adts, ConvertWotLKADT);
-            //#elif DEBUG
-            //            foreach (var adt in adts)
-            //            {
-            //                ConvertWotLKADT(adt);
-            //            }
-            //#endif
+#elif DEBUG
+            foreach (var adt in adts)
+            {
+                ConvertWotLKADT(adt);
+            }
+#endif
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
             totalTimeMS += timer.ElapsedMilliseconds;

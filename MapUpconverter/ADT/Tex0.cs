@@ -1,6 +1,7 @@
 ﻿using MapUpconverter.Utils;
 using Warcraft.NET.Files.ADT.Chunks;
 using Warcraft.NET.Files.ADT.Entries.MoP;
+using Warcraft.NET.Files.WDT.Flags;
 
 namespace MapUpconverter.ADT
 {
@@ -8,6 +9,17 @@ namespace MapUpconverter.ADT
     {
         public static Warcraft.NET.Files.ADT.TerrainTexture.BfA.TerrainTexture Convert(Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
         {
+            var wotlkWDTPath = Path.Combine(Settings.InputDir, Settings.MapName + ".wdt");
+            var wotlkFlags = new MPHDFlags();
+            var wotlkWDTExists = File.Exists(wotlkWDTPath);
+            Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable wotlkWDT = new();
+
+            if (wotlkWDTExists)
+            {
+                wotlkWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(wotlkWDTPath));
+                wotlkFlags = wotlkWDT.Header.Flags;
+            }
+
             var bfaTex0 = new Warcraft.NET.Files.ADT.TerrainTexture.BfA.TerrainTexture
             {
                 Version = new MVER(18),
@@ -75,14 +87,14 @@ namespace MapUpconverter.ADT
                 var wotlkChunk = wotlkRootADT.Chunks[i];
 
                 // Apparently required for Noggit output -- verify if still correct after Noggit ground effect editor is released
-                // TODO: Check WDT if it has the same flag set
-                wotlkChunk.FixGroundEffectMap(true);
+                wotlkChunk.FixGroundEffectMap(wotlkFlags.HasFlag(MPHDFlags.BigAlpha));
 
-                bfaTex0.Chunks[i] = new Warcraft.NET.Files.ADT.TerrainTexture.MCNK();
-
-                bfaTex0.Chunks[i].AlphaMaps = wotlkChunk.AlphaMaps;
-                bfaTex0.Chunks[i].TextureLayers = wotlkChunk.TextureLayers;
-                bfaTex0.Chunks[i].BakedShadows = wotlkChunk.BakedShadows;
+                bfaTex0.Chunks[i] = new Warcraft.NET.Files.ADT.TerrainTexture.MCNK
+                {
+                    AlphaMaps = wotlkChunk.AlphaMaps,
+                    TextureLayers = wotlkChunk.TextureLayers,
+                    BakedShadows = wotlkChunk.BakedShadows
+                };
 
                 // TODO: This might be neat to set properly!
                 // bfaTex0.Chunks[i].TerrainMaterials = new Warcraft.NET.Files.ADT.TerrainTexture.MapChunk.SubChunks.MCMT();
