@@ -28,12 +28,15 @@ jobs:
           - kind: linux
             os: ubuntu-latest
             target: linux-x64
+            config: CLIOnlyRelease
           - kind: windows
             os: windows-latest
             target: win-x64
+            config: Release
           - kind: macOS
             os: macos-latest
             target: osx-x64
+            config: CLIOnlyRelease
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
@@ -46,7 +49,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration ${{ matrix.config }} --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Archive Release
