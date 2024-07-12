@@ -1,15 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <PackageOutputPath>$(OutputPath)</PackageOutputPath>
+    <PackAsTool>True</PackAsTool>
+    <ToolCommandName>$(TargetName)</ToolCommandName>
     <BaseOutputPath>..\bin</BaseOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icon.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\Version.cs" Link="Version.cs" />
@@ -20,11 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <ProjectReference Include="..\MapUpconverter\MapUpconverter.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Warcraft.NET\Warcraft.NET\Warcraft.NET.csproj" />
+    <Resource Include="Icon.png" />
   </ItemGroup>
 
 </Project>

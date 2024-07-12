@@ -14,6 +14,8 @@ namespace MapUpconverter
         {
             string toolFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly()?.Location) ?? "";
 
+            Console.WriteLine("Starting MapUpconverter v" + Version.SharedVersion + "..");
+
             // Load settings from settings.json
             try
             {

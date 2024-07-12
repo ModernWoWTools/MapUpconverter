@@ -37,5 +37,27 @@ namespace MapUpconverter
 
             ConvertOnSave = settingsJSON.convertOnSave;
         }
+
+        public static void Save(string toolFolder)
+        {
+            var jsonPath = Path.Combine(toolFolder, "settings.json");
+
+            var settingsJSON = new
+            {
+                inputDir = InputDir,
+                outputDir = OutputDir,
+
+                mapName = MapName,
+
+                epsilonDir = EpsilonDir,
+                epsilonPatchName = EpsilonPatchName,
+
+                rootWDTFileDataID = RootWDTFileDataID,
+
+                convertOnSave = ConvertOnSave
+            };
+
+            File.WriteAllText(jsonPath, JsonConvert.SerializeObject(settingsJSON, Formatting.Indented));
+        }
     }
 }

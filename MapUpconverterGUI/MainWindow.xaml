@@ -1,0 +1,49 @@
+﻿<Window x:Class="MapUpconverterGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapUpconverterGUI"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="MapUpConverterGUI" Height="500" Width="800" Icon="/Icon.png">
+    <Grid>
+        <Label Content="This tool is intended to upgrade 3.3.5 formatted map files (WDT, WDL, ADT) to post-FDID client versions (8.2+).&#xD;&#xA;The below 3 settings are required." HorizontalAlignment="Left" VerticalAlignment="Top" Width="780" Margin="10,0,0,0"/>
+
+        <Label Content="Input directory" HorizontalAlignment="Left" Margin="19,50,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="InputDir" HorizontalAlignment="Left" Margin="112,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="InputDir_TextChanged" Height="20"/>
+        <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,54,0,0" VerticalAlignment="Top" Click="InputDirButton_Click" Width="102"/>
+
+        <Label Content="Output directory" HorizontalAlignment="Left" Margin="9,80,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="OutputDir" HorizontalAlignment="Left" Margin="112,84,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="OutputDir_TextChanged" Height="20"/>
+        <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,84,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
+
+        <Label Content="Map name" HorizontalAlignment="Left" Margin="39,110,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="MapName" PreviewTextInput="MapName_PreviewTextInput" HorizontalAlignment="Left" Margin="112,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
+
+        <CheckBox x:Name="ConvertOnSaveCheckbox" Content="Convert on save? Leave this unchecked the first time you generate a map.&#10;After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).&#10;To stop monitoring ADTs for changes, focus the console window and hit enter." HorizontalAlignment="Left" Margin="19,141,0,0" VerticalAlignment="Top" Click="Checkbox_Changed"/>
+
+        <!-- Epsilon integration -->
+        <Label Content="Epsilon specific-settings (optional). If you are targeting Epsilon, you need to fill in the below settings.&#10;For fast in-client updates, set the above output directory to your (existing or not) patch directory (e.g. C:/Epsilon/__retail__/Patches/MyPatchName)." HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top" />
+
+        <Label Content="Epsilon directory" HorizontalAlignment="Left" Margin="8,228,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="EpsilonDir" HorizontalAlignment="Left" Margin="112,231,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="EpsilonDir_TextChanged" Height="20"/>
+        <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,231,0,0" VerticalAlignment="Top" Click="EpsilonDirButton_Click" Width="102"/>
+
+        <Label Content="Patch name" HorizontalAlignment="Left" Margin="34,261,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PatchName" HorizontalAlignment="Left" Margin="112,265,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="PatchName_TextChanged" Height="20"/>
+
+        <Label Content="WDT FileDataID" HorizontalAlignment="Left" Margin="14,291,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="WDTFileDataID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="112,295,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="WDTFileDataID_TextChanged" Height="20"/>
+        <Label Content="This is the FileDataID of an existing WDT file to override.&#10;Note that some IDs will behave differently than others,&#10;so follow a tutorial or something to pick a good one." HorizontalAlignment="Left" Margin="112,315,0,0" VerticalAlignment="Top" Width="330"/>
+
+        <TextBlock Margin="36,435,36,10" HorizontalAlignment="Center">           
+            <Hyperlink NavigateUri="https://github.com/Marlamin/MapUpconverter" RequestNavigate="Hyperlink_RequestNavigate">
+                For the more information, updates, reporting issues or contributing, visit the GitHub repository by clicking here.
+            </Hyperlink>
+        </TextBlock>
+
+        <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,378,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
+        <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,378,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
+    </Grid>
+</Window>
