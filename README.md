@@ -5,7 +5,7 @@ Tool to automatically go from Noggit Red output (with modern features enabled) t
 You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter).
 
 ## Settings
-You can use the included MapUpConverterGUI.exe tool to change these settings. If you want to edit the settings.json/want more information on what things do, read on.
+You can use the included MapUpConverterGUI.exe tool (Windows only!) to change these settings. If you want to edit the settings.json/want more information on what things do, read on.
 
 ### Example settings.json file without Epsilon integration
 ```json
@@ -55,3 +55,11 @@ When overwriting an existing WDT ID or if you already know your WDTs ID, you can
 ### convertOnSave (optional)
 If set to false, generates the map once and then exits. This is required the first time you generate a map.
 If set to true, the program will wait for updates in the input directory and convert them as soon as they are saved. This is useful for Noggit users who want to see their changes in-game quickly after they save them.
+
+## License
+Licensed under GPLv3 instead of MIT (unlike my usual projects) to keep in line with 3rd-party licenses. 
+
+## Credits
+- implave for constant project discussion/testing throughout
+- [Luzifix's Warcraft.NET](https://github.com/Luzifix/Warcraft.NET)
+- [wowdev.wiki](https://wowdev.wiki/)
