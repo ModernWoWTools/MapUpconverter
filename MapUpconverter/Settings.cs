@@ -8,7 +8,6 @@ namespace MapUpconverter
         public static string OutputDir = "";
 
         public static string MapName = "";
-        public static string ReplaceMapNameWith = "";
 
         public static string EpsilonDir = "";
         public static string EpsilonPatchName = "";
@@ -30,7 +29,6 @@ namespace MapUpconverter
             OutputDir = settingsJSON.outputDir;
 
             MapName = settingsJSON.mapName;
-            ReplaceMapNameWith = settingsJSON.replaceMapNameWith;
 
             EpsilonDir = settingsJSON.epsilonDir;
             EpsilonPatchName = settingsJSON.epsilonPatchName;
