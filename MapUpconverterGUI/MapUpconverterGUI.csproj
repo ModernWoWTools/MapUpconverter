@@ -13,6 +13,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <Configurations>Debug;Release;CLIOnlyRelease</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
