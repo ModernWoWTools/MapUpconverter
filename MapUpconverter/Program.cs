@@ -41,8 +41,15 @@ namespace MapUpconverter
             var timer = new System.Diagnostics.Stopwatch();
             timer.Start();
 
+            Downloads.Initialize(toolFolder);
+
             // Load listfile from listfile.csv
-            // TODO: Auto-download? Expiration warnings?
+            if (!File.Exists(Path.Combine(toolFolder, "listfile.csv")))
+            {
+                Console.WriteLine("Downloading listfile..");
+                Downloads.DownloadListfile(toolFolder).Wait();
+            }
+
             try
             {
                 Console.Write("Loading listfile..");
@@ -95,7 +102,12 @@ namespace MapUpconverter
             timer.Restart();
 
             // Load texture height/scale information
-            // TODO: Updating?
+            if (!File.Exists(Path.Combine(toolFolder, "TextureInfoByFilePath.json")))
+            {
+                Console.WriteLine("Downloading height info..");
+                Downloads.DownloadHeightTextureInfo(toolFolder).Wait();
+            }
+
             try
             {
                 Console.Write("Loading height info..");
@@ -114,7 +126,12 @@ namespace MapUpconverter
             timer.Restart();
 
             // Load texture height/scale information
-            // TODO: Updating?
+            if (!File.Exists(Path.Combine(toolFolder, "blob.json")))
+            {
+                Console.WriteLine("Downloading model bounding box blob..");
+                Downloads.DownloadModelBlob(toolFolder).Wait();
+            }
+
             try
             {
                 Console.Write("Loading bounding box info..");

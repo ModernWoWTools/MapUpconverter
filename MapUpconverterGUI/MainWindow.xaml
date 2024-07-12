@@ -42,6 +42,15 @@
                 For the more information, updates, reporting issues or contributing, visit the GitHub repository by clicking here.
             </Hyperlink>
         </TextBlock>
+        
+        <Label x:Name="ListfileLabel" Content="Listfile is up to date" HorizontalAlignment="Left" Margin="554,267,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,270,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
+
+        <Label x:Name="HeightInfoLabel" Content="Height texture info is up to date" HorizontalAlignment="Left" Margin="488,297,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="HeightInfoButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,300,0,0" VerticalAlignment="Top" Width="79" Click="HeightInfoButton_Click"/>
+
+        <Label x:Name="ModelBlobLabel" Content="Model blob is up to date" HorizontalAlignment="Left" Margin="526,327,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ModelBlobButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,330,0,0" VerticalAlignment="Top" Width="79" Click="ModelBlobButton_Click"/>
 
         <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,378,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
         <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,378,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>

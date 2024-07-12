@@ -1,0 +1,5 @@
+{
+  "listfileURL": "https://github.com/wowdev/wow-listfile/releases/latest/download/community-listfile.csv",
+  "heightTextureInfoURL": "https://github.com/Luzifix/ADTHeightDump/raw/main/Output/TextureInfoByFilePath.json",
+  "modelBlobURL": "https://raw.githubusercontent.com/Marlamin/BoundingBoxBlobGen/main/blob.json"
+}
