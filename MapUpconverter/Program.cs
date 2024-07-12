@@ -350,7 +350,7 @@ namespace MapUpconverter
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Failed to convert " + inputADT + ": " + e.Message + ", press enter to ignore and continue or ctrl-c to exit.");
+                Console.WriteLine("Failed to convert " + inputADT + ": " + e.Message);
                 Console.ResetColor();
             }
         }
