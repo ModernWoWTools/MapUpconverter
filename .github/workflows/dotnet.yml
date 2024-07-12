@@ -55,10 +55,10 @@ jobs:
     - name: Archive Release
       uses: thedoctor0/zip-release@main
       with:
-        directory: ${{ github.workspace }}/bin/Release/net8.0
+        directory: ${{ github.workspace }}/bin/${{ matrix.config }}/net8.0
         type: 'zip'
-        filename: ${{ github.workspace }}/Release-${{ matrix.target }}.zip
+        filename: ${{ github.workspace }}/${{ matrix.config }}-${{ matrix.target }}.zip
     - name: Release
       uses: softprops/action-gh-release@v0.1.13
       with:
-        files: ${{ github.workspace }}/Release-${{ matrix.target }}.zip
+        files: ${{ github.workspace }}/${{ matrix.config }}-${{ matrix.target }}.zip
