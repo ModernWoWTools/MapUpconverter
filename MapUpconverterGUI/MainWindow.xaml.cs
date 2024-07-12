@@ -18,6 +18,8 @@ namespace MapUpconverterGUI
         private bool heightInfoNeedsDownload = true;
         private bool modelBlobNeedsDownload = true;
 
+        private static bool isRunning = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -282,7 +284,23 @@ namespace MapUpconverterGUI
         {
             SaveSettings();
 
-            Process.Start(new ProcessStartInfo() { UseShellExecute = true, FileName = Path.Combine(toolFolder, "MapUpconverter.exe") });
+            if (isRunning)
+            {
+                MessageBox.Show("Converter is already running, please close the existing instance first.", "Already running", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var converter = Process.Start(new ProcessStartInfo() { UseShellExecute = true, FileName = Path.Combine(toolFolder, "MapUpconverter.exe") });
+
+            converter!.EnableRaisingEvents = true;
+
+            isRunning = true;
+
+            converter.Exited += (s, e) =>
+            {
+                isRunning = false;
+            };
+
             e.Handled = true;
         }
 
