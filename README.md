@@ -4,6 +4,10 @@ Tool to convert WoW maps from 3.3.5 file formats to modern ones readable by 8.2+
 ## Downloading
 You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter).
 
+## Usage
+On Windows, open MapUpconverterGUI.exe and fill in the settings, download the required files and hit start.
+Alternatively or on other platforms, fill in settings.json correctly and run MapUpconverter.exe.
+
 ## Settings
 You can use the included MapUpConverterGUI.exe tool (Windows only!) to change these settings. If you want to edit the settings.json/want more information on what things do, read on.
 
