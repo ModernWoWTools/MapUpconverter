@@ -1,5 +1,5 @@
 # MapUpconverter
-Tool to automatically go from Noggit Red output (with modern features enabled) to modern ADTs readable by 8.2+ WoW clients. 
+Tool to convert WoW maps from 3.3.5 file formats to modern ones readable by 8.2+ WoW clients. 
 
 ## Downloading
 You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter).
