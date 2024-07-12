@@ -253,9 +253,9 @@ namespace MapUpconverter
         private static void OnADTChanged(object sender, FileSystemEventArgs e)
         {
             Console.WriteLine(e.ChangeType);
-            if(!e.FullPath.StartsWith(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName)))
+            if (!e.FullPath.StartsWith(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName)))
                 Console.WriteLine("Ignoring ADT " + e.FullPath + " because it's not in the map directory " + Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName));
-            
+
             if (!adtQueue.Contains(e.FullPath))
                 adtQueue.Add(e.FullPath);
         }
@@ -289,15 +289,15 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
-            Console.Write("Converting WDT..");
-            ConvertWDT();
+            Console.Write("Converting minimaps..");
+            ConvertMinimaps();
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
-            Console.Write("Converting minimaps..");
-            ConvertMinimaps();
+            Console.Write("Converting WDT..");
+            ConvertWDT();
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
             totalTimeMS += timer.ElapsedMilliseconds;
@@ -329,7 +329,8 @@ namespace MapUpconverter
 
                 cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
                 cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Failed to convert " + inputADT + ": " + e.Message + ", press enter to ignore and continue or ctrl-c to exit.");
