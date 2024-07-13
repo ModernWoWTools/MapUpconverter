@@ -39,7 +39,7 @@
 
         <TextBlock Margin="0,482,0,-37" HorizontalAlignment="Center">           
             <Hyperlink NavigateUri="https://github.com/Marlamin/MapUpconverter" RequestNavigate="Hyperlink_RequestNavigate">
-                For the more information, updates, reporting issues or contributing, visit the GitHub repository by clicking here.
+                For more information, updates, reporting issues or contributing, visit the GitHub repository by clicking here.
             </Hyperlink>
         </TextBlock>
 
