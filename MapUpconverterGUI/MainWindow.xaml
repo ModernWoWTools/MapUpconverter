@@ -8,7 +8,7 @@
         ResizeMode="NoResize"
         Title="MapUpConverterGUI" Height="550" Width="800" Icon="/Icon.png">
     <Grid>
-        <Label Content="This tool is intended to upgrade 3.3.5 formatted map files (WDT, WDL, ADT) to post-FDID client versions (8.2+).&#xD;&#xA;The below 3 settings are required." HorizontalAlignment="Left" VerticalAlignment="Top" Width="780" Margin="10,0,0,0"/>
+        <Label Content="This tool is intended to upgrade 3.3.5 formatted map files (WDT, WDL, ADT) to post-FDID client versions (8.2+).&#xA;The below 3 fields are required." HorizontalAlignment="Left" VerticalAlignment="Top" Width="780" Margin="10,0,0,0"/>
 
         <Label Content="Input directory" HorizontalAlignment="Left" Margin="19,50,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="InputDir" HorizontalAlignment="Left" Margin="112,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="InputDir_TextChanged" Height="20"/>
@@ -43,13 +43,13 @@
             </Hyperlink>
         </TextBlock>
 
-        <Label x:Name="ListfileLabel" Content="Listfile is up to date" HorizontalAlignment="Left" Margin="554,314,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="554,314,0,0" VerticalAlignment="Top"/>
         <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,317,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
 
-        <Label x:Name="HeightInfoLabel" Content="Height texture info is up to date" HorizontalAlignment="Left" Margin="488,344,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="HeightInfoLabel" Content="Height texture info exists on disk" HorizontalAlignment="Left" Margin="488,344,0,0" VerticalAlignment="Top"/>
         <Button x:Name="HeightInfoButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,347,0,0" VerticalAlignment="Top" Width="79" Click="HeightInfoButton_Click"/>
 
-        <Label x:Name="ModelBlobLabel" Content="Model blob is up to date" HorizontalAlignment="Left" Margin="526,374,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ModelBlobLabel" Content="Model blob exists on disk" HorizontalAlignment="Left" Margin="526,374,0,0" VerticalAlignment="Top"/>
         <Button x:Name="ModelBlobButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,377,0,0" VerticalAlignment="Top" Width="79" Click="ModelBlobButton_Click"/>
 
         <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,425,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>

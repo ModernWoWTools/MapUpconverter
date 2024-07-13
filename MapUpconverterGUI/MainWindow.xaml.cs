@@ -240,12 +240,12 @@ namespace MapUpconverterGUI
                 var listfileNeedsUpdate = (listfileLastWriteTime - DateTime.Now).TotalDays > 30;
                 if (listfileNeedsUpdate)
                 {
-                    ListfileLabel.Content = "Listfile is present on disk";
+                    ListfileLabel.Content = "Listfile exists on disk";
                     ListfileButton.Content = "Update";
                 }
                 else
                 {
-                    ListfileLabel.Content = "Listfile is up to date";
+                    ListfileLabel.Content = "Listfile exists on disk";
                     ListfileButton.Content = "Redownload";
                 }
 
@@ -267,12 +267,12 @@ namespace MapUpconverterGUI
                 var heightInfoNeedsUpdate = (heightInfoLastWriteTime - DateTime.Now).TotalDays > 30;
                 if (heightInfoNeedsUpdate)
                 {
-                    HeightInfoLabel.Content = "Height texture is present on disk";
+                    HeightInfoLabel.Content = "Height texture info exists on disk";
                     HeightInfoButton.Content = "Update";
                 }
                 else
                 {
-                    HeightInfoLabel.Content = "Height texture info is up to date";
+                    HeightInfoLabel.Content = "Height texture info exists on disk";
                     HeightInfoButton.Content = "Redownload";
                 }
 
@@ -294,12 +294,12 @@ namespace MapUpconverterGUI
                 var modelBlobNeedsUpdate = (modelBlobLastWriteTime - DateTime.Now).TotalDays > 30;
                 if (modelBlobNeedsUpdate)
                 {
-                    ModelBlobLabel.Content = "Model blob is present on disk";
+                    ModelBlobLabel.Content = "Model blob exists on disk";
                     ModelBlobButton.Content = "Update";
                 }
                 else
                 {
-                    ModelBlobLabel.Content = "Model blob is up to date";
+                    ModelBlobLabel.Content = "Model blob exists on disk";
                     ModelBlobButton.Content = "Redownload";
                 }
 
