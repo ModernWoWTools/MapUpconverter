@@ -56,7 +56,7 @@ Path to Epsilon launcher directory.
 Name of Epsilon patch to keep create/keep updated.
 
 ### generateWDTWDL (optional)
-Whether or not to generate/update WDT/WDL files. Defaults to `true` as this tool is primarily meant for fully custom maps, but can be disabled when editing a (partial) official map and doesn't want to override official WDT/WDLs. If one wants to generate an updated WDT/WDL due to having added new ADTs or wanting to update the distant-mountain heightmap, make sure to extract all ADTS of the existing map into the input directory before doing so or it will only generate a WDT/WDL for the ADTs present in the input directory instead of all of them.
+Whether or not to generate/update WDT/WDL files. Defaults to `true` as this tool is primarily meant for fully custom maps, but can be disabled when editing a (partial) official map and you don't want to override official WDT/WDLs. If one wants to generate an updated WDT/WDL due to having added new ADTs or wanting to update the distant-mountain heightmap, make sure to extract all ADTs of the existing map into the input directory before doing so or it will only generate a WDT/WDL for the ADTs present in the input directory instead of all of them (and break the map).
 
 ### rootWDTFileDataID (optional)
 When overwriting an existing WDT ID or if you already know your WDTs ID, you can set it here. If you use Epsilon integration, you will want to fill this in.
