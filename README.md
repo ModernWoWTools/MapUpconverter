@@ -6,7 +6,7 @@ You can get the latest release from [the releases page](https://github.com/Marla
 
 ## Usage
 On Windows, open MapUpconverterGUI.exe and fill in the settings, download the required files and hit start.
-Alternatively or on other platforms, fill in settings.json correctly and run MapUpconverter.exe.
+Alternatively or on other platforms, create and fill in settings.json correctly and run MapUpconverter.exe.
 
 ## Settings
 You can use the included MapUpConverterGUI.exe tool (Windows only!) to change these settings. If you want to edit the settings.json/want more information on what things do, read on.
@@ -19,6 +19,7 @@ You can use the included MapUpConverterGUI.exe tool (Windows only!) to change th
     "mapName": "yourmapnamegoeshere",
     "epsilonDir": "",
     "epsilonPatchName": "",
+    "generateWDTWDL": true,
     "rootWDTFileDataID": 0,
     "convertOnSave": false
 }
@@ -31,6 +32,7 @@ You can use the included MapUpConverterGUI.exe tool (Windows only!) to change th
     "mapName": "yourmapnamegoeshere",
     "epsilonDir": "C:\\Epsilon",
     "epsilonPatchName": "YourPatchNameGoesHere",
+    "generateWDTWDL" : true,
     "rootWDTFileDataID": 1498241,
     "convertOnSave": false
 }
@@ -52,6 +54,9 @@ Path to Epsilon launcher directory.
 
 ### epsilonPatchName (optional)
 Name of Epsilon patch to keep create/keep updated.
+
+### generateWDTWDL (optional)
+Whether or not to generate/update WDT/WDL files. Defaults to `true` as this tool is primarily meant for fully custom maps, but can be disabled when editing a (partial) official map and doesn't want to override official WDT/WDLs. If one wants to generate an updated WDT/WDL due to having added new ADTs or wanting to update the distant-mountain heightmap, make sure to extract all ADTS of the existing map into the input directory before doing so or it will only generate a WDT/WDL for the ADTs present in the input directory instead of all of them.
 
 ### rootWDTFileDataID (optional)
 When overwriting an existing WDT ID or if you already know your WDTs ID, you can set it here. If you use Epsilon integration, you will want to fill this in.

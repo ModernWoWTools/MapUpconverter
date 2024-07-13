@@ -12,6 +12,7 @@ namespace MapUpconverter
         public static string EpsilonDir = "";
         public static string EpsilonPatchName = "";
 
+        public static bool GenerateWDTWDL = true;
         public static uint RootWDTFileDataID = 0;
 
         public static bool ConvertOnSave = false;
@@ -33,6 +34,11 @@ namespace MapUpconverter
             EpsilonDir = settingsJSON.epsilonDir;
             EpsilonPatchName = settingsJSON.epsilonPatchName;
 
+            if (settingsJSON.generateWDTWDL == null)
+                GenerateWDTWDL = true;
+            else
+                GenerateWDTWDL = settingsJSON.generateWDTWDL;
+
             RootWDTFileDataID = settingsJSON.rootWDTFileDataID;
 
             ConvertOnSave = settingsJSON.convertOnSave;
@@ -52,6 +58,7 @@ namespace MapUpconverter
                 epsilonDir = EpsilonDir,
                 epsilonPatchName = EpsilonPatchName,
 
+                generateWDTWDL = GenerateWDTWDL,
                 rootWDTFileDataID = RootWDTFileDataID,
 
                 convertOnSave = ConvertOnSave

@@ -46,6 +46,7 @@ namespace MapUpconverterGUI
                 InputDir.Text = MapUpconverter.Settings.InputDir;
                 OutputDir.Text = MapUpconverter.Settings.OutputDir;
 
+                GenerateWDTWDLCheckbox.IsChecked = MapUpconverter.Settings.GenerateWDTWDL;
                 ConvertOnSaveCheckbox.IsChecked = MapUpconverter.Settings.ConvertOnSave;
 
                 MapName.Text = MapUpconverter.Settings.MapName;
@@ -186,6 +187,13 @@ namespace MapUpconverterGUI
         private void Checkbox_Changed(object sender, RoutedEventArgs e)
         {
             MapUpconverter.Settings.ConvertOnSave = ConvertOnSaveCheckbox.IsChecked == true;
+            ResetSaveButton();
+        }
+
+
+        private void GenerateWDTWDL_Checked(object sender, RoutedEventArgs e)
+        {
+            MapUpconverter.Settings.GenerateWDTWDL = GenerateWDTWDLCheckbox.IsChecked == true;
             ResetSaveButton();
         }
 

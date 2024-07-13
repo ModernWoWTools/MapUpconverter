@@ -233,16 +233,19 @@ namespace MapUpconverter
                                 Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + e.Message);
                             }
 
-                            try
+                            if (Settings.GenerateWDTWDL)
                             {
-                                timer.Restart();
-                                ConvertWDL();
-                                timer.Stop();
-                                Console.WriteLine("Generating WDL took " + timer.ElapsedMilliseconds + "ms");
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine("Failed to generate WDL: " + e.Message);
+                                try
+                                {
+                                    timer.Restart();
+                                    ConvertWDL();
+                                    timer.Stop();
+                                    Console.WriteLine("Generating WDL took " + timer.ElapsedMilliseconds + "ms");
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("Failed to generate WDL: " + e.Message);
+                                }
                             }
 
                             if (!string.IsNullOrEmpty(Settings.EpsilonDir))
@@ -299,12 +302,15 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
-            Console.Write("Generating WDL from converted ADTs..");
-            ConvertWDL();
-            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            if (Settings.GenerateWDTWDL)
+            {
+                Console.Write("Generating WDL from converted ADTs..");
+                ConvertWDL();
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
-            totalTimeMS += timer.ElapsedMilliseconds;
-            timer.Restart();
+                totalTimeMS += timer.ElapsedMilliseconds;
+                timer.Restart();
+            }
 
             Console.Write("Converting minimaps..");
             ConvertMinimaps();
@@ -313,12 +319,15 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
-            Console.Write("Converting WDT..");
-            ConvertWDT();
-            Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            if (Settings.GenerateWDTWDL)
+            {
+                Console.Write("Converting WDT..");
+                ConvertWDT();
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
-            totalTimeMS += timer.ElapsedMilliseconds;
-            timer.Restart();
+                totalTimeMS += timer.ElapsedMilliseconds;
+                timer.Restart();
+            }
 
             if (!string.IsNullOrEmpty(Settings.EpsilonDir))
                 Epsilon.PatchManifest.Update();

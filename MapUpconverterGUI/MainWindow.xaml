@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MapUpconverterGUI"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="MapUpConverterGUI" Height="500" Width="800" Icon="/Icon.png">
+        Title="MapUpConverterGUI" Height="550" Width="800" Icon="/Icon.png">
     <Grid>
         <Label Content="This tool is intended to upgrade 3.3.5 formatted map files (WDT, WDL, ADT) to post-FDID client versions (8.2+).&#xD;&#xA;The below 3 settings are required." HorizontalAlignment="Left" VerticalAlignment="Top" Width="780" Margin="10,0,0,0"/>
 
@@ -20,39 +20,39 @@
 
         <Label Content="Map name" HorizontalAlignment="Left" Margin="39,110,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="MapName" PreviewTextInput="MapName_PreviewTextInput" HorizontalAlignment="Left" Margin="112,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
-
-        <CheckBox x:Name="ConvertOnSaveCheckbox" Content="Convert on save? Leave this unchecked the first time you generate a map.&#10;After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).&#10;To stop monitoring ADTs for changes, focus the console window and hit enter." HorizontalAlignment="Left" Margin="19,141,0,0" VerticalAlignment="Top" Click="Checkbox_Changed"/>
+        <CheckBox x:Name="GenerateWDTWDLCheckbox" Content="Generate WDT/WDL? Primarily for fully custom maps. If you are editing a partial/existing map and aren't adding -new- ADTs, uncheck this.&#10;If you are adding new ADTs/want to update the WDL (distant mountain heightmap), put all ADTs in the input dir (new or not) and check this." HorizontalAlignment="Left" Margin="19,146,0,0" VerticalAlignment="Top" Click="GenerateWDTWDL_Checked"/>
+        <CheckBox x:Name="ConvertOnSaveCheckbox" Content="Convert on save? Leave this unchecked the first time you generate a map.&#10;After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).&#10;To stop monitoring ADTs for changes, focus the console window and hit enter." HorizontalAlignment="Left" Margin="19,185,0,0" VerticalAlignment="Top" Click="Checkbox_Changed"/>
 
         <!-- Epsilon integration -->
-        <Label Content="Epsilon specific-settings (optional). If you are targeting Epsilon, you need to fill in the below settings.&#10;For fast in-client updates, set the above output directory to your (existing or not) patch directory (e.g. C:/Epsilon/__retail__/Patches/MyPatchName)." HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top" />
+        <Label Content="Epsilon specific-settings (optional). If you are targeting Epsilon, you need to fill in the below settings.&#10;For fast in-client updates, set the above output directory to your (existing or not) patch directory (e.g. C:/Epsilon/__retail__/Patches/MyPatchName)." HorizontalAlignment="Left" Margin="10,235,0,0" VerticalAlignment="Top" />
 
-        <Label Content="Epsilon directory" HorizontalAlignment="Left" Margin="8,228,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="EpsilonDir" HorizontalAlignment="Left" Margin="112,231,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="EpsilonDir_TextChanged" Height="20"/>
-        <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,231,0,0" VerticalAlignment="Top" Click="EpsilonDirButton_Click" Width="102"/>
+        <Label Content="Epsilon directory" HorizontalAlignment="Left" Margin="8,275,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="EpsilonDir" HorizontalAlignment="Left" Margin="112,278,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="EpsilonDir_TextChanged" Height="20"/>
+        <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,278,0,0" VerticalAlignment="Top" Click="EpsilonDirButton_Click" Width="102"/>
 
-        <Label Content="Patch name" HorizontalAlignment="Left" Margin="34,261,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="PatchName" HorizontalAlignment="Left" Margin="112,265,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="PatchName_TextChanged" Height="20"/>
+        <Label Content="Patch name" HorizontalAlignment="Left" Margin="34,308,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PatchName" HorizontalAlignment="Left" Margin="112,312,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="PatchName_TextChanged" Height="20"/>
 
-        <Label Content="WDT FileDataID" HorizontalAlignment="Left" Margin="14,291,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="WDTFileDataID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="112,295,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="WDTFileDataID_TextChanged" Height="20"/>
-        <Label Content="This is the FileDataID of an existing WDT file to override.&#10;Note that some IDs will behave differently than others,&#10;so follow a tutorial or something to pick a good one." HorizontalAlignment="Left" Margin="112,315,0,0" VerticalAlignment="Top" Width="330"/>
+        <Label Content="WDT FileDataID" HorizontalAlignment="Left" Margin="14,338,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="WDTFileDataID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="112,342,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="WDTFileDataID_TextChanged" Height="20"/>
+        <Label Content="This is the FileDataID of an existing WDT file to override.&#10;Note that some IDs will behave differently than others,&#10;so follow a tutorial or something to pick a good one." HorizontalAlignment="Left" Margin="112,362,0,0" VerticalAlignment="Top" Width="330"/>
 
-        <TextBlock Margin="36,435,36,10" HorizontalAlignment="Center">           
+        <TextBlock Margin="0,482,0,-37" HorizontalAlignment="Center">           
             <Hyperlink NavigateUri="https://github.com/Marlamin/MapUpconverter" RequestNavigate="Hyperlink_RequestNavigate">
                 For the more information, updates, reporting issues or contributing, visit the GitHub repository by clicking here.
             </Hyperlink>
         </TextBlock>
-        
-        <Label x:Name="ListfileLabel" Content="Listfile is up to date" HorizontalAlignment="Left" Margin="554,267,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,270,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
 
-        <Label x:Name="HeightInfoLabel" Content="Height texture info is up to date" HorizontalAlignment="Left" Margin="488,297,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="HeightInfoButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,300,0,0" VerticalAlignment="Top" Width="79" Click="HeightInfoButton_Click"/>
+        <Label x:Name="ListfileLabel" Content="Listfile is up to date" HorizontalAlignment="Left" Margin="554,314,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,317,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
 
-        <Label x:Name="ModelBlobLabel" Content="Model blob is up to date" HorizontalAlignment="Left" Margin="526,327,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ModelBlobButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,330,0,0" VerticalAlignment="Top" Width="79" Click="ModelBlobButton_Click"/>
+        <Label x:Name="HeightInfoLabel" Content="Height texture info is up to date" HorizontalAlignment="Left" Margin="488,344,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="HeightInfoButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,347,0,0" VerticalAlignment="Top" Width="79" Click="HeightInfoButton_Click"/>
 
-        <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,378,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
-        <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,378,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
+        <Label x:Name="ModelBlobLabel" Content="Model blob is up to date" HorizontalAlignment="Left" Margin="526,374,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ModelBlobButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,377,0,0" VerticalAlignment="Top" Width="79" Click="ModelBlobButton_Click"/>
+
+        <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,425,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
+        <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,425,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
     </Grid>
 </Window>
