@@ -1,5 +1,16 @@
 # MapUpconverter
-Tool to convert WoW maps from 3.3.5 file formats to modern ones readable by 8.2+ WoW clients. 
+Features:
+- Converts 3.3.5 map-related file formats to modern 8.2.x+ file formats (WDT, WDL, ADT).
+- Adds height texturing information (MTXP).
+- Filename => FileDataID conversions.
+- Convert-on-save mode to convert ADTs as they are saved by e.g. Noggit while mapping [allowing for quick in-game previews](https://marlam.in/u/Wow_y5z4Dte6uZ.mp4).
+- Optionally generates/updates an Epsilon patch for the map (and any other files in the output directory).
+
+## Status
+This tool is still early in development and will likely not work well for all usecases.
+
+## Support
+No, not yet.
 
 ## Downloading
 You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter).
