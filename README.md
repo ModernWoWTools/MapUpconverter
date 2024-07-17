@@ -13,7 +13,7 @@ This tool is still early in development and will likely not work well for all us
 No, not yet.
 
 ## Downloading
-You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter).
+You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter/releases).
 
 ## Usage
 On Windows, open MapUpconverterGUI.exe and fill in the settings, download the required files and hit start.
