@@ -233,10 +233,10 @@ namespace MapUpconverterGUI
 
         private void CheckRequiredFiles()
         {
-            listfileNeedsDownload = !File.Exists(Path.Combine(toolFolder, "listfile.csv"));
+            listfileNeedsDownload = !File.Exists(Path.Combine(toolFolder, "meta", "listfile.csv"));
             if (!listfileNeedsDownload)
             {
-                var listfileLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "listfile.csv"));
+                var listfileLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "meta", "listfile.csv"));
                 var listfileNeedsUpdate = (listfileLastWriteTime - DateTime.Now).TotalDays > 30;
                 if (listfileNeedsUpdate)
                 {
@@ -260,10 +260,10 @@ namespace MapUpconverterGUI
                 ListfileButton.FontWeight = FontWeights.Bold;
             }
 
-            heightInfoNeedsDownload = !File.Exists(Path.Combine(toolFolder, "TextureInfoByFilePath.json"));
+            heightInfoNeedsDownload = !File.Exists(Path.Combine(toolFolder, "meta", "TextureInfoByFilePath.json"));
             if (!heightInfoNeedsDownload)
             {
-                var heightInfoLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "TextureInfoByFilePath.json"));
+                var heightInfoLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "meta", "TextureInfoByFilePath.json"));
                 var heightInfoNeedsUpdate = (heightInfoLastWriteTime - DateTime.Now).TotalDays > 30;
                 if (heightInfoNeedsUpdate)
                 {
@@ -287,10 +287,10 @@ namespace MapUpconverterGUI
                 HeightInfoButton.FontWeight = FontWeights.Bold;
             }
 
-            modelBlobNeedsDownload = !File.Exists(Path.Combine(toolFolder, "blob.json"));
+            modelBlobNeedsDownload = !File.Exists(Path.Combine(toolFolder, "meta", "blob.json"));
             if (!modelBlobNeedsDownload)
             {
-                var modelBlobLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "blob.json"));
+                var modelBlobLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "meta", "blob.json"));
                 var modelBlobNeedsUpdate = (modelBlobLastWriteTime - DateTime.Now).TotalDays > 30;
                 if (modelBlobNeedsUpdate)
                 {

@@ -44,7 +44,7 @@ namespace MapUpconverter
             Downloads.Initialize(toolFolder);
 
             // Load listfile from listfile.csv
-            if (!File.Exists(Path.Combine(toolFolder, "listfile.csv")))
+            if (!File.Exists(Path.Combine(toolFolder, "meta", "listfile.csv")))
             {
                 Console.WriteLine("Downloading listfile..");
                 Downloads.DownloadListfile(toolFolder).Wait();
@@ -101,8 +101,11 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
+            if(!Directory.Exists(Path.Combine(toolFolder, "meta")))
+                Directory.CreateDirectory(Path.Combine(toolFolder, "meta"));
+
             // Load texture height/scale information
-            if (!File.Exists(Path.Combine(toolFolder, "TextureInfoByFilePath.json")))
+            if (!File.Exists(Path.Combine(toolFolder, "meta", "TextureInfoByFilePath.json")))
             {
                 Console.WriteLine("Downloading height info..");
                 Downloads.DownloadHeightTextureInfo(toolFolder).Wait();
@@ -111,7 +114,7 @@ namespace MapUpconverter
             try
             {
                 Console.Write("Loading height info..");
-                HeightInfo.Initialize(Path.Combine(toolFolder, "TextureInfoByFilePath.json"));
+                HeightInfo.Initialize(Path.Combine(toolFolder, "meta", "TextureInfoByFilePath.json"));
                 Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             }
             catch (Exception e)
@@ -126,7 +129,7 @@ namespace MapUpconverter
             timer.Restart();
 
             // Load texture height/scale information
-            if (!File.Exists(Path.Combine(toolFolder, "blob.json")))
+            if (!File.Exists(Path.Combine(toolFolder, "meta", "blob.json")))
             {
                 Console.WriteLine("Downloading model bounding box blob..");
                 Downloads.DownloadModelBlob(toolFolder).Wait();
@@ -135,7 +138,7 @@ namespace MapUpconverter
             try
             {
                 Console.Write("Loading bounding box info..");
-                BoundingBoxInfo.Initialize(Path.Combine(toolFolder, "blob.json"));
+                BoundingBoxInfo.Initialize(Path.Combine(toolFolder, "meta", "blob.json"));
                 Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             }
             catch (Exception e)

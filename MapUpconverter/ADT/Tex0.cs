@@ -28,6 +28,7 @@ namespace MapUpconverter.ADT
 
             bfaTex0.TextureDiffuseIds = new();
             bfaTex0.TextureHeightIds = new();
+            bfaTex0.TextureParameters = new();
             bfaTex0.TextureFlags = new();
 
             foreach (var texture in wotlkRootADT.Textures.Filenames)

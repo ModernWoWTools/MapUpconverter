@@ -20,6 +20,9 @@ namespace MapUpconverter.Utils
             ListfileURL = manifest.ListfileURL;
             HeightTextureInfoURL = manifest.HeightTextureInfoURL;
             ModelBlobURL = manifest.ModelBlobURL;
+
+            if(!Directory.Exists(Path.Combine(toolPath, "meta")))
+                Directory.CreateDirectory(Path.Combine(toolPath, "meta"));
         }
 
         public async static Task<bool> DownloadListfile(string toolPath)
@@ -28,7 +31,7 @@ namespace MapUpconverter.Utils
                 throw new Exception("Listfile URL is not set or nor empty");
 
             var listfileStream = await client.GetAsync(ListfileURL);
-            using (var file = File.Create(Path.Combine(toolPath, "listfile.csv")))
+            using (var file = File.Create(Path.Combine(toolPath, "meta", "listfile.csv")))
             {
                 await listfileStream.Content.CopyToAsync(file);
             }
@@ -42,7 +45,7 @@ namespace MapUpconverter.Utils
                 throw new Exception("Height texture info URL is not set or nor empty");
 
             var heightTextureInfoStream = await client.GetAsync(HeightTextureInfoURL);
-            using (var file = File.Create(Path.Combine(toolPath, "TextureInfoByFilePath.json")))
+            using (var file = File.Create(Path.Combine(toolPath, "meta", "TextureInfoByFilePath.json")))
             {
                 await heightTextureInfoStream.Content.CopyToAsync(file);
             }
@@ -56,7 +59,7 @@ namespace MapUpconverter.Utils
                 throw new Exception("Model blob URL is not set or nor empty");
 
             var modelBlobStream = await client.GetAsync(ModelBlobURL);
-            using (var file = File.Create(Path.Combine(toolPath, "blob.json")))
+            using (var file = File.Create(Path.Combine(toolPath, "meta", "blob.json")))
             {
                 await modelBlobStream.Content.CopyToAsync(file);
             }

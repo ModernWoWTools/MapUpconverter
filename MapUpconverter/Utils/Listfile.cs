@@ -6,10 +6,13 @@
         public static Dictionary<string, uint> ReverseMap = [];
         public static List<uint> customFDIDs = [];
         private static uint baseCustomFileDataID = 927_000_000;
+        private static string ListfileDir = "";
 
         public static void Initialize(string listfileDir)
         {
-            var listfilePath = Path.Combine(listfileDir, "listfile.csv");
+            ListfileDir = listfileDir;
+
+            var listfilePath = Path.Combine(listfileDir, "meta", "listfile.csv");
             if (!File.Exists(listfilePath))
                 throw new FileNotFoundException("Listfile not found at " + listfilePath);
 
@@ -29,7 +32,7 @@
                 ReverseMap[parts[1]] = fdid;
             }
 
-            var customListfilePath = Path.Combine(listfileDir, "custom-listfile.csv");
+            var customListfilePath = Path.Combine(listfileDir, "meta", "custom-listfile.csv");
             if (File.Exists(customListfilePath))
             {
                 foreach (var line in File.ReadAllLines(customListfilePath))
@@ -76,7 +79,7 @@
             customFDIDs.Add(fileDataID);
 
             // Update custom-listfile.csv
-            File.WriteAllLines("custom-listfile.csv", customFDIDs.Select(x => x + ";" + NameMap[x]));
+            File.WriteAllLines(Path.Combine(ListfileDir, "meta", "custom-listfile.csv"), customFDIDs.Select(x => x + ";" + NameMap[x]));
         }
     }
 }
