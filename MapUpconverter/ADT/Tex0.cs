@@ -79,7 +79,7 @@ namespace MapUpconverter.ADT
                     Console.WriteLine("Could not find height info for " + diffuseTexture);
                 }
 
-                bfaTex0.TextureFlags.TextureFlagEntries.Add(mtxpEntry);
+                bfaTex0.TextureParameters.TextureFlagEntries.Add(mtxpEntry);
             }
             
             // check if GroundEffectMap is all 0 in all MCNKs
