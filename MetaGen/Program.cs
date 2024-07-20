@@ -34,8 +34,6 @@ namespace MetaGen
             var tex0ADTList = Listfile.NameMap.Where(kv => kv.Value.EndsWith("_tex0.adt")).Select(x => x.Key).ToList();
             Console.WriteLine("done, found " + tex0ADTList.Count + " ADTs.");
 
-            Warcraft.NET.Settings.throwOnMissingChunk = false;
-
             Console.WriteLine("Loading existing height info...");
             ADT.LoadCurrent(metaFolder);
 
