@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapUpconverterGUI", "MapUpc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warcraft.NET", "Warcraft.NET\Warcraft.NET\Warcraft.NET.csproj", "{B8133A09-958D-4129-935E-5AAC2AF91B69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGen", "MetaGen\MetaGen.csproj", "{3D78D50E-185D-467D-9F1A-B15FEDD677A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGen", "MetaGen\MetaGen.csproj", "{3D78D50E-185D-467D-9F1A-B15FEDD677A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CascLib", "CASCLib\CascLib\CascLib.csproj", "{E1C60928-1CFD-4091-AF75-B118CE441C04}"
 EndProject
