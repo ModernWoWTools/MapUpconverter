@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CASCLib\CascLib\CascLib.csproj" />
     <ProjectReference Include="..\Warcraft.NET\Warcraft.NET\Warcraft.NET.csproj" />
   </ItemGroup>
