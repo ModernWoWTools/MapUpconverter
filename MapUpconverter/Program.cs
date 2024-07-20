@@ -225,12 +225,12 @@ namespace MapUpconverter
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + ioE.Message);
+                                    Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + ioE.Message + "\n" + ioE.StackTrace);
                                 }
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + e.Message);
+                                Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + e.Message + "\n" + e.StackTrace);
                             }
 
                             if (Settings.GenerateWDTWDL)
