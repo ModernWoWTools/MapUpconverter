@@ -183,7 +183,6 @@ namespace MetaGen.Properties.Scanners
                 groundEffectMap.Add((int)geRow["ID"], rowString.GetHashCode());
             }
 
-            // remove duplicates
             foreach(var texture in TextureGroundEffectMap)
             {
                 var groundEffects = texture.Value;

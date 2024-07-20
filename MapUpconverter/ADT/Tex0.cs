@@ -101,6 +101,18 @@ namespace MapUpconverter.ADT
                     BakedShadows = wotlkChunk.BakedShadows
                 };
 
+                for(var j = 0; j < wotlkChunk.TextureLayers.Layers.Count; j++)
+                {
+                    // Set ground effect ID to the first one in the list
+                    if(GroundEffectInfo.TextureGroundEffectMap.TryGetValue(bfaTex0.TextureDiffuseIds.Textures[(int)wotlkChunk.TextureLayers.Layers[j].TextureID], out var effectIDs))
+                    {
+                        if (effectIDs.Length == 0)
+                            continue;
+
+                        bfaTex0.Chunks[i].TextureLayers.Layers[j].EffectID = effectIDs[0];
+                    }
+                }
+
                 // TODO: This might be neat to set properly!
                 // bfaTex0.Chunks[i].TerrainMaterials = new Warcraft.NET.Files.ADT.TerrainTexture.MapChunk.SubChunks.MCMT();
             }

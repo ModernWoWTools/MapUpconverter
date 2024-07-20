@@ -128,6 +128,30 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
+            // Load ground effect texture information
+            if (!File.Exists(Path.Combine(toolFolder, "meta", "GroundEffectIDsByTextureFileID.json")))
+            {
+                Console.WriteLine("Downloading ground effect info..");
+                Downloads.DownloadGroundEffectInfo(toolFolder).Wait();
+            }
+
+            try
+            {
+                Console.Write("Loading ground effect info..");
+                GroundEffectInfo.Initialize(Path.Combine(toolFolder, "meta", "GroundEffectIDsByTextureFileID.json"));
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to load ground effect info: " + e.Message);
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
+
+            totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
+
             // Load texture height/scale information
             if (!File.Exists(Path.Combine(toolFolder, "meta", "blob.json")))
             {

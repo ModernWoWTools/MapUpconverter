@@ -16,6 +16,7 @@ namespace MapUpconverterGUI
 
         private bool listfileNeedsDownload = true;
         private bool heightInfoNeedsDownload = true;
+        private bool groundEffectInfoNeedsDownload = true;
         private bool modelBlobNeedsDownload = true;
 
         private static bool isRunning = false;
@@ -287,6 +288,33 @@ namespace MapUpconverterGUI
                 HeightInfoButton.FontWeight = FontWeights.Bold;
             }
 
+            groundEffectInfoNeedsDownload = !File.Exists(Path.Combine(toolFolder, "meta", "GroundEffectIDsByTextureFileID.json"));
+            if (!groundEffectInfoNeedsDownload)
+            {
+                var groundEffectInfoLastWriteTime = File.GetLastWriteTime(Path.Combine(toolFolder, "meta", "GroundEffectIDsByTextureFileID.json"));
+                var groundEffectInfoNeedsUpdate = (groundEffectInfoLastWriteTime - DateTime.Now).TotalDays > 30;
+                if (groundEffectInfoNeedsUpdate)
+                {
+                    GroundEffectLabel.Content = "Ground effect info exists on disk";
+                    GroundEffectButton.Content = "Update";
+                }
+                else
+                {
+                    GroundEffectLabel.Content = "Ground effect info exists on disk";
+                    GroundEffectButton.Content = "Redownload";
+                }
+
+                GroundEffectLabel.FontWeight = FontWeights.Normal;
+                GroundEffectButton.FontWeight = FontWeights.Normal;
+            }
+            else
+            {
+                GroundEffectLabel.Content = "Ground effect info is missing!";
+                GroundEffectLabel.FontWeight = FontWeights.Bold;
+                GroundEffectButton.Content = "Download";
+                GroundEffectButton.FontWeight = FontWeights.Bold;
+            }
+
             modelBlobNeedsDownload = !File.Exists(Path.Combine(toolFolder, "meta", "blob.json"));
             if (!modelBlobNeedsDownload)
             {
@@ -363,6 +391,26 @@ namespace MapUpconverterGUI
 
             CheckRequiredFiles();
         }
+
+        private async void GroundEffectButton_Click(object sender, RoutedEventArgs e)
+        {
+            GroundEffectButton.IsEnabled = false;
+            GroundEffectButton.Content = "Downloading...";
+            try
+            {
+                await Downloads.DownloadGroundEffectInfo(toolFolder);
+            }
+            catch (Exception ex)
+            {
+                GroundEffectLabel.Content = "Error downloading";
+                MessageBox.Show("Error downloading ground effect info: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            GroundEffectButton.IsEnabled = true;
+            GroundEffectButton.Content = "Redownload";
+
+            CheckRequiredFiles();
+        }
+
 
         private async void HeightInfoButton_Click(object sender, RoutedEventArgs e)
         {

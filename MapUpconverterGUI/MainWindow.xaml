@@ -43,15 +43,18 @@
             </Hyperlink>
         </TextBlock>
 
-        <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="554,314,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,317,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
+        <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="564,286,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="692,289,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
 
-        <Label x:Name="HeightInfoLabel" Content="Height texture info exists on disk" HorizontalAlignment="Left" Margin="488,344,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="HeightInfoButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,347,0,0" VerticalAlignment="Top" Width="79" Click="HeightInfoButton_Click"/>
+        <Label x:Name="HeightInfoLabel" Content="Height texture info exists on disk" HorizontalAlignment="Left" Margin="498,316,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="HeightInfoButton" Content="Redownload" HorizontalAlignment="Left" Margin="692,319,0,0" VerticalAlignment="Top" Width="79" Click="HeightInfoButton_Click"/>
 
-        <Label x:Name="ModelBlobLabel" Content="Model blob exists on disk" HorizontalAlignment="Left" Margin="526,374,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ModelBlobButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,377,0,0" VerticalAlignment="Top" Width="79" Click="ModelBlobButton_Click"/>
+        <Label x:Name="ModelBlobLabel" Content="Model blob exists on disk" HorizontalAlignment="Left" Margin="536,346,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ModelBlobButton" Content="Redownload" HorizontalAlignment="Left" Margin="692,349,0,0" VerticalAlignment="Top" Width="79" Click="ModelBlobButton_Click"/>
 
+        <Label x:Name="GroundEffectLabel" Content="Ground effect info exists on disk" HorizontalAlignment="Left" Margin="500,376,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="GroundEffectButton" Content="Redownload" HorizontalAlignment="Left" Margin="692,379,0,0" VerticalAlignment="Top" Width="79" Click="GroundEffectButton_Click"/>
+        
         <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,425,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
         <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,425,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
     </Grid>

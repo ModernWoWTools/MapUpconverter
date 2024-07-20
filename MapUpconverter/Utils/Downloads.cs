@@ -6,6 +6,7 @@ namespace MapUpconverter.Utils
     {
         public static string ListfileURL { get; private set; }
         public static string HeightTextureInfoURL { get; private set; }
+        public static string GroundEffectInfoURL { get; private set; }
         public static string ModelBlobURL { get; private set; }
 
         private static HttpClient client = new();
@@ -19,6 +20,7 @@ namespace MapUpconverter.Utils
 
             ListfileURL = manifest.ListfileURL;
             HeightTextureInfoURL = manifest.HeightTextureInfoURL;
+            GroundEffectInfoURL = manifest.GroundEffectInfoURL;
             ModelBlobURL = manifest.ModelBlobURL;
 
             if(!Directory.Exists(Path.Combine(toolPath, "meta")))
@@ -53,6 +55,20 @@ namespace MapUpconverter.Utils
             return true;
         }
 
+        public async static Task<bool> DownloadGroundEffectInfo(string toolPath)
+        {
+            if (string.IsNullOrEmpty(GroundEffectInfoURL))
+                throw new Exception("Ground effect info URL is not set or nor empty");
+
+            var groundEffectInfoStream = await client.GetAsync(GroundEffectInfoURL);
+            using (var file = File.Create(Path.Combine(toolPath, "meta", "GroundEffectIDsByTextureFileID.json")))
+            {
+                await groundEffectInfoStream.Content.CopyToAsync(file);
+            }
+
+            return true;
+        }
+
         public async static Task<bool> DownloadModelBlob(string toolPath)
         {
             if (string.IsNullOrEmpty(ModelBlobURL))
@@ -71,6 +87,7 @@ namespace MapUpconverter.Utils
         {
             public string ListfileURL { get; set; }
             public string HeightTextureInfoURL { get; set; }
+            public string GroundEffectInfoURL { get; set; }
             public string ModelBlobURL { get; set; }
         }
     }
