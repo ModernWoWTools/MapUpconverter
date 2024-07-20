@@ -16,6 +16,7 @@ namespace MapUpconverter.ADT
                 Chunks = new Warcraft.NET.Files.ADT.Terrain.BfA.MCNK[256]
             };
 
+            bfaRoot.Header.Flags = new MHDRFlags();
             bfaRoot.Header.Flags |= MHDRFlags.MFBO;
 
             for (int i = 0; i < 256; i++)
