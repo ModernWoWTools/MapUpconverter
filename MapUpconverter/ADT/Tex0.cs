@@ -81,13 +81,17 @@ namespace MapUpconverter.ADT
 
                 bfaTex0.TextureFlags.TextureFlagEntries.Add(mtxpEntry);
             }
+            
+            // check if GroundEffectMap is all 0 in all MCNKs
+            var regenGroundEffectMap = wotlkRootADT.Chunks.Any(x => x.Header.GroundEffectMap.All(y => y == 0));
 
             for (int i = 0; i < 256; i++)
             {
                 var wotlkChunk = wotlkRootADT.Chunks[i];
 
                 // Apparently required for Noggit output -- verify if still correct after Noggit ground effect editor is released
-                wotlkChunk.FixGroundEffectMap(wotlkFlags.HasFlag(MPHDFlags.BigAlpha));
+                if(regenGroundEffectMap)
+                    wotlkChunk.FixGroundEffectMap(wotlkFlags.HasFlag(MPHDFlags.BigAlpha));
 
                 bfaTex0.Chunks[i] = new Warcraft.NET.Files.ADT.TerrainTexture.MCNK
                 {
