@@ -4,3 +4,6 @@
 [submodule "CASCLib"]
 	path = CASCLib
 	url = https://github.com/Marlamin/CASCLib
+[submodule "DBCD"]
+	path = DBCD
+	url = https://github.com/wowdev/DBCD

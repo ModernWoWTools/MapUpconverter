@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CASCLib\CascLib\CascLib.csproj" />
+    <ProjectReference Include="..\DBCD\DBCD\DBCD.csproj" />
     <ProjectReference Include="..\Warcraft.NET\Warcraft.NET\Warcraft.NET.csproj" />
   </ItemGroup>
 

@@ -57,6 +57,16 @@ namespace MetaGen
             Console.WriteLine("Saving height info by file path to " + textureInfoByFilePath);
             ADT.SaveTextureInfoByFilePath(textureInfoByFilePath);
 
+            ADT.RemoveDupes();
+
+            var groundEffectIDsByTextureFileIDPath = Path.Combine(metaFolder, "GroundEffectIDsByTextureFileID.json");
+            Console.WriteLine("Saving ground effect IDs by texture file ID to " + groundEffectIDsByTextureFileIDPath);
+            ADT.SaveGroundEffectIDsByTextureFileID(groundEffectIDsByTextureFileIDPath);
+
+            var groundEffectIDsByTextureFilePath = Path.Combine(metaFolder, "GroundEffectIDsByTextureFilePath.json");
+            Console.WriteLine("Saving ground effect IDs by texture file path to " + groundEffectIDsByTextureFilePath);
+            ADT.SaveGroundEffectIDsByTextureFilePath(groundEffectIDsByTextureFilePath);
+
             // WMO bounding boxes
             Console.Write("Generating list of WMOs to process...");
             var wmoList = Listfile.NameMap.Where(kv => kv.Value.EndsWith(".wmo")).ToDictionary();
