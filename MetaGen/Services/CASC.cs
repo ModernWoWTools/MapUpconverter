@@ -1,6 +1,6 @@
 ﻿using CASCLib;
 
-namespace MetaGen.Properties.Services
+namespace MetaGen.Services
 {
     public static class CASC
     {

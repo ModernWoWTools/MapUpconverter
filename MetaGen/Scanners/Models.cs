@@ -1,9 +1,9 @@
-﻿using MetaGen.Properties.Services;
+﻿using MetaGen.Services;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 
-namespace MetaGen.Properties.Scanners
+namespace MetaGen.Scanners
 {
     public static class Models
     {
@@ -139,17 +139,17 @@ namespace MetaGen.Properties.Scanners
         {
             public CAaBox(C3Vector<float> inBottomCorner, C3Vector<float> inTopCorner)
             {
-                this.BottomCorner = inBottomCorner;
-                this.TopCorner = inTopCorner;
+                BottomCorner = inBottomCorner;
+                TopCorner = inTopCorner;
             }
 
             public override string ToString()
             {
                 DefaultInterpolatedStringHandler defaultInterpolatedStringHandler = new DefaultInterpolatedStringHandler(14, 2);
                 defaultInterpolatedStringHandler.AppendLiteral("Min : ");
-                defaultInterpolatedStringHandler.AppendFormatted<C3Vector<float>>(this.BottomCorner);
+                defaultInterpolatedStringHandler.AppendFormatted(BottomCorner);
                 defaultInterpolatedStringHandler.AppendLiteral(", Max : ");
-                defaultInterpolatedStringHandler.AppendFormatted<C3Vector<float>>(this.TopCorner);
+                defaultInterpolatedStringHandler.AppendFormatted(TopCorner);
                 return defaultInterpolatedStringHandler.ToStringAndClear();
             }
 
@@ -168,11 +168,11 @@ namespace MetaGen.Properties.Scanners
             {
                 DefaultInterpolatedStringHandler defaultInterpolatedStringHandler = new DefaultInterpolatedStringHandler(16, 3);
                 defaultInterpolatedStringHandler.AppendLiteral("X : ");
-                defaultInterpolatedStringHandler.AppendFormatted<T>(this.x);
+                defaultInterpolatedStringHandler.AppendFormatted(x);
                 defaultInterpolatedStringHandler.AppendLiteral(", Y : ");
-                defaultInterpolatedStringHandler.AppendFormatted<T>(this.y);
+                defaultInterpolatedStringHandler.AppendFormatted(y);
                 defaultInterpolatedStringHandler.AppendLiteral(", Z : ");
-                defaultInterpolatedStringHandler.AppendFormatted<T>(this.z);
+                defaultInterpolatedStringHandler.AppendFormatted(z);
                 return defaultInterpolatedStringHandler.ToStringAndClear();
             }
         }

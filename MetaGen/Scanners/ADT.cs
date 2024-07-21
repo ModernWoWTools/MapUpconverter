@@ -1,8 +1,8 @@
-﻿using MetaGen.Properties.Services;
+﻿using MetaGen.Services;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
 
-namespace MetaGen.Properties.Scanners
+namespace MetaGen.Scanners
 {
     public class TextureInfo
     {
@@ -153,7 +153,7 @@ namespace MetaGen.Properties.Scanners
                     {
                         case "System.SByte[]":
                             var sbyteArray = (sbyte[])value;
-                            for(var i = 0; i < sbyteArray.Length; i++)
+                            for (var i = 0; i < sbyteArray.Length; i++)
                             {
                                 rowString += sbyteArray[i].ToString() + "_";
                             }
@@ -183,14 +183,14 @@ namespace MetaGen.Properties.Scanners
                 groundEffectMap.Add((int)geRow["ID"], rowString.GetHashCode());
             }
 
-            foreach(var texture in TextureGroundEffectMap)
+            foreach (var texture in TextureGroundEffectMap)
             {
                 var groundEffects = texture.Value;
                 var newGEs = new List<uint>();
                 var usedHashes = new List<int>();
-                foreach(var ge in groundEffects)
+                foreach (var ge in groundEffects)
                 {
-                    if(groundEffectMap.TryGetValue((int)ge, out var hash))
+                    if (groundEffectMap.TryGetValue((int)ge, out var hash))
                     {
                         if (!usedHashes.Contains(hash))
                         {

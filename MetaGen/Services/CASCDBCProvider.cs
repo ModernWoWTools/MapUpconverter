@@ -1,7 +1,6 @@
 ﻿using DBCD.Providers;
-using MetaGen.Properties.Services;
 
-namespace MetaGen
+namespace MetaGen.Services
 {
     class CASCDBCProvider : IDBCProvider
     {
