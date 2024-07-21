@@ -1,5 +1,5 @@
-﻿using MetaGen.Properties.Scanners;
-using MetaGen.Properties.Services;
+﻿using MetaGen.Scanners;
+using MetaGen.Services;
 using System.Text.RegularExpressions;
 
 namespace MetaGen
