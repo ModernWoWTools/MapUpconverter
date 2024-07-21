@@ -18,6 +18,13 @@ namespace MapUpconverter.WDL
                     continue;
 
                 var filename = Path.GetFileNameWithoutExtension(file);
+                
+                if(!filename.ToLowerInvariant().StartsWith(Settings.MapName.ToLowerInvariant()))
+                {
+                    Console.WriteLine(filename + " does not belong to " + Settings.MapName + ", skipping it in WDL generation...");
+                    continue;
+                }
+                
                 var mapName = "";
                 var splitName = filename.Split('_');
 
