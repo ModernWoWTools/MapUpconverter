@@ -12,7 +12,7 @@ namespace MapUpconverter.ADT
                 Version = new MVER(18),
                 Header = wotlkRootADT.Header,
                 Water = wotlkRootADT.Water,
-                BoundingBox = wotlkRootADT.BoundingBox ?? new MFBO(-1000, 2000),
+                BoundingBox = new MFBO(-30000, 30000),
                 Chunks = new Warcraft.NET.Files.ADT.Terrain.BfA.MCNK[256]
             };
 
