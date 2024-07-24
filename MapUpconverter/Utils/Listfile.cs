@@ -60,6 +60,12 @@
 
         public static void AddCustomFileDataIDToListfile(uint fileDataID, string filename)
         {
+            if (filename == "world/maps/" + Settings.MapName + "/" + Settings.MapName + ".wdt" && Settings.RootWDTFileDataID != 0)
+            {
+                // Special case -- for overriding maps users can use existing Blizzard WDT FDIDs referenced from Map.db2, this means we need to add an official FDID to the patch.
+                fileDataID = Settings.RootWDTFileDataID;
+            }
+
             filename = filename.ToLower();
 
             if (NameMap.ContainsKey(fileDataID))
