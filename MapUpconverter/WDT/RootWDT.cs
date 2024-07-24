@@ -23,20 +23,20 @@ namespace MapUpconverter.WDT
 
             Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable rootWDT;
 
-            if (File.Exists(currentWDTPath))
-            {
-                rootWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(currentWDTPath));
-            }
-            else
-            {
+            //if (File.Exists(currentWDTPath))
+            //{
+            //    rootWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(currentWDTPath));
+            //}
+            //else
+            //{
                 // We need to generate an entirely new WDT, oh dear.
-                Console.ForegroundColor = ConsoleColor.Red;
-                if (wotlkWDTExists)
-                    Console.WriteLine("Generating WDT based on WotLK input WDT. This is not fully implemented yet, and will not work as expected.");
-                else
-                    Console.WriteLine("Generating an entirely new WDT. This is not fully implemented yet, and will not work as expected.");
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //if (wotlkWDTExists)
+                //    Console.WriteLine("Generating WDT based on WotLK input WDT. This is not fully implemented yet, and will not work as expected.");
+                //else
+                //    Console.WriteLine("Generating an entirely new WDT. This is not fully implemented yet, and will not work as expected.");
 
-                Console.ResetColor();
+                //Console.ResetColor();
 
                 rootWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable()
                 {
@@ -121,7 +121,7 @@ namespace MapUpconverter.WDT
                             MinimapTextureFileId = hasMinimapTexture ? GetOrAssignFileDataID("world/minimaps/" + Settings.MapName + "/map" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp") : 0
                         };
                     }
-                }
+               // }
             }
 
             return rootWDT;
