@@ -42,8 +42,10 @@
                         continue;
 
                     var fdid = uint.Parse(parts[0]);
-                    NameMap[fdid] = parts[1];
-                    ReverseMap[parts[1]] = fdid;
+                    var filename = parts[1].ToLowerInvariant();
+
+                    NameMap[fdid] = filename;
+                    ReverseMap[filename] = fdid;
 
                     customFDIDs.Add(fdid);
 
