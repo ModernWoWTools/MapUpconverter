@@ -203,11 +203,6 @@ namespace MapUpconverterGUI
             e.Handled = !uint.TryParse(e.Text, out _);
         }
 
-        private void MapName_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            e.Handled = !e.Text.All(char.IsLetterOrDigit);
-        }
-
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo() { UseShellExecute = true, FileName = e.Uri.AbsoluteUri });

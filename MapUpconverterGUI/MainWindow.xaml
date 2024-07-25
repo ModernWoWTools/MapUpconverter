@@ -19,7 +19,7 @@
         <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,84,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
 
         <Label Content="Map name" HorizontalAlignment="Left" Margin="39,110,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="MapName" PreviewTextInput="MapName_PreviewTextInput" HorizontalAlignment="Left" Margin="112,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
+        <TextBox x:Name="MapName" HorizontalAlignment="Left" Margin="112,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
         <CheckBox x:Name="GenerateWDTWDLCheckbox" Content="Generate WDT/WDL? Primarily for fully custom maps. If you are editing a partial/existing map and aren't adding -new- ADTs, uncheck this.&#10;If you are adding new ADTs/want to update the WDL (distant mountain heightmap), put all ADTs in the input dir (new or not) and check this." HorizontalAlignment="Left" Margin="19,146,0,0" VerticalAlignment="Top" Click="GenerateWDTWDL_Checked"/>
         <CheckBox x:Name="ConvertOnSaveCheckbox" Content="Convert on save? Leave this unchecked the first time you generate a map.&#10;After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).&#10;To stop monitoring ADTs for changes, focus the console window and hit enter." HorizontalAlignment="Left" Margin="19,185,0,0" VerticalAlignment="Top" Click="Checkbox_Changed"/>
 
