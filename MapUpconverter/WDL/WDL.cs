@@ -17,9 +17,9 @@ namespace MapUpconverter.WDL
                 if (file.EndsWith("_lod.adt") || file.EndsWith("obj0.adt") || file.EndsWith("obj1.adt") || file.EndsWith("tex0.adt"))
                     continue;
 
-                var filename = Path.GetFileNameWithoutExtension(file);
+                var filename = Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
                 
-                if(!filename.ToLowerInvariant().StartsWith(Settings.MapName.ToLowerInvariant()))
+                if(!filename.StartsWith(Settings.MapName.ToLowerInvariant()))
                 {
                     Console.WriteLine(filename + " does not belong to " + Settings.MapName + ", skipping it in WDL generation...");
                     continue;
