@@ -300,7 +300,8 @@ namespace MapUpconverter
 
         private static void OnADTChanged(object sender, FileSystemEventArgs e)
         {
-            if (!e.FullPath.StartsWith(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName)))
+            var path = Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName);
+            if (!e.FullPath.ToLowerInvariant().StartsWith(path.ToLowerInvariant()))
                 Console.WriteLine("Ignoring ADT " + e.FullPath + " because it's not in the map directory " + Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName));
 
             if (!adtQueue.Contains(e.FullPath))
