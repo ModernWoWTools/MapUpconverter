@@ -12,7 +12,7 @@ namespace MapUpconverter.Utils
                 throw new FileNotFoundException("Ground effect info not found at " + configPath);
 
             var currentByID = JsonConvert.DeserializeObject<Dictionary<string, uint[]>>(File.ReadAllText(configPath)) ?? throw new Exception("Failed to read GroundEffectIDsByTextureFileID");
-            TextureGroundEffectMap = new Dictionary<uint, uint[]>(currentByID.ToDictionary(x => uint.Parse(x.Key), x => x.Value));
+            TextureGroundEffectMap = new Dictionary<uint, uint[]>(currentByID.ToDictionary(x => uint.Parse(x.Key), x => x.Value.Order().ToArray()));
         }
     }
 }
