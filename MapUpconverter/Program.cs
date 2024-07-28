@@ -367,25 +367,62 @@ namespace MapUpconverter
 
         private static void ConvertWotLKADT(string inputADT)
         {
-            using (var fileStream = new FileStream(inputADT, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (var ms = new MemoryStream())
+            var path = Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName);
+            if (!Path.GetFileNameWithoutExtension(inputADT).StartsWith(Settings.MapName, StringComparison.InvariantCultureIgnoreCase))
             {
-                fileStream.CopyTo(ms);
+                Console.WriteLine("Ignoring ADT " + inputADT + " because it's not named as map " + Settings.MapName);
+                return;
+            }
+
+            using (var ms = new MemoryStream(File.ReadAllBytes(inputADT)))
+            {
                 var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(ms.ToArray());
 
                 var root = ADT.Root.Convert(wotlkADT);
-                var tex0 = ADT.Tex0.Convert(wotlkADT);
-                var obj0 = ADT.Obj0.Convert(wotlkADT);
-                var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
-
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileName(inputADT)), root.Serialize());
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt"), tex0.Serialize());
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt"), obj0.Serialize());
-                File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt"), obj1.Serialize());
-
+                var rootSerialized = root.Serialize();
                 cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
+                var rootPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileName(inputADT));
+                WriteFileIfChanged(rootPath, rootSerialized);
+
+                var tex0 = ADT.Tex0.Convert(wotlkADT);
+                var tex0Serialized = tex0.Serialize();
+                var tex0Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt");
+                WriteFileIfChanged(tex0Path, tex0Serialized);
+
+                var obj0 = ADT.Obj0.Convert(wotlkADT);
+                var obj0Serialized = obj0.Serialize();
+                var obj0Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt");
+                WriteFileIfChanged(obj0Path, obj0Serialized);
+
+                var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
+                var obj1Serialized = obj1.Serialize();
                 cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
+                var obj1Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt");
+                WriteFileIfChanged(obj1Path, obj1Serialized);
+
+                var lod = ADT.LOD.Convert(wotlkADT);
+                var lodSerialized = lod.Serialize();
+                var lodPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_lod.adt");
+                WriteFileIfChanged(lodPath, lodSerialized);
             }
+        }
+
+        private static void WriteFileIfChanged(string path, byte[] data)
+        {
+            if (!File.Exists(path))
+            {
+                File.WriteAllBytes(path, data);
+                return;
+            }
+
+            var existingData = File.ReadAllBytes(path);
+            if (!existingData.SequenceEqual(data))
+            {
+                File.WriteAllBytes(path, data);
+                return;
+            }
+
+            Console.WriteLine("ADT " + Path.GetFileName(path) + " is unchanged, skipping write..");
         }
 
         private static void ConvertWDL()
