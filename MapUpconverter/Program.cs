@@ -193,6 +193,9 @@ namespace MapUpconverter
                 Directory.CreateDirectory(mapDir);
             }
 
+            //if (Settings.EpsilonIntegration)
+            //    MapUpconverter.EpsilonConnection.Connect();
+
             Console.WriteLine("Startup took " + totalTimeMS + "ms");
 
             if (!Settings.ConvertOnSave)
@@ -293,10 +296,11 @@ namespace MapUpconverter
                                     }
                                 }
 
-                                if (Settings.EpsilonIntegration)
-                                {
-                                    Console.WriteLine("Requesting map refresh..");
-                                }
+                                //if (Settings.EpsilonIntegration)
+                                //{
+                                //    Console.WriteLine("Requesting map refresh..");
+                                //    EpsilonConnection.RequestMapUpdate();
+                                //}
                             }
                         }
                     }
@@ -409,10 +413,10 @@ namespace MapUpconverter
                 var obj1Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt");
                 WriteFileIfChanged(obj1Path, obj1Serialized);
 
-                var lod = ADT.LOD.Convert(wotlkADT);
-                var lodSerialized = lod.Serialize();
-                var lodPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_lod.adt");
-                WriteFileIfChanged(lodPath, lodSerialized);
+                //var lod = ADT.LOD.Convert(wotlkADT);
+                //var lodSerialized = lod.Serialize();
+                //var lodPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_lod.adt");
+                //WriteFileIfChanged(lodPath, lodSerialized);
             }
         }
 
