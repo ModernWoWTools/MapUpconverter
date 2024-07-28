@@ -16,6 +16,7 @@ namespace MapUpconverter
         public static uint RootWDTFileDataID = 0;
 
         public static bool ConvertOnSave = false;
+        public static bool EpsilonIntegration = true;
 
         public static void Load(string toolFolder)
         {

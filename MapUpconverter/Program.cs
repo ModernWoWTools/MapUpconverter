@@ -101,7 +101,7 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
-            if(!Directory.Exists(Path.Combine(toolFolder, "meta")))
+            if (!Directory.Exists(Path.Combine(toolFolder, "meta")))
                 Directory.CreateDirectory(Path.Combine(toolFolder, "meta"));
 
             // Load texture height/scale information
@@ -260,33 +260,42 @@ namespace MapUpconverter
                                 Console.WriteLine("Failed to convert ADT " + Path.GetFileNameWithoutExtension(adtFilename) + ": " + e.Message + "\n" + e.StackTrace);
                             }
 
-                            if (Settings.GenerateWDTWDL)
+                            if (adtQueue.Count == 0)
                             {
-                                try
+                                Console.WriteLine("No ADTs in queue, updating WDL/Epsilon (if needed)..");
+                                if (Settings.GenerateWDTWDL)
                                 {
-                                    timer.Restart();
-                                    ConvertWDL();
-                                    timer.Stop();
-                                    Console.WriteLine("Generating WDL took " + timer.ElapsedMilliseconds + "ms");
+                                    try
+                                    {
+                                        timer.Restart();
+                                        ConvertWDL();
+                                        timer.Stop();
+                                        Console.WriteLine("Generating WDL took " + timer.ElapsedMilliseconds + "ms");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Failed to generate WDL: " + e.Message);
+                                    }
                                 }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine("Failed to generate WDL: " + e.Message);
-                                }
-                            }
 
-                            if (!string.IsNullOrEmpty(Settings.EpsilonDir))
-                            {
-                                try
+                                if (!string.IsNullOrEmpty(Settings.EpsilonDir))
                                 {
-                                    timer.Restart();
-                                    Epsilon.PatchManifest.Update();
-                                    timer.Stop();
-                                    Console.WriteLine("Updating Epsilon patch manifest took " + timer.ElapsedMilliseconds + "ms");
+                                    try
+                                    {
+                                        timer.Restart();
+                                        Epsilon.PatchManifest.Update();
+                                        timer.Stop();
+                                        Console.WriteLine("Updating Epsilon patch manifest took " + timer.ElapsedMilliseconds + "ms");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Failed to update Epsilon patch manifest: " + e.Message);
+                                    }
                                 }
-                                catch (Exception e)
+
+                                if (Settings.EpsilonIntegration)
                                 {
-                                    Console.WriteLine("Failed to update Epsilon patch manifest: " + e.Message);
+                                    Console.WriteLine("Requesting map refresh..");
                                 }
                             }
                         }

@@ -1,7 +1,6 @@
 ﻿using MetaGen.Services;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
 
 namespace MetaGen.Scanners
 {
@@ -143,16 +142,6 @@ namespace MetaGen.Scanners
                 TopCorner = inTopCorner;
             }
 
-            public override string ToString()
-            {
-                DefaultInterpolatedStringHandler defaultInterpolatedStringHandler = new DefaultInterpolatedStringHandler(14, 2);
-                defaultInterpolatedStringHandler.AppendLiteral("Min : ");
-                defaultInterpolatedStringHandler.AppendFormatted(BottomCorner);
-                defaultInterpolatedStringHandler.AppendLiteral(", Max : ");
-                defaultInterpolatedStringHandler.AppendFormatted(TopCorner);
-                return defaultInterpolatedStringHandler.ToStringAndClear();
-            }
-
             public C3Vector<float> BottomCorner;
 
             public C3Vector<float> TopCorner;
@@ -163,18 +152,6 @@ namespace MetaGen.Scanners
             public T x { readonly get; set; }
             public T y { readonly get; set; }
             public T z { readonly get; set; }
-
-            public override string ToString()
-            {
-                DefaultInterpolatedStringHandler defaultInterpolatedStringHandler = new DefaultInterpolatedStringHandler(16, 3);
-                defaultInterpolatedStringHandler.AppendLiteral("X : ");
-                defaultInterpolatedStringHandler.AppendFormatted(x);
-                defaultInterpolatedStringHandler.AppendLiteral(", Y : ");
-                defaultInterpolatedStringHandler.AppendFormatted(y);
-                defaultInterpolatedStringHandler.AppendLiteral(", Z : ");
-                defaultInterpolatedStringHandler.AppendFormatted(z);
-                return defaultInterpolatedStringHandler.ToStringAndClear();
-            }
         }
     }
 }
