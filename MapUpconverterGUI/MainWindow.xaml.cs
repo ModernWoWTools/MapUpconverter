@@ -55,6 +55,9 @@ namespace MapUpconverterGUI
                 EpsilonDir.Text = MapUpconverter.Settings.EpsilonDir;
                 PatchName.Text = MapUpconverter.Settings.EpsilonPatchName;
                 WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
+
+                ClientRefreshEnabled.IsChecked = MapUpconverter.Settings.ClientRefresh;
+                MapID.Text = MapUpconverter.Settings.MapID.ToString();
             }
             catch (Exception ex)
             {
@@ -185,12 +188,31 @@ namespace MapUpconverterGUI
             }
         }
 
+        private void MapID_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (int.TryParse(MapID.Text.Trim(), out var cleanedID))
+            {
+                MapID.Text = cleanedID.ToString();
+                MapUpconverter.Settings.MapID = cleanedID;
+                ResetSaveButton();
+            }
+            else
+            {
+                MapID.Text = "";
+            }
+        }
+
         private void Checkbox_Changed(object sender, RoutedEventArgs e)
         {
             MapUpconverter.Settings.ConvertOnSave = ConvertOnSaveCheckbox.IsChecked == true;
             ResetSaveButton();
         }
 
+        private void ClientRefreshEnabled_Checked(object sender, RoutedEventArgs e)
+        {
+            MapUpconverter.Settings.ClientRefresh = ClientRefreshEnabled.IsChecked == true;
+            ResetSaveButton();
+        }
 
         private void GenerateWDTWDL_Checked(object sender, RoutedEventArgs e)
         {

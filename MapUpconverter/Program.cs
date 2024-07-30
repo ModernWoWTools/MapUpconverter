@@ -195,7 +195,7 @@ namespace MapUpconverter
                 Directory.CreateDirectory(mapDir);
             }
 
-            if (Settings.EpsilonIntegration)
+            if (Settings.ClientRefresh)
                 EpsilonConnection.Connect();
 
             Console.WriteLine("Startup took " + totalTimeMS + "ms");
@@ -298,7 +298,7 @@ namespace MapUpconverter
                                     }
                                 }
 
-                                if (Settings.EpsilonIntegration)
+                                if (Settings.ClientRefresh)
                                 {
                                     Console.WriteLine("Requesting map refresh..");
                                     RequestMapUpdate();
@@ -315,7 +315,7 @@ namespace MapUpconverter
 
         private static void RequestMapUpdate()
         {
-            if (!Settings.EpsilonIntegration)
+            if (!Settings.ClientRefresh)
                 return;
 
             var tiles = new List<(int TileID, int UpdateFlags)>();
@@ -324,8 +324,7 @@ namespace MapUpconverter
                 tiles.Add((tile.Key, tile.Value));
             }
 
-            // TODO: MapID config option
-            EpsilonConnection.RequestMapTileUpdate(-1, tiles);
+            EpsilonConnection.RequestMapTileUpdate(Settings.MapID, tiles);
 
             UpdatedTiles.Clear();
         }

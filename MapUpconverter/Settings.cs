@@ -16,7 +16,9 @@ namespace MapUpconverter
         public static uint RootWDTFileDataID = 0;
 
         public static bool ConvertOnSave = false;
-        public static bool EpsilonIntegration = true;
+
+        public static bool ClientRefresh = false;
+        public static int MapID = -1;
 
         public static void Load(string toolFolder)
         {
@@ -43,6 +45,16 @@ namespace MapUpconverter
             RootWDTFileDataID = settingsJSON.rootWDTFileDataID;
 
             ConvertOnSave = settingsJSON.convertOnSave;
+
+            if (settingsJSON.clientRefresh == null)
+                ClientRefresh = false;
+            else
+                ClientRefresh = settingsJSON.clientRefresh;
+
+            if (settingsJSON.mapID == null)
+                MapID = -1;
+            else
+                MapID = settingsJSON.mapID;
         }
 
         public static void Save(string toolFolder)
@@ -62,7 +74,10 @@ namespace MapUpconverter
                 generateWDTWDL = GenerateWDTWDL,
                 rootWDTFileDataID = RootWDTFileDataID,
 
-                convertOnSave = ConvertOnSave
+                convertOnSave = ConvertOnSave,
+
+                clientRefresh = ClientRefresh,
+                mapID = MapID
             };
 
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(settingsJSON, Formatting.Indented));
