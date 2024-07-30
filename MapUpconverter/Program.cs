@@ -7,6 +7,7 @@ namespace MapUpconverter
     {
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
+        private static readonly ConcurrentDictionary<int, int> UpdatedTiles = [];
 
         private static BlockingCollection<string> adtQueue = [];
 
@@ -311,6 +312,19 @@ namespace MapUpconverter
             }
         }
 
+        private static void RequestMapUpdate()
+        {
+            if (!Settings.EpsilonIntegration)
+                return;
+
+            var tiles = new List<(int TileID, int UpdateFlags)>();
+            foreach (var tile in UpdatedTiles)
+            {
+                tiles.Add((tile.Key, tile.Value));
+            }
+            UpdatedTiles.Clear();
+        }
+
         private static void OnADTChanged(object sender, FileSystemEventArgs e)
         {
             var path = Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName);
@@ -392,26 +406,25 @@ namespace MapUpconverter
                 var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(ms.ToArray());
 
                 var root = ADT.Root.Convert(wotlkADT);
+
+                var adtName = Path.GetFileNameWithoutExtension(inputADT);
+
                 var rootSerialized = root.Serialize();
-                cachedRootADTs[Path.GetFileNameWithoutExtension(inputADT)] = root;
-                var rootPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileName(inputADT));
-                WriteFileIfChanged(rootPath, rootSerialized);
+                cachedRootADTs[adtName] = root;
+                WriteADTIfChanged(adtName, "root", rootSerialized);
 
                 var tex0 = ADT.Tex0.Convert(wotlkADT);
                 var tex0Serialized = tex0.Serialize();
-                var tex0Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_tex0.adt");
-                WriteFileIfChanged(tex0Path, tex0Serialized);
+                WriteADTIfChanged(adtName, "tex0", tex0Serialized);
 
                 var obj0 = ADT.Obj0.Convert(wotlkADT);
                 var obj0Serialized = obj0.Serialize();
-                var obj0Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj0.adt");
-                WriteFileIfChanged(obj0Path, obj0Serialized);
+                WriteADTIfChanged(adtName, "obj0", obj0Serialized);
 
                 var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
                 var obj1Serialized = obj1.Serialize();
-                cachedOBJ1ADTs[Path.GetFileNameWithoutExtension(inputADT) + "_obj1"] = obj1;
-                var obj1Path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Path.GetFileNameWithoutExtension(inputADT) + "_obj1.adt");
-                WriteFileIfChanged(obj1Path, obj1Serialized);
+                cachedOBJ1ADTs[adtName + "_obj1"] = obj1;
+                WriteADTIfChanged(adtName, "obj1", obj1Serialized);
 
                 //var lod = ADT.LOD.Convert(wotlkADT);
                 //var lodSerialized = lod.Serialize();
@@ -420,8 +433,10 @@ namespace MapUpconverter
             }
         }
 
-        private static void WriteFileIfChanged(string path, byte[] data)
+        private static void WriteADTIfChanged(string adtName, string type, byte[] data)
         {
+            var path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, adtName + (type == "root" ? ".adt" : "_" + type + ".adt"));
+
             if (!File.Exists(path))
             {
                 File.WriteAllBytes(path, data);
@@ -432,6 +447,39 @@ namespace MapUpconverter
             if (!existingData.SequenceEqual(data))
             {
                 File.WriteAllBytes(path, data);
+
+                var splitType = adtName.Split('_');
+                var tileX = int.Parse(splitType[1]);
+                var tileY = int.Parse(splitType[2]);
+
+                int tileUpdateFlag = 0;
+
+                switch (type)
+                {
+                    case "root":
+                        tileUpdateFlag = 0x1;
+                        break;
+                    case "tex0":
+                        tileUpdateFlag = 0x2;
+                        break;
+                    case "obj0":
+                    case "obj1":
+                        tileUpdateFlag = 0x4;
+                        break;
+                    case "lod":
+                        tileUpdateFlag = 0x8;
+                        break;
+                }
+
+                if (UpdatedTiles.TryGetValue(tileY * 64 + tileX, out int flags))
+                {
+                    UpdatedTiles[tileY * 64 + tileX] = flags | tileUpdateFlag;
+                }
+                else
+                {
+                    UpdatedTiles[tileY * 64 + tileX] = tileUpdateFlag;
+                }
+
                 return;
             }
 
