@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MapUpconverter.Epsilon\MapUpconverter.Epsilon.csproj" />
     <ProjectReference Include="..\Warcraft.NET\Warcraft.NET\Warcraft.NET.csproj" />
   </ItemGroup>
 

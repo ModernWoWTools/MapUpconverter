@@ -1,0 +1,15 @@
+syntax = "proto2";
+package Epsilon.DTO;
+
+message RequestMapTileOperation {
+	enum MapTileOperationFlags {
+		RELOAD_TERRAIN = 0x1;
+		RELOAD_TEXTURE = 0x2;
+		RELOAD_OBJECTS = 0x4;
+		RELOAD_LOD = 0x8;
+	}
+
+	required int32 mapID = 1;
+	repeated int32 mapTileID = 2;
+	repeated int32 mapTileOpFlags = 3; // Not directly of type MapTileOperationFlags as protobuf does not support bitfield/flags that way.
+}

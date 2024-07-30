@@ -1,4 +1,5 @@
-﻿using MapUpconverter.Utils;
+﻿using MapUpconverter.Epsilon;
+using MapUpconverter.Utils;
 using System.Collections.Concurrent;
 
 namespace MapUpconverter
@@ -194,8 +195,8 @@ namespace MapUpconverter
                 Directory.CreateDirectory(mapDir);
             }
 
-            //if (Settings.EpsilonIntegration)
-            //    MapUpconverter.EpsilonConnection.Connect();
+            if (Settings.EpsilonIntegration)
+                EpsilonConnection.Connect();
 
             Console.WriteLine("Startup took " + totalTimeMS + "ms");
 
@@ -297,11 +298,11 @@ namespace MapUpconverter
                                     }
                                 }
 
-                                //if (Settings.EpsilonIntegration)
-                                //{
-                                //    Console.WriteLine("Requesting map refresh..");
-                                //    EpsilonConnection.RequestMapUpdate();
-                                //}
+                                if (Settings.EpsilonIntegration)
+                                {
+                                    Console.WriteLine("Requesting map refresh..");
+                                    RequestMapUpdate();
+                                }
                             }
                         }
                     }
@@ -322,6 +323,10 @@ namespace MapUpconverter
             {
                 tiles.Add((tile.Key, tile.Value));
             }
+
+            // TODO: MapID config option
+            EpsilonConnection.RequestMapTileUpdate(-1, tiles);
+
             UpdatedTiles.Clear();
         }
 

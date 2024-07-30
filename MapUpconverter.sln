@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBFileReaderLib", "DBCD\DBF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBCD", "DBCD\DBCD\DBCD.csproj", "{89435A84-7685-4605-9EC6-048FA0384D93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapUpconverter.Epsilon", "MapUpconverter.Epsilon\MapUpconverter.Epsilon.csproj", "{D0D9D491-4724-4312-B84B-EC141EFC550F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CLIOnlyRelease|Any CPU = CLIOnlyRelease|Any CPU
@@ -61,6 +63,12 @@ Global
 		{89435A84-7685-4605-9EC6-048FA0384D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89435A84-7685-4605-9EC6-048FA0384D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89435A84-7685-4605-9EC6-048FA0384D93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D9D491-4724-4312-B84B-EC141EFC550F}.CLIOnlyRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D9D491-4724-4312-B84B-EC141EFC550F}.CLIOnlyRelease|Any CPU.Build.0 = Release|Any CPU
+		{D0D9D491-4724-4312-B84B-EC141EFC550F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D9D491-4724-4312-B84B-EC141EFC550F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D9D491-4724-4312-B84B-EC141EFC550F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D9D491-4724-4312-B84B-EC141EFC550F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
