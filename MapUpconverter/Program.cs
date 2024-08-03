@@ -281,6 +281,18 @@ namespace MapUpconverter
                                     {
                                         Console.WriteLine("Failed to generate WDL: " + e.Message);
                                     }
+                                    // TODO: We don't want to generate WDTs on the fly yet, this will need support in the hot reloading stuff first
+                                    //try
+                                    //{
+                                    //    timer.Restart();
+                                    //    ConvertWDT();
+                                    //    timer.Stop();
+                                    //    Console.WriteLine("Generating WDT took " + timer.ElapsedMilliseconds + "ms");
+                                    //}
+                                    //catch (Exception e)
+                                    //{
+                                    //    Console.WriteLine("Failed to generate WDT: " + e.Message);
+                                    //}
                                 }
 
                                 if (!string.IsNullOrEmpty(Settings.EpsilonDir))
