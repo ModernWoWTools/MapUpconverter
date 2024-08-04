@@ -12,12 +12,12 @@
             <TabItem Header="General Settings">
                 <Grid Height="459" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Label Content="Input directory" HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="InputDir" HorizontalAlignment="Left" Margin="112,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="InputDir_TextChanged" Height="20"/>
-                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,14,0,0" VerticalAlignment="Top" Click="InputDirButton_Click" Width="102"/>
+                    <TextBox x:Name="InputDir" HorizontalAlignment="Left" Margin="112,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="501" TextChanged="InputDir_TextChanged" Height="20"/>
+                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="619,14,0,0" VerticalAlignment="Top" Click="InputDirButton_Click" Width="102"/>
 
                     <Label Content="Output directory" HorizontalAlignment="Left" Margin="9,40,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="OutputDir" HorizontalAlignment="Left" Margin="112,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="OutputDir_TextChanged" Height="20"/>
-                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="447,44,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
+                    <TextBox x:Name="OutputDir" HorizontalAlignment="Left" Margin="112,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="501" TextChanged="OutputDir_TextChanged" Height="20"/>
+                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="619,44,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
 
                     <Label Content="Map name" HorizontalAlignment="Left" Margin="39,70,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="MapName" HorizontalAlignment="Left" Margin="112,74,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
@@ -31,6 +31,13 @@
                             <Bold>Convert on save?</Bold><LineBreak />Leave this unchecked the first time you generate a map as this does not generate/update WDTs.<LineBreak/>After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).<LineBreak />To stop monitoring ADTs for changes, focus the console window and hit enter.
                         </TextBlock>
                     </CheckBox>
+
+                    <TextBlock Margin="31,252,221,165">
+                        <Bold>Export target</Bold> <LineBreak /> Currently only one export target can be set at a time. For per-target settings, see the other tabs.
+                    </TextBlock>
+                    <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="39,289,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+                    <RadioButton x:Name="ArctiumRadioButton" Content="Arctium" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="112,289,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+
                     <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="554,268,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,271,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
 
@@ -49,8 +56,8 @@
                     <Label Content="Epsilon specific-settings (optional). If you are targeting Epsilon, you need to fill in the below settings.&#xA;For fast in-client updates, set the above output directory to your (existing or not) patch directory (e.g. C:/Eps/_retail__/Patches/MyPatchName).&#xA;Then, with convert-on-save mode enabled changes will only take a relog/teleport to appear in-game." HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" />
 
                     <Label Content="Epsilon directory" HorizontalAlignment="Left" Margin="9,69,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="EpsilonDir" HorizontalAlignment="Left" Margin="113,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="EpsilonDir_TextChanged" Height="20"/>
-                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="448,72,0,0" VerticalAlignment="Top" Click="EpsilonDirButton_Click" Width="102"/>
+                    <TextBox x:Name="EpsilonDir" HorizontalAlignment="Left" Margin="113,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="550" TextChanged="EpsilonDir_TextChanged" Height="20"/>
+                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="668,72,0,0" VerticalAlignment="Top" Click="EpsilonDirButton_Click" Width="102"/>
 
                     <Label Content="Patch name" HorizontalAlignment="Left" Margin="35,99,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="PatchName" HorizontalAlignment="Left" Margin="113,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="PatchName_TextChanged" Height="20"/>
@@ -65,6 +72,18 @@
                     </CheckBox>
                     <Label Content="MapID" HorizontalAlignment="Left" Margin="63,272,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="MapID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="113,275,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapID_TextChanged" Height="20"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Arctium Settings">
+                <Grid>
+                    <Label Content="Arctium Launcher specific-settings (optional). If you are targeting the Arctium Launcher, you need to fill in the below settings.&#xA;Then, with convert-on-save mode enabled changes will only take a relog/teleport to appear in-game." HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" />
+
+                    <Label Content="Arctium directory" HorizontalAlignment="Left" Margin="9,69,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="LauncherDir" HorizontalAlignment="Left" Margin="113,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="486" TextChanged="LauncherDir_TextChanged" Height="20"/>
+                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="606,72,0,0" VerticalAlignment="Top" Click="LauncherDirButton_Click" Width="102"/>
+
+                    <Label Content="Patch name" HorizontalAlignment="Left" Margin="35,99,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="ArctiumPatchName" HorizontalAlignment="Left" Margin="113,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="ArctiumPatchName_TextChanged" Height="20"/>
                 </Grid>
             </TabItem>
         </TabControl>

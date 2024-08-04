@@ -9,8 +9,13 @@ namespace MapUpconverter
 
         public static string MapName = "";
 
+        public static string ExportTarget = "";
+
         public static string EpsilonDir = "";
         public static string EpsilonPatchName = "";
+
+        public static string ArctiumDir = "";
+        public static string ArctiumPatchName = "";
 
         public static bool GenerateWDTWDL = true;
         public static uint RootWDTFileDataID = 0;
@@ -55,6 +60,21 @@ namespace MapUpconverter
                 MapID = -1;
             else
                 MapID = settingsJSON.mapID;
+
+            if(settingsJSON.arctiumDir == null)
+                ArctiumDir = "";
+            else
+                ArctiumDir = settingsJSON.arctiumDir;
+
+            if (settingsJSON.arctiumPatchName == null)
+                ArctiumPatchName = "";
+            else
+                ArctiumPatchName = settingsJSON.arctiumPatchName;
+
+            if(settingsJSON.exportTarget == null)
+                ExportTarget = "";
+            else
+                ExportTarget = settingsJSON.exportTarget;
         }
 
         public static void Save(string toolFolder)
@@ -71,8 +91,13 @@ namespace MapUpconverter
                 epsilonDir = EpsilonDir,
                 epsilonPatchName = EpsilonPatchName,
 
+                arctiumDir = ArctiumDir,
+                arctiumPatchName = ArctiumPatchName,
+
                 generateWDTWDL = GenerateWDTWDL,
                 rootWDTFileDataID = RootWDTFileDataID,
+
+                exportTarget = ExportTarget,
 
                 convertOnSave = ConvertOnSave,
 

@@ -54,6 +54,10 @@ namespace MapUpconverterGUI
 
                 EpsilonDir.Text = MapUpconverter.Settings.EpsilonDir;
                 PatchName.Text = MapUpconverter.Settings.EpsilonPatchName;
+
+                LauncherDir.Text = MapUpconverter.Settings.ArctiumDir;
+                ArctiumPatchName.Text = MapUpconverter.Settings.ArctiumPatchName;
+
                 WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
 
                 ClientRefreshEnabled.IsChecked = MapUpconverter.Settings.ClientRefresh;
@@ -144,6 +148,31 @@ namespace MapUpconverterGUI
             }
         }
 
+        private void LauncherDirButton_Click(object sender, RoutedEventArgs e)
+        {
+            var folderDialog = new OpenFolderDialog
+            {
+                Title = "Select Arctium WoW Launcher.exe folder",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
+            };
+
+            if (folderDialog.ShowDialog() == true)
+            {
+                var folderName = folderDialog.FolderName;
+
+                if (!File.Exists(Path.Combine(folderName, "Arctium WoW Launcher.exe")))
+                {
+                    MessageBox.Show("Arctium WoW Launcher.exe not found in this folder, please select the correct folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    LauncherDir.Text = "";
+                }
+                else
+                {
+                    LauncherDir.Text = folderName;
+                    ResetSaveButton();
+                }
+            }
+        }
+
         private void InputDir_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             MapUpconverter.Settings.InputDir = InputDir.Text;
@@ -171,6 +200,18 @@ namespace MapUpconverterGUI
         private void PatchName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             MapUpconverter.Settings.EpsilonPatchName = PatchName.Text;
+            ResetSaveButton();
+        }
+
+        private void ArctiumPatchName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            MapUpconverter.Settings.ArctiumPatchName = ArctiumPatchName.Text;
+            ResetSaveButton();
+        }
+
+        private void LauncherDir_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            MapUpconverter.Settings.ArctiumDir = LauncherDir.Text;
             ResetSaveButton();
         }
 
@@ -217,6 +258,19 @@ namespace MapUpconverterGUI
         private void GenerateWDTWDL_Checked(object sender, RoutedEventArgs e)
         {
             MapUpconverter.Settings.GenerateWDTWDL = GenerateWDTWDLCheckbox.IsChecked == true;
+            ResetSaveButton();
+        }
+
+        private void ExportTarget_Checked(object sender, RoutedEventArgs e)
+        {
+            if(EpsilonRadioButton.IsChecked == true)
+            {
+                MapUpconverter.Settings.ExportTarget = "Epsilon";
+            }
+            else if(ArctiumRadioButton.IsChecked == true)
+            {
+                MapUpconverter.Settings.ExportTarget = "Arctium";
+            }
             ResetSaveButton();
         }
 
@@ -466,5 +520,6 @@ namespace MapUpconverterGUI
 
             CheckRequiredFiles();
         }
+
     }
 }
