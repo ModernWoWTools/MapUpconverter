@@ -474,14 +474,63 @@ namespace MapUpconverter
 
             if (!File.Exists(path))
             {
-                File.WriteAllBytes(path, data);
+                var tries = 0;
+                var doneWriting = false;
+
+                while (!doneWriting)
+                {
+                    try
+                    {
+                        File.WriteAllBytes(path, data);
+                        doneWriting = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Failed to write ADT " + Path.GetFileName(path) + ": " + ex.Message + ", retrying..");
+                        Console.ResetColor();
+                        tries++;
+
+                        if (tries == 5)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Failed to write ADT " + Path.GetFileName(path) + " after 5 tries, throwing.");
+                            throw;
+                        }
+                    }
+                }
+                
                 return;
             }
 
             var existingData = File.ReadAllBytes(path);
             if (!existingData.SequenceEqual(data))
             {
-                File.WriteAllBytes(path, data);
+                var tries = 0;
+                var doneWriting = false;
+
+                while (!doneWriting)
+                {
+                    try
+                    {
+                        File.WriteAllBytes(path, data);
+                        doneWriting = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Failed to write ADT " + Path.GetFileName(path) + ": " + ex.Message + ", retrying..");
+                        Console.ResetColor();
+                        tries++;
+
+                        if (tries == 5)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Failed to write ADT " + Path.GetFileName(path) + " after 5 tries, throwing.");
+                            throw;
+                        }
+                    }
+                }
 
                 var splitType = adtName.Split('_');
                 var tileX = int.Parse(splitType[1]);
