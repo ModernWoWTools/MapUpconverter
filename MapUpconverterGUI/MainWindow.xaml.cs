@@ -59,6 +59,7 @@ namespace MapUpconverterGUI
                 ArctiumPatchName.Text = MapUpconverter.Settings.ArctiumPatchName;
 
                 WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
+                ArctiumWDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
 
                 ClientRefreshEnabled.IsChecked = MapUpconverter.Settings.ClientRefresh;
                 MapID.Text = MapUpconverter.Settings.MapID.ToString();
@@ -245,6 +246,20 @@ namespace MapUpconverterGUI
             else
             {
                 WDTFileDataID.Text = "";
+            }
+        }
+
+        private void ArctiumWDTFileDataID_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (uint.TryParse(ArctiumWDTFileDataID.Text.Trim(), out var cleanedID))
+            {
+                ArctiumWDTFileDataID.Text = cleanedID.ToString();
+                MapUpconverter.Settings.RootWDTFileDataID = cleanedID;
+                ResetSaveButton();
+            }
+            else
+            {
+                ArctiumWDTFileDataID.Text = "";
             }
         }
 
