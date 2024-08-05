@@ -377,14 +377,14 @@ namespace MapUpconverter
             var adts = Directory.GetFiles(Settings.InputDir, "*.adt", SearchOption.AllDirectories);
 
             Console.Write("Converting " + adts.Length + " adts..");
-#if !DEBUG
-            Parallel.ForEach(adts, ConvertWotLKADT);
-#elif DEBUG
+//#if !DEBUG
+//            Parallel.ForEach(adts, ConvertWotLKADT);
+//#elif DEBUG
             foreach (var adt in adts)
             {
                 ConvertWotLKADT(adt);
             }
-#endif
+//#endif
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
             totalTimeMS += timer.ElapsedMilliseconds;
