@@ -24,7 +24,21 @@ namespace MapUpconverter.ADT
                 }
                 else
                 {
-                    throw new Exception("No FDID found for M2 " + wotlkModelName);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Warning: No FDID found for M2 " + wotlkModelName + ", this might indicate an outdated listfile or outdated downported asset filenames.");
+                    
+                    var baseName = Path.GetFileName(wotlkModelName);
+                    Console.WriteLine("Scanning listfile for files named " + baseName + "...");
+                    var matchingFiles = Listfile.ReverseMap.Where(kv => kv.Key.EndsWith(baseName)).ToList();
+                    if (matchingFiles.Count > 0)
+                    {
+                        Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
+                    }
+                    else
+                    {
+                        throw new Exception("No FDID found for M2 " + wotlkModelName + " or base name " + baseName);
+                    }
+                    Console.ResetColor();
                 }
             }
 
@@ -40,7 +54,21 @@ namespace MapUpconverter.ADT
                 }
                 else
                 {
-                    throw new Exception("No FDID found for WMO " + wotlkModelName);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Warning: No FDID found for WMO " + wotlkModelName + ", this might indicate an outdated listfile or outdated downported asset filenames.");
+
+                    var baseName = Path.GetFileName(wotlkModelName);
+                    Console.WriteLine("Scanning listfile for files named " + baseName + "...");
+                    var matchingFiles = Listfile.ReverseMap.Where(kv => kv.Key.EndsWith(baseName)).ToList();
+                    if (matchingFiles.Count > 0)
+                    {
+                        Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
+                    }
+                    else
+                    {
+                        throw new Exception("No FDID found for WMO " + wotlkModelName + " or base name " + baseName);
+                    }
+                    Console.ResetColor();
                 }
             }
 
