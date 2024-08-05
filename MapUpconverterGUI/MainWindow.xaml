@@ -17,9 +17,8 @@
 
                     <Label Content="Output directory" HorizontalAlignment="Left" Margin="9,40,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="OutputDir" HorizontalAlignment="Left" Margin="112,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="501" TextChanged="OutputDir_TextChanged" Height="20"/>
-                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="619,44,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
-
-                    <Label Content="Map name" HorizontalAlignment="Left" Margin="39,70,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="OutputDirButton" Content="Select directory" HorizontalAlignment="Left" Margin="619,44,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
+                    <Label Content="Map name" HorizontalAlignment="Left" Margin="39,71,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="MapName" HorizontalAlignment="Left" Margin="112,74,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
                     <CheckBox x:Name="GenerateWDTWDLCheckbox" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" Click="GenerateWDTWDL_Checked">
                         <TextBlock>
@@ -32,11 +31,12 @@
                         </TextBlock>
                     </CheckBox>
 
-                    <TextBlock Margin="31,252,221,165">
-                        <Bold>Export target</Bold> <LineBreak /> Currently only one export target can be set at a time. For per-target settings, see the other tabs.
+                    <TextBlock Margin="31,253,221,153">
+                        <Bold>Export target</Bold> <LineBreak /> Currently only one export target can be set at a time.<LineBreak/> For per-target settings, see the other tabs.
                     </TextBlock>
-                    <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="39,289,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
-                    <RadioButton x:Name="ArctiumRadioButton" Content="Arctium" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="112,289,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+                    <RadioButton x:Name="GenericRadioButton" Content="Folder" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="40,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+                    <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="112,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+                    <RadioButton x:Name="ArctiumRadioButton" Content="Arctium" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="185,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
 
                     <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="554,268,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,271,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>
