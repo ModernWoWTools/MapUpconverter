@@ -88,15 +88,18 @@ namespace MapUpconverter
                 totalTimeMS += timer.ElapsedMilliseconds;
                 timer.Restart();
 
-                try
+                if (Settings.ExportTarget == "Epsilon" && !string.IsNullOrEmpty(Settings.EpsilonDir))
                 {
-                    Console.Write("Checking existing Epsilon patches for used FileDataIDs..");
-                    Epsilon.PatchManifest.ScanUsedFileDataIDs();
-                    Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Failed to scan Epsilon patches for used FileDataIDs: " + e.Message);
+                    try
+                    {
+                        Console.Write("Checking existing Epsilon patches for used FileDataIDs..");
+                        Epsilon.PatchManifest.ScanUsedFileDataIDs();
+                        Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Failed to scan Epsilon patches for used FileDataIDs: " + e.Message);
+                    }
                 }
             }
 
@@ -182,13 +185,13 @@ namespace MapUpconverter
             Warcraft.NET.Settings.throwOnMissingChunk = false;
 #endif
 
-            if (!Directory.Exists(Settings.OutputDir))
+            if (!Directory.Exists(ExportHelper.GetExportDirectory()))
             {
-                Console.WriteLine("Output directory " + Settings.OutputDir + " does not exist, creating..");
-                Directory.CreateDirectory(Settings.OutputDir);
+                Console.WriteLine("Output directory " + ExportHelper.GetExportDirectory() + " does not exist, creating..");
+                Directory.CreateDirectory(ExportHelper.GetExportDirectory());
             }
 
-            var mapDir = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName);
+            var mapDir = Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName);
             if (!Directory.Exists(mapDir))
             {
                 Console.WriteLine("Map directory " + mapDir + " does not exist, creating..");
@@ -295,7 +298,7 @@ namespace MapUpconverter
                                     //}
                                 }
 
-                                if (!string.IsNullOrEmpty(Settings.EpsilonDir))
+                                if (Settings.ExportTarget == "Epsilon" && !string.IsNullOrEmpty(Settings.EpsilonDir))
                                 {
                                     try
                                     {
@@ -307,6 +310,20 @@ namespace MapUpconverter
                                     catch (Exception e)
                                     {
                                         Console.WriteLine("Failed to update Epsilon patch manifest: " + e.Message);
+                                    }
+                                }
+                                else if (Settings.ExportTarget == "Arctium" && !string.IsNullOrEmpty(Settings.ArctiumDir))
+                                {
+                                    try
+                                    {
+                                        timer.Restart();
+                                        Arctium.FileMapping.Update();
+                                        timer.Stop();
+                                        Console.WriteLine("Updating Arctium file mapping took " + timer.ElapsedMilliseconds + "ms");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Failed to update Arctium file mapping: " + e.Message);
                                     }
                                 }
 
@@ -400,8 +417,10 @@ namespace MapUpconverter
                 timer.Restart();
             }
 
-            if (!string.IsNullOrEmpty(Settings.EpsilonDir))
+            if (Settings.ExportTarget == "Epsilon" && !string.IsNullOrEmpty(Settings.EpsilonDir))
                 Epsilon.PatchManifest.Update();
+            else if (Settings.ExportTarget == "Arctium" && !string.IsNullOrEmpty(Settings.ArctiumDir))
+                Arctium.FileMapping.Update();
 
             Console.WriteLine("Conversion took " + totalTimeMS + "ms");
             Console.WriteLine("Press enter to exit");
@@ -451,7 +470,7 @@ namespace MapUpconverter
 
         private static void WriteADTIfChanged(string adtName, string type, byte[] data)
         {
-            var path = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, adtName + (type == "root" ? ".adt" : "_" + type + ".adt"));
+            var path = Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, adtName + (type == "root" ? ".adt" : "_" + type + ".adt"));
 
             if (!File.Exists(path))
             {
@@ -505,13 +524,13 @@ namespace MapUpconverter
         private static void ConvertWDL()
         {
             var wdl = WDL.WDL.Generate(cachedRootADTs, cachedOBJ1ADTs);
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdl"), wdl.Serialize());
+            File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdl"), wdl.Serialize());
         }
 
         private static void ConvertWDT()
         {
             var wdt = WDT.RootWDT.Generate();
-            File.WriteAllBytes(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
+            File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
         }
 
         private static void ConvertMinimaps()

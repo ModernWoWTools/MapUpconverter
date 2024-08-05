@@ -19,7 +19,7 @@ namespace MapUpconverter.WDT
                 wotlkFlags = wotlkWDT.Header.Flags;
             }
 
-            var currentWDTPath = Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdt");
+            var currentWDTPath = Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt");
 
             Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable rootWDT;
 
@@ -50,32 +50,32 @@ namespace MapUpconverter.WDT
 
                 rootWDT.Header.Flags = wotlkFlags | MPHDFlags.hasHeightTexturing | MPHDFlags.HasMAID;
 
-                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_lgt.wdt")))
+                if (File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_lgt.wdt")))
                     rootWDT.Header.LgtFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_lgt.wdt");
                 else
                     rootWDT.Header.LgtFileID = 1249658;
 
-                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_occ.wdt")))
+                if (File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_occ.wdt")))
                     rootWDT.Header.OccFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_occ.wdt");
                 else
                     rootWDT.Header.OccFileID = 1100613;
 
-                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_fogs.wdt")))
+                if (File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_fogs.wdt")))
                     rootWDT.Header.FogsFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_fogs.wdt");
                 else
                     rootWDT.Header.FogsFileID = 1668535;
 
-                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_mpv.wdt")))
+                if (File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_mpv.wdt")))
                     rootWDT.Header.MpvFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + "_mpv.wdt");
                 else
                     rootWDT.Header.MpvFileID = 2495665;
 
-                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".tex")))
+                if (File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".tex")))
                     rootWDT.Header.TexFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + ".tex");
                 else
                     rootWDT.Header.TexFileID = 1249780;
 
-                if (File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + ".wdl")))
+                if (File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdl")))
                     rootWDT.Header.WdlFileID = GetOrAssignFileDataID("world/maps/" + Settings.MapName + "/" + Settings.MapName + ".wdl");
                 else
                     throw new Exception("WDL not found in output directory for map " + Settings.MapName + ". This is required for the root WDT.");
@@ -86,11 +86,11 @@ namespace MapUpconverter.WDT
                 {
                     for (byte y = 0; y < 64; y++)
                     {
-                        var hasADT = File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + ".adt"));
-                        var hasLodADT = File.Exists(Path.Combine(Settings.OutputDir, "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + "_lod.adt"));
-                        var hasMapTexture = File.Exists(Path.Combine(Settings.OutputDir, "world", "maptextures", Settings.MapName, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
-                        var hasMapTextureN = File.Exists(Path.Combine(Settings.OutputDir, "world", "maptextures", Settings.MapName, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + "_n.blp"));
-                        var hasMinimapTexture = File.Exists(Path.Combine(Settings.OutputDir, "world", "minimaps", Settings.MapName, "map" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
+                        var hasADT = File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + ".adt"));
+                        var hasLodADT = File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + "_lod.adt"));
+                        var hasMapTexture = File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maptextures", Settings.MapName, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
+                        var hasMapTextureN = File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maptextures", Settings.MapName, Settings.MapName + "_" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + "_n.blp"));
+                        var hasMinimapTexture = File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "minimaps", Settings.MapName, "map" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp"));
 
                         rootWDT.Tiles.Entries[x, y] = new Warcraft.NET.Files.WDT.Entries.MAINEntry()
                         {

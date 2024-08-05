@@ -1,4 +1,5 @@
-﻿using Warcraft.NET.Files.BLP;
+﻿using MapUpconverter.Utils;
+using Warcraft.NET.Files.BLP;
 
 namespace MapUpconverter.Minimaps
 {
@@ -16,7 +17,7 @@ namespace MapUpconverter.Minimaps
                     var cleanedName = Path.GetFileNameWithoutExtension(file).ToLower().Replace(Settings.MapName.ToLower() + "_", "");
                     var splitName = cleanedName.Split('_');
 
-                    var targetName = Path.Combine(Settings.OutputDir, "world", "minimaps", Settings.MapName, "map" + splitName[0].PadLeft(2, '0') + "_" + splitName[1].PadLeft(2, '0') + ".blp");
+                    var targetName = Path.Combine(ExportHelper.GetExportDirectory(), "world", "minimaps", Settings.MapName, "map" + splitName[0].PadLeft(2, '0') + "_" + splitName[1].PadLeft(2, '0') + ".blp");
                     var targetDir = Path.GetDirectoryName(targetName);
 
                     if (!Directory.Exists(targetDir))
@@ -46,11 +47,11 @@ namespace MapUpconverter.Minimaps
                     var cleanedName = Path.GetFileNameWithoutExtension(file).ToLower().Replace(Settings.MapName.ToLower() + "_", "");
                     var splitName = cleanedName.Split('_');
 
-                    var targetName = Path.Combine(Settings.OutputDir, "world", "maptextures", Settings.MapName, Settings.MapName + "_" + splitName[0].PadLeft(2, '0') + "_" + splitName[1].PadLeft(2, '0') + ".blp");
+                    var targetName = Path.Combine(ExportHelper.GetExportDirectory(), "world", "maptextures", Settings.MapName, Settings.MapName + "_" + splitName[0].PadLeft(2, '0') + "_" + splitName[1].PadLeft(2, '0') + ".blp");
 
                     if (splitName.Length == 3 && splitName[2] == "n")
                     {
-                        targetName = Path.Combine(Settings.OutputDir, "world", "maptextures", Settings.MapName, Settings.MapName + "_" + splitName[0].PadLeft(2, '0') + "_" + splitName[1].PadLeft(2, '0') + "_n.blp");
+                        targetName = Path.Combine(ExportHelper.GetExportDirectory(), "world", "maptextures", Settings.MapName, Settings.MapName + "_" + splitName[0].PadLeft(2, '0') + "_" + splitName[1].PadLeft(2, '0') + "_n.blp");
                     }
 
                     var targetDir = Path.GetDirectoryName(targetName);

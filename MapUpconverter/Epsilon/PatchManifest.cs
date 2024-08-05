@@ -85,7 +85,7 @@ namespace MapUpconverter.Epsilon
 
         public static void Update()
         {
-            var epsilonPatchManifestPath = Path.Combine(Settings.EpsilonDir, "_retail_", "Patches", Settings.EpsilonPatchName, "patch.json");
+            var epsilonPatchManifestPath = Path.Combine(ExportHelper.GetExportDirectory(), "patch.json");
 
             var epsilonPatchManifest = new EpsilonPatchManifest();
 
@@ -114,9 +114,9 @@ namespace MapUpconverter.Epsilon
 
             var patchManifestFilesChanged = false;
 
-            foreach (var outputFile in Directory.GetFiles(Settings.OutputDir, "*", SearchOption.AllDirectories))
+            foreach (var outputFile in Directory.GetFiles(ExportHelper.GetExportDirectory(), "*", SearchOption.AllDirectories))
             {
-                var gamePath = outputFile.Replace(Settings.OutputDir + "\\", "").Replace(Settings.OutputDir + "/", "").Replace("\\", "/");
+                var gamePath = outputFile.Replace(ExportHelper.GetExportDirectory() + "\\", "").Replace(ExportHelper.GetExportDirectory() + "/", "").Replace("\\", "/");
 
                 var outputFileName = Path.GetFileName(outputFile);
                 if (outputFileName == "patch.json" || outputFileName == "desktop.ini")
@@ -154,7 +154,7 @@ namespace MapUpconverter.Epsilon
 
             foreach (var file in epsilonPatchManifest.files.ToList())
             {
-                if (!File.Exists(Path.Combine(Settings.OutputDir, file.file)))
+                if (!File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), file.file)))
                 {
                     patchManifestFilesChanged = true;
                     epsilonPatchManifest.files.Remove(file);
