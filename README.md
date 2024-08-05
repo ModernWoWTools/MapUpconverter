@@ -10,7 +10,7 @@ Features:
 This tool is still early in development and will likely not work well for all usecases.
 
 ## Support
-No, not yet.
+Please join our [Discord](https://discord.gg/q4tRTwwDEQ) for support, do not DM people but post in the #troubleshooting channel instead.
 
 ## Downloading
 You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter/releases).
