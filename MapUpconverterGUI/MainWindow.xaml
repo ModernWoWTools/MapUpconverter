@@ -34,8 +34,8 @@
                     <TextBlock Margin="31,253,221,153">
                         <Bold>Export target</Bold> <LineBreak /> Currently only one export target can be set at a time.<LineBreak/> For per-target settings, see the other tabs.
                     </TextBlock>
-                    <RadioButton x:Name="GenericRadioButton" Content="Folder" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="40,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
-                    <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="112,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+                    <RadioButton x:Name="GenericRadioButton" Content="Generic" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="40,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
+                    <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="114,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
                     <RadioButton x:Name="ArctiumRadioButton" Content="Arctium" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="185,310,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
 
                     <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="554,268,0,0" VerticalAlignment="Top"/>

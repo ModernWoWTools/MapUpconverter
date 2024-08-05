@@ -66,20 +66,20 @@ namespace MapUpconverterGUI
                 if (MapUpconverter.Settings.ExportTarget == "Epsilon")
                 {
                     EpsilonRadioButton.IsChecked = true;
-                    OutputDir.IsEnabled = false;
-                    OutputDirButton.IsEnabled = false;
+                    //OutputDir.IsEnabled = false;
+                    //OutputDirButton.IsEnabled = false;
                 }
                 else if (MapUpconverter.Settings.ExportTarget == "Arctium")
                 {
                     ArctiumRadioButton.IsChecked = true;
-                    OutputDir.IsEnabled = false;
-                    OutputDirButton.IsEnabled = false;
+                    //OutputDir.IsEnabled = false;
+                    //OutputDirButton.IsEnabled = false;
                 }
                 else
                 {
                     GenericRadioButton.IsChecked = true;
-                    OutputDir.IsEnabled = true;
-                    OutputDirButton.IsEnabled = true;
+                    //OutputDir.IsEnabled = true;
+                    //OutputDirButton.IsEnabled = true;
                 }
             }
             catch (Exception ex)
@@ -282,8 +282,8 @@ namespace MapUpconverterGUI
 
         private void ExportTarget_Checked(object sender, RoutedEventArgs e)
         {
-            OutputDir.IsEnabled = false;
-            OutputDirButton.IsEnabled = false;
+            //OutputDir.IsEnabled = false;
+            //OutputDirButton.IsEnabled = false;
             if (EpsilonRadioButton.IsChecked == true)
             {
                 MapUpconverter.Settings.ExportTarget = "Epsilon";
@@ -294,8 +294,8 @@ namespace MapUpconverterGUI
             }
             else
             {
-                OutputDir.IsEnabled = true;
-                OutputDirButton.IsEnabled = true;
+                //OutputDir.IsEnabled = true;
+                //OutputDirButton.IsEnabled = true;
                 MapUpconverter.Settings.ExportTarget = "Generic";
             }
             ResetSaveButton();
