@@ -14,6 +14,7 @@
     <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <Configurations>Debug;Release;CLIOnlyRelease</Configurations>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
