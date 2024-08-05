@@ -53,7 +53,7 @@
             </TabItem>
             <TabItem Header="Epsilon Settings">
                 <Grid>
-                    <Label Content="Epsilon specific-settings (optional). If you are targeting Epsilon, you need to fill in the below settings.&#xA;For fast in-client updates, set the above output directory to your (existing or not) patch directory (e.g. C:/Eps/_retail__/Patches/MyPatchName).&#xA;Then, with convert-on-save mode enabled changes will only take a relog/teleport to appear in-game." HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" />
+                    <Label Content="Epsilon specific-settings (optional). If you are targeting Epsilon, you need to fill in the below settings.&#xA;For fast in-client updates, run the converter with convert-on-save mode (after generating the initial map).&#xA;With that, changes will only take a relog/teleport to appear in-game." HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" />
 
                     <Label Content="Epsilon directory" HorizontalAlignment="Left" Margin="9,69,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="EpsilonDir" HorizontalAlignment="Left" Margin="113,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="550" TextChanged="EpsilonDir_TextChanged" Height="20"/>
