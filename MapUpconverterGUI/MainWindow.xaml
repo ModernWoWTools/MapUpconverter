@@ -76,14 +76,14 @@
             </TabItem>
             <TabItem Header="Arctium Settings">
                 <Grid>
-                    <Label Content="Arctium Launcher specific-settings (optional). If you are targeting the Arctium Launcher, you need to fill in the below settings.&#xA;Then, with convert-on-save mode enabled changes will only take a relog/teleport to appear in-game." HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" />
+                    <Label Content="Arctium Launcher specific-settings (optional). If you are targeting the Arctium Launcher, you need to fill in the below settings." HorizontalAlignment="Center" Margin="0,8,0,0" VerticalAlignment="Top" />
 
-                    <Label Content="Arctium directory" HorizontalAlignment="Left" Margin="9,69,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="LauncherDir" HorizontalAlignment="Left" Margin="113,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="486" TextChanged="LauncherDir_TextChanged" Height="20"/>
-                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="606,72,0,0" VerticalAlignment="Top" Click="LauncherDirButton_Click" Width="102"/>
+                    <Label Content="Arctium directory" HorizontalAlignment="Left" Margin="9,49,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="LauncherDir" HorizontalAlignment="Left" Margin="113,52,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="486" TextChanged="LauncherDir_TextChanged" Height="20"/>
+                    <Button Content="Select directory" HorizontalAlignment="Left" Margin="606,52,0,0" VerticalAlignment="Top" Click="LauncherDirButton_Click" Width="102"/>
 
-                    <Label Content="Patch name" HorizontalAlignment="Left" Margin="35,99,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="ArctiumPatchName" HorizontalAlignment="Left" Margin="113,103,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="ArctiumPatchName_TextChanged" Height="20"/>
+                    <Label Content="Patch name" HorizontalAlignment="Left" Margin="35,79,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="ArctiumPatchName" HorizontalAlignment="Left" Margin="113,83,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="ArctiumPatchName_TextChanged" Height="20"/>
                 </Grid>
             </TabItem>
         </TabControl>
