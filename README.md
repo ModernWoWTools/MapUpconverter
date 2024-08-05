@@ -10,7 +10,7 @@ Features:
 This tool is still early in development and will likely not work well for all usecases.
 
 ## Support
-No, not yet.
+Please join our [Discord](https://discord.gg/q4tRTwwDEQ) for support, do not DM people but post in the #troubleshooting channel instead.
 
 ## Downloading
 You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter/releases).
@@ -25,27 +25,37 @@ You can use the included MapUpConverterGUI.exe tool (Windows only!) to change th
 ### Example settings.json file without Epsilon integration
 ```json
 {
-    "inputDir": "C:\\NoggitProject",
-    "outputDir": "C:\\NoggitMapButModern",
-    "mapName": "yourmapnamegoeshere",
-    "epsilonDir": "",
-    "epsilonPatchName": "",
-    "generateWDTWDL": true,
-    "rootWDTFileDataID": 0,
-    "convertOnSave": false
+  "inputDir": "C:\\NoggitProject",
+  "outputDir": "C:\\NoggitMapButModern",
+  "mapName": "yourmapnamegoeshere",
+  "epsilonDir": "",
+  "epsilonPatchName": "",
+  "arctiumDir": "",
+  "arctiumPatchName": "",
+  "generateWDTWDL": true,
+  "rootWDTFileDataID": 0,
+  "exportTarget": "Generic",
+  "convertOnSave": false,
+  "clientRefresh": false,
+  "mapID": -1
 }
 ```
 ### Example settings.json file with Epsilon integration
 ```json
 {
-    "inputDir": "C:\\NoggitProject",
-    "outputDir": "C:\\Epsilon\\_retail_\\Patches\\YourPatchNameGoesHere",
-    "mapName": "yourmapnamegoeshere",
-    "epsilonDir": "C:\\Epsilon",
-    "epsilonPatchName": "YourPatchNameGoesHere",
-    "generateWDTWDL" : true,
-    "rootWDTFileDataID": 1498241,
-    "convertOnSave": false
+  "inputDir": "C:\\NoggitProject",
+  "outputDir": "C:\\NoggitMapButModern",
+  "mapName": "yourmapnamegoeshere",
+  "epsilonDir": "C:\\Epsilon",
+  "epsilonPatchName": "YourPatchNameGoesHere",
+  "arctiumDir": "",
+  "arctiumPatchName": "",
+  "generateWDTWDL": true,
+  "rootWDTFileDataID": 1498241,
+  "exportTarget": "Generic",
+  "convertOnSave": false,
+  "clientRefresh": false,
+  "mapID": -1
 }
 ```
 
@@ -66,6 +76,12 @@ Path to Epsilon launcher directory.
 ### epsilonPatchName (optional)
 Name of Epsilon patch to keep create/keep updated.
 
+### arctiumDir (optional)
+Path to the Arctium Launcher directory.
+
+### arctiumPatchName (optional)
+Name for the Arctium patch names (used as filename for listfile mapping and patch dir in files folder).
+
 ### generateWDTWDL (optional)
 Whether or not to generate/update WDT/WDL files. Defaults to `true` as this tool is primarily meant for fully custom maps, but can be disabled when editing a (partial) official map and you don't want to override official WDT/WDLs. If one wants to generate an updated WDT/WDL due to having added new ADTs or wanting to update the distant-mountain heightmap, make sure to extract all ADTs of the existing map into the input directory before doing so or it will only generate a WDT/WDL for the ADTs present in the input directory instead of all of them (and break the map).
 
@@ -75,6 +91,12 @@ When overwriting an existing WDT ID or if you already know your WDTs ID, you can
 ### convertOnSave (optional)
 If set to false, generates the map once and then exits. This is required the first time you generate a map.
 If set to true, the program will wait for updates in the input directory and convert them as soon as they are saved. This is useful for Noggit users who want to see their changes in-game quickly after they save them.
+
+### clientRefresh (optional)
+Whether or not to enable client refreshing (experimental), needs external DLL not currently available.
+
+### mapID (optional)
+Used with client refresh mode, defaults to -1.
 
 ## License
 Unlike my other projects, this is licensed under GPLv3 instead of MIT to keep compatibility with 3rd-party licenses.
