@@ -69,7 +69,7 @@ namespace MapUpconverter
             totalTimeMS += timer.ElapsedMilliseconds;
             timer.Restart();
 
-            if (!string.IsNullOrEmpty(Settings.EpsilonDir))
+            if (Settings.ExportTarget == "Epsilon" && !string.IsNullOrEmpty(Settings.EpsilonDir))
             {
                 try
                 {
@@ -88,18 +88,15 @@ namespace MapUpconverter
                 totalTimeMS += timer.ElapsedMilliseconds;
                 timer.Restart();
 
-                if (Settings.ExportTarget == "Epsilon" && !string.IsNullOrEmpty(Settings.EpsilonDir))
+                try
                 {
-                    try
-                    {
-                        Console.Write("Checking existing Epsilon patches for used FileDataIDs..");
-                        Epsilon.PatchManifest.ScanUsedFileDataIDs();
-                        Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Failed to scan Epsilon patches for used FileDataIDs: " + e.Message);
-                    }
+                    Console.Write("Checking existing Epsilon patches for used FileDataIDs..");
+                    Epsilon.PatchManifest.ScanUsedFileDataIDs();
+                    Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to scan Epsilon patches for used FileDataIDs: " + e.Message);
                 }
             }
 
@@ -567,7 +564,7 @@ namespace MapUpconverter
                 return;
             }
 
-            Console.WriteLine("ADT " + Path.GetFileName(path) + " is unchanged, skipping write..");
+            //Console.WriteLine("ADT " + Path.GetFileName(path) + " is unchanged, skipping write..");
         }
 
         private static void ConvertWDL()
