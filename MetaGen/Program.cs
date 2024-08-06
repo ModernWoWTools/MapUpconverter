@@ -96,6 +96,7 @@ namespace MetaGen
 
             timer.Restart();
             Console.Write("Starting M2 scanning...");
+            Models.LoadCurrent(metaFolder);
             Parallel.ForEach(m2List, m2 =>
             {
                 Models.ProcessM2(m2.Key);

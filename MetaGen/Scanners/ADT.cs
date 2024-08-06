@@ -25,6 +25,19 @@ namespace MetaGen.Scanners
                 TextureInfoMap = new ConcurrentDictionary<uint, TextureInfo>(currentByID.ToDictionary(x => uint.Parse(x.Key), x => x.Value));
             }
 
+            if(File.Exists(Path.Combine(metaFolder, "TextureInfoByFilePath.json")))
+            {
+                var textureInfoPath = Path.Combine(metaFolder, "TextureInfoByFilePath.json");
+                var currentByPath = JsonConvert.DeserializeObject<Dictionary<string, TextureInfo>>(File.ReadAllText(textureInfoPath)) ?? throw new Exception("Failed to read TextureInfoByFilePath.json");
+                foreach (var kv in currentByPath)
+                {
+                    if (Listfile.ReverseMap.TryGetValue(kv.Key, out var id))
+                        TextureInfoMap[id] = kv.Value;
+                    else
+                        Console.WriteLine("Failed to find ID for " + kv.Key + ", not transferring to new Texture Info file.");
+                }
+            }
+
             if (File.Exists(Path.Combine(metaFolder, "GroundEffectIDsByTextureFileID.json")))
             {
                 var groundEffectPath = Path.Combine(metaFolder, "GroundEffectIDsByTextureFileID.json");
