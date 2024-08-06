@@ -9,7 +9,7 @@ namespace MetaGen
         static void Main(string[] args)
         {
             if (args.Length < 2)
-                throw new Exception("Usage: MetaGen <meta folder> <CASC product> (WoW folder)");
+                throw new Exception("Usage: MetaGen <meta folder> <CASC product> (WoW folder or CDN host)");
 
             var metaFolder = Path.Combine(args[0]);
 
@@ -27,6 +27,27 @@ namespace MetaGen
             // CASCLib setup
             var cascProduct = args[1];
             var wowFolder = args.Length > 2 ? args[2] : null;
+
+            if(File.Exists("fakebuildconfighash"))
+                File.Delete("fakebuildconfighash");
+
+            if(File.Exists("fakecdnconfighash"))
+                File.Delete("fakecdnconfighash");
+
+            var buildConfig = args.Length > 3 ? args[3] : null;
+            if (buildConfig != null)
+            {
+                Console.WriteLine("Using custom build config hash " + buildConfig);
+                File.WriteAllText("fakebuildconfighash", buildConfig);
+            }
+
+            var cdnConfig = args.Length > 4 ? args[4] : null;
+            if (cdnConfig != null)
+            {
+                Console.WriteLine("Using custom cdn config hash " + cdnConfig);
+                File.WriteAllText("fakecdnconfighash", cdnConfig);
+            }
+
             CASC.Initialize(cascProduct, wowFolder);
 
             // ADT dumping

@@ -6,7 +6,7 @@ namespace MetaGen.Services
     {
         private static CASCHandler cascHandler;
 
-        public static void Initialize(string program, string? wowFolder)
+        public static void Initialize(string program, string? wowFolderOrCDNHost)
         {
             CASCConfig.ValidateData = false;
             CASCConfig.ThrowOnFileNotFound = false;
@@ -14,15 +14,25 @@ namespace MetaGen.Services
 
             LocaleFlags locale = LocaleFlags.enUS;
 
-            if (wowFolder == null)
+            if (wowFolderOrCDNHost == null)
             {
-                Console.WriteLine("Initializing CASC from web for program " + program + " and locale " + locale);
+                Console.WriteLine("Initializing CASC from Blizzard CDN for program " + program + " and locale " + locale);
                 cascHandler = CASCHandler.OpenOnlineStorage(program, "eu");
+            }
+            else if(wowFolderOrCDNHost.StartsWith("http://") || wowFolderOrCDNHost.StartsWith("https://"))
+            {
+                CASCConfig.OverrideCDNHost = wowFolderOrCDNHost;
+                Console.WriteLine("Initializing CASC from CDN with host " + wowFolderOrCDNHost + " and program " + program + " and locale " + locale);
+                cascHandler = CASCHandler.OpenOnlineStorage(program, "eu");
+            }
+            else if(Directory.Exists(wowFolderOrCDNHost))
+            {
+                Console.WriteLine("Initializing CASC from local disk with basedir " + wowFolderOrCDNHost + " and program " + program + " and locale " + locale);
+                cascHandler = CASCHandler.OpenLocalStorage(wowFolderOrCDNHost, program);
             }
             else
             {
-                Console.WriteLine("Initializing CASC from local disk with basedir " + wowFolder + " and program " + program + " and locale " + locale);
-                cascHandler = CASCHandler.OpenLocalStorage(wowFolder, program);
+                throw new Exception("Invalid WoW folder or CDN host given!");
             }
 
             cascHandler.Root.SetFlags(locale);
