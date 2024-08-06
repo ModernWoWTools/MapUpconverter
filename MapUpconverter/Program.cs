@@ -324,7 +324,7 @@ namespace MapUpconverter
                                     }
                                 }
 
-                                if (Settings.ClientRefresh)
+                                if (Settings.ClientRefresh && !UpdatedTiles.IsEmpty)
                                 {
                                     Console.WriteLine("Requesting map refresh..");
                                     RequestMapUpdate();
@@ -529,36 +529,41 @@ namespace MapUpconverter
                     }
                 }
 
-                var splitType = adtName.Split('_');
-                var tileX = int.Parse(splitType[1]);
-                var tileY = int.Parse(splitType[2]);
-
-                int tileUpdateFlag = 0;
-
-                switch (type)
+                if (Settings.ClientRefresh)
                 {
-                    case "root":
-                        tileUpdateFlag = 0x1;
-                        break;
-                    case "tex0":
-                        tileUpdateFlag = 0x2;
-                        break;
-                    case "obj0":
-                    case "obj1":
-                        tileUpdateFlag = 0x4;
-                        break;
-                    case "lod":
-                        tileUpdateFlag = 0x8;
-                        break;
-                }
+                    var splitType = adtName.Split('_');
+                    var tileX = int.Parse(splitType[1]);
+                    var tileY = int.Parse(splitType[2]);
 
-                if (UpdatedTiles.TryGetValue(tileY * 64 + tileX, out int flags))
-                {
-                    UpdatedTiles[tileY * 64 + tileX] = flags | tileUpdateFlag;
-                }
-                else
-                {
-                    UpdatedTiles[tileY * 64 + tileX] = tileUpdateFlag;
+                    int tileUpdateFlag = 0;
+
+                    switch (type)
+                    {
+                        case "root":
+                            tileUpdateFlag = 0x1;
+                            break;
+                        case "tex0":
+                            tileUpdateFlag = 0x2;
+                            break;
+                        case "obj0":
+                        case "obj1":
+                            tileUpdateFlag = 0x4;
+                            break;
+                        case "lod":
+                            tileUpdateFlag = 0x8;
+                            break;
+                    }
+
+                    Console.WriteLine("Updated tile " + adtName + " " + type);
+
+                    if (UpdatedTiles.TryGetValue(tileY * 64 + tileX, out int flags))
+                    {
+                        UpdatedTiles[tileY * 64 + tileX] = flags | tileUpdateFlag;
+                    }
+                    else
+                    {
+                        UpdatedTiles[tileY * 64 + tileX] = tileUpdateFlag;
+                    }
                 }
 
                 return;
