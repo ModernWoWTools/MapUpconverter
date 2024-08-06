@@ -33,6 +33,8 @@ namespace MapUpconverter.ADT
                     if (matchingFiles.Count > 0)
                     {
                         Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
+                        bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = matchingFiles[0].Value;
+                        bfaObj0.ModelPlacementInfo.MDDFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MDDFFlags.NameIdIsFiledataId;
                     }
                     else
                     {
@@ -63,6 +65,9 @@ namespace MapUpconverter.ADT
                     if (matchingFiles.Count > 0)
                     {
                         Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
+                        bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].NameId = matchingFiles[0].Value;
+                        bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.NameIdIsFiledataId;
+                        bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
                     }
                     else
                     {
