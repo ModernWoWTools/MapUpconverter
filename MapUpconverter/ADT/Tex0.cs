@@ -1,7 +1,6 @@
 ﻿using MapUpconverter.Utils;
 using Warcraft.NET.Files.ADT.Chunks;
 using Warcraft.NET.Files.ADT.Entries.MoP;
-using Warcraft.NET.Files.WDT.Flags;
 
 namespace MapUpconverter.ADT
 {
@@ -9,17 +8,6 @@ namespace MapUpconverter.ADT
     {
         public static Warcraft.NET.Files.ADT.TerrainTexture.BfA.TerrainTexture Convert(Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
         {
-            var wotlkWDTPath = Path.Combine(Settings.InputDir, Settings.MapName + ".wdt");
-            var wotlkFlags = new MPHDFlags();
-            var wotlkWDTExists = File.Exists(wotlkWDTPath);
-            Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable wotlkWDT = new();
-
-            if (wotlkWDTExists)
-            {
-                wotlkWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(wotlkWDTPath));
-                wotlkFlags = wotlkWDT.Header.Flags;
-            }
-
             var bfaTex0 = new Warcraft.NET.Files.ADT.TerrainTexture.BfA.TerrainTexture
             {
                 Version = new MVER(18),
@@ -82,17 +70,10 @@ namespace MapUpconverter.ADT
 
                 bfaTex0.TextureParameters.TextureFlagEntries.Add(mtxpEntry);
             }
-            
-            // check if GroundEffectMap is all 0 in all MCNKs
-            var regenGroundEffectMap = wotlkRootADT.Chunks.Any(x => x.Header.GroundEffectMap.All(y => y == 0));
 
             for (int i = 0; i < 256; i++)
             {
                 var wotlkChunk = wotlkRootADT.Chunks[i];
-
-                // Apparently required for Noggit output -- verify if still correct after Noggit ground effect editor is released
-                if(regenGroundEffectMap)
-                    wotlkChunk.FixGroundEffectMap(wotlkFlags.HasFlag(MPHDFlags.BigAlpha));
 
                 bfaTex0.Chunks[i] = new Warcraft.NET.Files.ADT.TerrainTexture.MCNK
                 {
@@ -101,10 +82,10 @@ namespace MapUpconverter.ADT
                     BakedShadows = wotlkChunk.BakedShadows
                 };
 
-                for(var j = 0; j < wotlkChunk.TextureLayers.Layers.Count; j++)
+                for (var j = 0; j < wotlkChunk.TextureLayers.Layers.Count; j++)
                 {
                     // Set ground effect ID to the first one in the list
-                    if(GroundEffectInfo.TextureGroundEffectMap.TryGetValue(bfaTex0.TextureDiffuseIds.Textures[(int)wotlkChunk.TextureLayers.Layers[j].TextureID], out var effectIDs))
+                    if (GroundEffectInfo.TextureGroundEffectMap.TryGetValue(bfaTex0.TextureDiffuseIds.Textures[(int)wotlkChunk.TextureLayers.Layers[j].TextureID], out var effectIDs))
                     {
                         if (effectIDs.Length == 0)
                             continue;
