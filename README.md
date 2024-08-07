@@ -13,7 +13,7 @@ This tool is still early in development and will likely not work well for all us
 Please join our [Discord](https://discord.gg/q4tRTwwDEQ) for support, do not DM people but post in the #troubleshooting channel instead.
 
 ## Downloading
-You can get the latest release from [the releases page](https://github.com/Marlamin/MapUpconverter/releases).
+You can get the latest release from [the releases page](https://github.com/ModernWoWTools/MapUpconverter/releases).
 
 ## Usage
 On Windows, open MapUpconverterGUI.exe and fill in the settings, download the required files and hit start.
@@ -103,5 +103,5 @@ Unlike my other projects, this is licensed under GPLv3 instead of MIT to keep co
 
 ## Credits
 - implave for constant project discussion/testing throughout
-- [Luzifix's Warcraft.NET](https://github.com/Luzifix/Warcraft.NET)
+- [Warcraft.NET](https://github.com/ModernWoWTools/Warcraft.NET)
 - [wowdev.wiki](https://wowdev.wiki/)
