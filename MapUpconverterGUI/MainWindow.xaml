@@ -95,7 +95,7 @@
         <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,425,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
 
         <TextBlock Margin="0,482,0,-37" HorizontalAlignment="Center">           
-    <Hyperlink NavigateUri="https://github.com/Marlamin/MapUpconverter" RequestNavigate="Hyperlink_RequestNavigate">
+    <Hyperlink NavigateUri="https://github.com/ModernWoWTools/MapUpconverter" RequestNavigate="Hyperlink_RequestNavigate">
         For more information, updates, reporting issues or contributing, visit the GitHub repository by clicking here.
     </Hyperlink>
         </TextBlock>
