@@ -2,6 +2,7 @@
 using Google.Protobuf;
 using NetMQ;
 using NetMQ.Sockets;
+using System.Text;
 
 namespace MapUpconverter.Epsilon
 {
@@ -24,15 +25,7 @@ namespace MapUpconverter.Epsilon
                 requestMapOp.MapTileOpFlags.Add(tile.UpdateFlags);
             }
 
-            byte[] topic = [(byte)'R', (byte)'O', (byte)'M', (byte)'2', 0x00];
-
-            // combine topic and message
-            byte[] message = requestMapOp.ToByteArray();
-            byte[] combined = new byte[topic.Length + message.Length];
-            topic.CopyTo(combined, 0);
-            message.CopyTo(combined, topic.Length);
-
-            Socket.SendFrame(combined);
+            Socket.SendMultipartBytes(new List<byte[]> { Encoding.ASCII.GetBytes("ROM2"), requestMapOp.ToByteArray() });
         }
     }
 }
