@@ -155,9 +155,9 @@ namespace MapUpconverterGUI
             {
                 var folderName = folderDialog.FolderName;
 
-                if (!File.Exists(Path.Combine(folderName, "Epsilon.exe")))
+                if (!File.Exists(Path.Combine(folderName, "Epsilon.exe")) && !File.Exists(Path.Combine(folderName, "_retail_", "Arctium WoW Launcher.exe")))
                 {
-                    MessageBox.Show("Epsilon.exe not found in this folder, please select the correct folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Epsilon.exe and/or launcher not found in this folder, please select the correct folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     EpsilonDir.Text = "";
                 }
                 else
