@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Epsilon.DTO {
+namespace Arbiter.Epsilon {
 
   /// <summary>Holder for reflection information generated from General.proto</summary>
   public static partial class GeneralReflection {
@@ -24,15 +24,15 @@ namespace Epsilon.DTO {
     static GeneralReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg1HZW5lcmFsLnByb3RvEgtFcHNpbG9uLkRUTyK4AQoXUmVxdWVzdE1hcFRp",
-            "bGVPcGVyYXRpb24SDQoFbWFwSUQYASACKAUSEQoJbWFwVGlsZUlEGAIgAygF",
-            "EhYKDm1hcFRpbGVPcEZsYWdzGAMgAygFImMKFU1hcFRpbGVPcGVyYXRpb25G",
-            "bGFncxISCg5SRUxPQURfVEVSUkFJThABEhIKDlJFTE9BRF9URVhUVVJFEAIS",
-            "EgoOUkVMT0FEX09CSkVDVFMQBBIOCgpSRUxPQURfTE9EEAg="));
+            "Cg1HZW5lcmFsLnByb3RvEg9BcmJpdGVyLkVwc2lsb24iuAEKF1JlcXVlc3RN",
+            "YXBUaWxlT3BlcmF0aW9uEg0KBW1hcElEGAEgAigFEhEKCW1hcFRpbGVJRBgC",
+            "IAMoBRIWCg5tYXBUaWxlT3BGbGFncxgDIAMoBSJjChVNYXBUaWxlT3BlcmF0",
+            "aW9uRmxhZ3MSEgoOUkVMT0FEX1RFUlJBSU4QARISCg5SRUxPQURfVEVYVFVS",
+            "RRACEhIKDlJFTE9BRF9PQkpFQ1RTEAQSDgoKUkVMT0FEX0xPRBAI"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Epsilon.DTO.RequestMapTileOperation), global::Epsilon.DTO.RequestMapTileOperation.Parser, new[]{ "MapID", "MapTileID", "MapTileOpFlags" }, null, new[]{ typeof(global::Epsilon.DTO.RequestMapTileOperation.Types.MapTileOperationFlags) }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Arbiter.Epsilon.RequestMapTileOperation), global::Arbiter.Epsilon.RequestMapTileOperation.Parser, new[]{ "MapID", "MapTileID", "MapTileOpFlags" }, null, new[]{ typeof(global::Arbiter.Epsilon.RequestMapTileOperation.Types.MapTileOperationFlags) }, null, null)
           }));
     }
     #endregion
@@ -55,7 +55,7 @@ namespace Epsilon.DTO {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Epsilon.DTO.GeneralReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Arbiter.Epsilon.GeneralReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

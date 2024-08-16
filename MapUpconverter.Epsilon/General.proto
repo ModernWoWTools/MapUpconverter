@@ -1,5 +1,5 @@
 syntax = "proto2";
-package Epsilon.DTO;
+package Arbiter.Epsilon;
 
 message RequestMapTileOperation {
 	enum MapTileOperationFlags {

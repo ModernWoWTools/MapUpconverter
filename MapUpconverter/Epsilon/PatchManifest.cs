@@ -163,10 +163,19 @@ namespace MapUpconverter.Epsilon
 
             if (patchManifestFilesChanged)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Epsilon patch manifest file list updated. A re-launch is required to load any new files in-game.");
-                Console.ResetColor();
                 File.WriteAllText(epsilonPatchManifestPath, JsonConvert.SerializeObject(epsilonPatchManifest, Formatting.Indented));
+
+                if (Settings.ClientRefresh)
+                {
+                    Console.WriteLine("Epsilon patch manifest file list updated, sent CASC refresh command to client.");
+                    EpsilonConnection.RequestCascReload();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Epsilon patch manifest file list updated. A re-launch is required to load any new files in-game.");
+                    Console.ResetColor();
+                }
             }
         }
 

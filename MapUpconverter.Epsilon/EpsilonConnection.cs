@@ -1,4 +1,5 @@
-﻿using Epsilon.DTO;
+﻿using Arbiter.Epsilon;
+using Arbiter.CASC;
 using Google.Protobuf;
 using NetMQ;
 using NetMQ.Sockets;
@@ -26,6 +27,12 @@ namespace MapUpconverter.Epsilon
             }
 
             Socket.SendMultipartBytes(new List<byte[]> { Encoding.ASCII.GetBytes("ROM2"), requestMapOp.ToByteArray() });
+        }
+
+        public static void RequestCascReload()
+        {
+            var requestCascOp = new RequestCascReloadOperation();
+            Socket.SendMultipartBytes(new List<byte[]> { Encoding.ASCII.GetBytes("RCR1"), requestCascOp.ToByteArray() });
         }
     }
 }
