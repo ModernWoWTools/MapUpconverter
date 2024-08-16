@@ -234,6 +234,7 @@ namespace MapUpconverter
                         try
                         {
                             adtFilename = adtQueue.Take();
+                            Console.WriteLine("Starting on-save conversion of ADT " + Path.GetFileNameWithoutExtension(adtFilename) + "..");
                         }
                         catch (InvalidOperationException) { }
 
@@ -254,6 +255,9 @@ namespace MapUpconverter
                                     Console.ForegroundColor = ConsoleColor.Yellow;
                                     Console.WriteLine("Requeuing ADT " + Path.GetFileNameWithoutExtension(adtFilename) + " because it was still being used..");
                                     Console.ResetColor();
+
+                                    adtQueue.Add(adtFilename);
+                                    continue;
                                 }
                                 else
                                 {
