@@ -122,7 +122,7 @@ namespace MapUpconverter.Epsilon
                 if (outputFileName == "patch.json" || outputFileName == "desktop.ini")
                     continue;
 
-                if (!epsilonPatchManifest.files.Any(x => x.file == gamePath))
+                if (!epsilonPatchManifest.files.Any(x => x.file.Equals(gamePath, StringComparison.CurrentCultureIgnoreCase)))
                 {
                     patchManifestFilesChanged = true;
 
