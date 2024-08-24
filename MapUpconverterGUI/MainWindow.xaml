@@ -90,6 +90,11 @@
                             <Bold>Enable client refreshing?</Bold> (Requires Epsilon 9.2 or Arbiter hot-reloading) <LineBreak /> Refreshes changed content in client when using convert-on-save mode.<LineBreak />Below Map ID field is recommended when using this feature but not required.
                         </TextBlock>
                     </CheckBox>
+                    <CheckBox x:Name="CASRefreshEnabled" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Click="CASRefreshEnabled_Checked">
+                        <TextBlock>
+                            <Bold>Enable patch manifest refreshing?</Bold> (Requires Epsilon 9.2 or Arbiter hot-reloading) <LineBreak /> Refreshes on-disk patch manifests in convert-on-save mode, not required to be on for hot-reloading.<LineBreak />With many patches or with fewer larger patch this will add considerable time to hot-reloading.
+                        </TextBlock>
+                    </CheckBox>
                     <Label Content="MapID" HorizontalAlignment="Left" Margin="63,72,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="MapID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="113,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapID_TextChanged" Height="20"/>
                 </Grid>

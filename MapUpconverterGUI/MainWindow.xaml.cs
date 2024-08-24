@@ -62,6 +62,8 @@ namespace MapUpconverterGUI
                 ArctiumWDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
 
                 ClientRefreshEnabled.IsChecked = MapUpconverter.Settings.ClientRefresh;
+                CASRefreshEnabled.IsChecked = MapUpconverter.Settings.CASRefresh;
+
                 MapID.Text = MapUpconverter.Settings.MapID.ToString();
                 
                 if (MapUpconverter.Settings.ExportTarget == "Epsilon")
@@ -286,6 +288,12 @@ namespace MapUpconverterGUI
         private void ClientRefreshEnabled_Checked(object sender, RoutedEventArgs e)
         {
             MapUpconverter.Settings.ClientRefresh = ClientRefreshEnabled.IsChecked == true;
+            ResetSaveButton();
+        }
+
+        private void CASRefreshEnabled_Checked(object sender, RoutedEventArgs e)
+        {
+            MapUpconverter.Settings.CASRefresh = CASRefreshEnabled.IsChecked == true;
             ResetSaveButton();
         }
 

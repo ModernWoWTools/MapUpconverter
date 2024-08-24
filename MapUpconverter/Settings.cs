@@ -23,6 +23,8 @@ namespace MapUpconverter
         public static bool ConvertOnSave = false;
 
         public static bool ClientRefresh = false;
+        public static bool CASRefresh = false;
+
         public static int MapID = -1;
 
         public static void Load(string toolFolder)
@@ -75,6 +77,11 @@ namespace MapUpconverter
                 ExportTarget = "";
             else
                 ExportTarget = settingsJSON.exportTarget;
+
+            if(settingsJSON.casRefresh == null)
+                CASRefresh = false;
+            else
+                CASRefresh = settingsJSON.casRefresh;
         }
 
         public static void Save(string toolFolder)
@@ -102,6 +109,7 @@ namespace MapUpconverter
                 convertOnSave = ConvertOnSave,
 
                 clientRefresh = ClientRefresh,
+                casRefresh = CASRefresh,
                 mapID = MapID
             };
 

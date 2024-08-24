@@ -165,7 +165,7 @@ namespace MapUpconverter.Epsilon
             {
                 File.WriteAllText(epsilonPatchManifestPath, JsonConvert.SerializeObject(epsilonPatchManifest, Formatting.Indented));
 
-                if (Settings.ClientRefresh)
+                if (Settings.ClientRefresh && Settings.CASRefresh)
                 {
                     Console.WriteLine("Epsilon patch manifest file list updated, sent CASC refresh command to client.");
                     EpsilonConnection.RequestCascReload();
