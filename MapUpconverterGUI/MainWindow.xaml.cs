@@ -125,7 +125,25 @@ namespace MapUpconverterGUI
 
             if (folderDialog.ShowDialog() == true)
             {
-                InputDir.Text = folderDialog.FolderName;
+                var folderName = folderDialog.FolderName;
+
+                if (Directory.GetFiles(folderName, "*.noggitproj").Length == 0)
+                {
+                    var messageDialog = MessageBox.Show("This folder is not a valid Noggit project directory (does not contain .noggitproj), are you sure you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (messageDialog == MessageBoxResult.Yes)
+                    {
+                        InputDir.Text = folderDialog.FolderName;
+                    }
+                    else
+                    {
+                        InputDir.Text = "";
+                    }
+                }
+                else
+                {
+                    InputDir.Text = folderDialog.FolderName;
+                }
+
                 ResetSaveButton();
             }
         }
