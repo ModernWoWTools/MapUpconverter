@@ -27,7 +27,7 @@
                     </CheckBox>
                     <CheckBox x:Name="ConvertOnSaveCheckbox" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Click="Checkbox_Changed">
                         <TextBlock>
-                            <Bold>Convert on save?</Bold><LineBreak />Leave this unchecked the first time you generate a map as this does not generate/update WDTs.<LineBreak/>After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).<LineBreak />To stop monitoring ADTs for changes, focus the console window and hit enter.
+                            <Bold>Convert on save?</Bold><LineBreak />Leave this unchecked the first time you generate a map as this does not generate/update WDTs.<LineBreak/>After the first conversion, you can check this to automatically reconvert any ADTs that are changed in the input directory (by e.g. Noggit).<LineBreak /><Bold>Keep the console open while waiting for changes.</Bold> To stop monitoring ADTs for changes, focus the console window and hit enter.
                         </TextBlock>
                     </CheckBox>
 
