@@ -27,6 +27,8 @@ namespace MapUpconverter
 
         public static int MapID = -1;
 
+        public static int TargetVersion = 927;
+
         public static void Load(string toolFolder)
         {
             var jsonPath = Path.Combine(toolFolder, "settings.json");
@@ -82,6 +84,11 @@ namespace MapUpconverter
                 CASRefresh = false;
             else
                 CASRefresh = settingsJSON.casRefresh;
+
+            if (settingsJSON.targetVersion == null)
+                TargetVersion = 927;
+            else
+                TargetVersion = settingsJSON.targetVersion;
         }
 
         public static void Save(string toolFolder)
@@ -110,7 +117,9 @@ namespace MapUpconverter
 
                 clientRefresh = ClientRefresh,
                 casRefresh = CASRefresh,
-                mapID = MapID
+                mapID = MapID,
+
+                targetVersion = TargetVersion
             };
 
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(settingsJSON, Formatting.Indented));

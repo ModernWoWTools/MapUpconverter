@@ -84,6 +84,19 @@ namespace MapUpconverterGUI
                     //OutputDir.IsEnabled = true;
                     //OutputDirButton.IsEnabled = true;
                 }
+
+                if (MapUpconverter.Settings.TargetVersion == 830)
+                {
+                    BFARadioButton.IsChecked = true;
+                }
+                else if (MapUpconverter.Settings.TargetVersion == 927)
+                {
+                    SLRadioButton.IsChecked = true;
+                }
+                else
+                {
+                    SLRadioButton.IsChecked = true;
+                }
             }
             catch (Exception ex)
             {
@@ -339,6 +352,24 @@ namespace MapUpconverterGUI
                 //OutputDirButton.IsEnabled = true;
                 MapUpconverter.Settings.ExportTarget = "Generic";
             }
+            ResetSaveButton();
+        }
+
+        private void ExportVersion_Checked(object sender, RoutedEventArgs e)
+        {
+            if (BFARadioButton.IsChecked == true)
+            {
+                MapUpconverter.Settings.TargetVersion = 830;
+            }
+            else if (SLRadioButton.IsChecked == true)
+            {
+                MapUpconverter.Settings.TargetVersion = 927;
+            }
+            else
+            {
+                MapUpconverter.Settings.TargetVersion = 927;
+            }
+
             ResetSaveButton();
         }
 
