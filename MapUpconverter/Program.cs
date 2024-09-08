@@ -164,7 +164,7 @@ namespace MapUpconverter
             try
             {
                 Console.Write("Loading bounding box info..");
-                BoundingBoxInfo.Initialize(Path.Combine(toolFolder, "meta", "blob.json"));
+                BoundingBoxInfo.Initialize(Path.Combine(toolFolder, "meta"));
                 Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
             }
             catch (Exception e)

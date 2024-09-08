@@ -1,5 +1,6 @@
 ﻿using MetaGen.Scanners;
 using MetaGen.Services;
+using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 
 namespace MetaGen
@@ -8,8 +9,23 @@ namespace MetaGen
     {
         static void Main(string[] args)
         {
+            if (args.Length == 1 && (args[0].ToLower().EndsWith(".m2") || args[0].ToLower().EndsWith(".wmo")))
+            {
+                if (args[0].ToLower().EndsWith(".m2"))
+                    Console.WriteLine(JsonConvert.SerializeObject(MapUpconverter.Utils.BoundingBoxInfo.ProcessM2(File.ReadAllBytes(args[0])), Formatting.Indented));
+                else if (args[0].ToLower().EndsWith(".wmo"))
+                    Console.WriteLine(JsonConvert.SerializeObject(MapUpconverter.Utils.BoundingBoxInfo.ProcessWMO(File.ReadAllBytes(args[0])), Formatting.Indented));
+
+                Console.ReadLine();
+                return;
+            }
+
             if (args.Length < 2)
-                throw new Exception("Usage: MetaGen <meta folder> <CASC product> (WoW folder or CDN host)");
+            {
+                Console.WriteLine("Usage (single mode): MetaGen <.m2 or .wmo file>");
+                Console.WriteLine("Usage (full run mode): MetaGen <meta folder> <CASC product> (WoW folder or CDN host)");
+                return;
+            }
 
             var metaFolder = Path.Combine(args[0]);
 
@@ -28,10 +44,10 @@ namespace MetaGen
             var cascProduct = args[1];
             var wowFolder = args.Length > 2 ? args[2] : null;
 
-            if(File.Exists("fakebuildconfighash"))
+            if (File.Exists("fakebuildconfighash"))
                 File.Delete("fakebuildconfighash");
 
-            if(File.Exists("fakecdnconfighash"))
+            if (File.Exists("fakecdnconfighash"))
                 File.Delete("fakecdnconfighash");
 
             var buildConfig = args.Length > 3 ? args[3] : null;
@@ -54,6 +70,8 @@ namespace MetaGen
             Console.Write("Generating list of tex0 ADTs to process...");
             var tex0ADTList = Listfile.NameMap.Where(kv => kv.Value.EndsWith("_tex0.adt")).Select(x => x.Key).ToList();
             Console.WriteLine("done, found " + tex0ADTList.Count + " ADTs.");
+
+            Warcraft.NET.Settings.throwOnMissingChunk = false;
 
             Console.WriteLine("Loading existing height info...");
             ADT.LoadCurrent(metaFolder);
