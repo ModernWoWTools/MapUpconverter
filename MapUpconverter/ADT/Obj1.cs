@@ -47,7 +47,19 @@ namespace MapUpconverter.ADT
 
                 bfaObj1.LevelDoodadDetail.MDDFEntries.Add(mlddEntry);
 
-                var m2BoundingBox = BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlddEntry.NameId.ToString(), out var boundingBox) ? boundingBox : new Warcraft.NET.Files.Structures.BoundingBox();
+                var m2BoundingBox = new Warcraft.NET.Files.Structures.BoundingBox();
+
+                if(BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlddEntry.NameId.ToString(), out var boundingBox))
+                {
+                    m2BoundingBox = boundingBox;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("No bounding box found for M2 " + mlddEntry.NameId + ", using empty bounding box. This will cause issues in-game.");
+                    Console.ResetColor();
+                }
+
                 var recalculatedBoundingBox = MathStuff.CalculateBoundingBox(mlddEntry.Position, new Vector3(mlddEntry.Rotation.Pitch, mlddEntry.Rotation.Yaw, mlddEntry.Rotation.Roll), m2BoundingBox, mlddEntry.ScalingFactor);
 
                 var mldxEntry = new MLDXEntry()
@@ -84,7 +96,19 @@ namespace MapUpconverter.ADT
 
                 bfaObj1.LevelWorldObjectDetail.MLMDEntries.Add(mlmdEntry);
 
-                var wmoBoundingBox = BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlmdEntry.NameId.ToString(), out var boundingBox) ? boundingBox : new Warcraft.NET.Files.Structures.BoundingBox();
+                var wmoBoundingBox = new Warcraft.NET.Files.Structures.BoundingBox();
+
+                if (BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlmdEntry.NameId.ToString(), out var boundingBox))
+                {
+                    wmoBoundingBox = boundingBox;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("No bounding box found for WMO " + mlmdEntry.NameId + ", using empty bounding box. This will cause issues in-game.");
+                    Console.ResetColor();
+                }
+
                 var recalculatedBoundingBox = MathStuff.CalculateBoundingBox(mlmdEntry.Position, new Vector3(mlmdEntry.Rotation.Pitch, mlmdEntry.Rotation.Yaw, mlmdEntry.Rotation.Roll), wmoBoundingBox, mlmdEntry.Scale);
 
                 var mlmxEntry = new MLMXEntry()
