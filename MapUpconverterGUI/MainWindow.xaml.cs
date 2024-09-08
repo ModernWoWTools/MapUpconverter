@@ -65,7 +65,7 @@ namespace MapUpconverterGUI
                 CASRefreshEnabled.IsChecked = MapUpconverter.Settings.CASRefresh;
 
                 MapID.Text = MapUpconverter.Settings.MapID.ToString();
-                
+
                 if (MapUpconverter.Settings.ExportTarget == "Epsilon")
                 {
                     EpsilonRadioButton.IsChecked = true;
@@ -358,11 +358,25 @@ namespace MapUpconverterGUI
             SaveSettings();
         }
 
-        private void SaveSettings()
+        private bool SaveSettings()
         {
-            MapUpconverter.Settings.Save(toolFolder);
-            SaveButton.Content = "Settings saved!";
-            SaveButton.IsEnabled = false;
+            if (string.IsNullOrEmpty(MapName.Text))
+            {
+                MessageBox.Show("Map name is not allowed to be empty, please enter a map name.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else if (string.IsNullOrEmpty(InputDir.Text))
+            {
+                MessageBox.Show("Input directory is not allowed to be empty, please select a directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            else
+            {
+                MapUpconverter.Settings.Save(toolFolder);
+                SaveButton.Content = "Settings saved!";
+                SaveButton.IsEnabled = false;
+                return true;
+            }
         }
 
         private void ResetSaveButton()
@@ -489,7 +503,10 @@ namespace MapUpconverterGUI
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveSettings();
+            var settingsSaved = SaveSettings();
+
+            if (!settingsSaved)
+                return;
 
             if (isRunning)
             {
