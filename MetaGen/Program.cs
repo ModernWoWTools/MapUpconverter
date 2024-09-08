@@ -25,7 +25,7 @@ namespace MetaGen
             if (args.Length < 2)
             {
                 Console.WriteLine("Usage (single mode): MetaGen <.m2 or .wmo file>");
-                Console.WriteLine("Usage (full run mode): MetaGen <meta folder> <CASC product> (WoW folder or CDN host)");
+                Console.WriteLine("Usage (full run mode, requires additional libraries compiled separately): MetaGen <meta folder> <CASC product> (WoW folder or CDN host)");
                 Console.WriteLine("Press enter to exit.");
                 Console.ReadLine();
                 return;

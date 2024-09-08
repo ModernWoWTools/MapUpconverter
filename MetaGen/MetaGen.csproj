@@ -8,6 +8,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;CLIOnlyRelease</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
