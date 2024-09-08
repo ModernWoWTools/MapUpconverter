@@ -49,11 +49,7 @@ namespace MapUpconverter.ADT
 
                 var m2BoundingBox = new Warcraft.NET.Files.Structures.BoundingBox();
 
-                if(BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlddEntry.NameId.ToString(), out var boundingBox))
-                {
-                    m2BoundingBox = boundingBox;
-                }
-                else
+                if(!BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlddEntry.NameId.ToString(), out m2BoundingBox))
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("No bounding box found for M2 " + mlddEntry.NameId + ", using empty bounding box. This will cause issues in-game.");
@@ -98,11 +94,7 @@ namespace MapUpconverter.ADT
 
                 var wmoBoundingBox = new Warcraft.NET.Files.Structures.BoundingBox();
 
-                if (BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlmdEntry.NameId.ToString(), out var boundingBox))
-                {
-                    wmoBoundingBox = boundingBox;
-                }
-                else
+                if (!BoundingBoxInfo.boundingBoxBlobDict.TryGetValue(mlmdEntry.NameId.ToString(), out wmoBoundingBox))
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("No bounding box found for WMO " + mlmdEntry.NameId + ", using empty bounding box. This will cause issues in-game.");
