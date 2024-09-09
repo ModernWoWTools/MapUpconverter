@@ -26,14 +26,11 @@ namespace MapUpconverter.WDL
                     continue;
                 }
                 
-                var mapName = "";
                 var splitName = filename.Split('_');
 
                 var x = byte.Parse(splitName[^2]);
                 var y = byte.Parse(splitName[^1].Replace(".adt", ""));
-                adtDict[(x, y)] = filename;
-
-                mapName = filename.Replace("_" + x + "_" + y + ".adt", "");
+                adtDict[(x, y)] = filename.ToLowerInvariant();
             }
 
             var wdl = new Warcraft.NET.Files.WDL.Legion.WorldDataLod

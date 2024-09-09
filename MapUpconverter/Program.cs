@@ -7,6 +7,7 @@ namespace MapUpconverter
     internal class Program
     {
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
+        private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero> cachedOBJ0ADTs = [];
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
         private static readonly ConcurrentDictionary<int, int> UpdatedTiles = [];
 
@@ -458,11 +459,12 @@ namespace MapUpconverter
 
                 var obj0 = ADT.Obj0.Convert(wotlkADT);
                 var obj0Serialized = obj0.Serialize();
+                cachedOBJ0ADTs[adtName.ToLowerInvariant() + "_obj0"] = obj0;
                 WriteADTIfChanged(adtName, "obj0", obj0Serialized);
 
                 var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
                 var obj1Serialized = obj1.Serialize();
-                cachedOBJ1ADTs[adtName + "_obj1"] = obj1;
+                cachedOBJ1ADTs[adtName.ToLowerInvariant() + "_obj1"] = obj1;
                 WriteADTIfChanged(adtName, "obj1", obj1Serialized);
 
                 //var lod = ADT.LOD.Convert(wotlkADT);
