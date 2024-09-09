@@ -287,17 +287,17 @@ namespace MapUpconverter
                                         Console.WriteLine("Failed to generate WDL: " + e.Message);
                                     }
                                     // TODO: We don't want to generate WDTs on the fly yet, this will need support in the hot reloading stuff first
-                                    //try
-                                    //{
-                                    //    timer.Restart();
-                                    //    ConvertWDT();
-                                    //    timer.Stop();
-                                    //    Console.WriteLine("Generating WDT took " + timer.ElapsedMilliseconds + "ms");
-                                    //}
-                                    //catch (Exception e)
-                                    //{
-                                    //    Console.WriteLine("Failed to generate WDT: " + e.Message);
-                                    //}
+                                    try
+                                    {
+                                        timer.Restart();
+                                        ConvertWDT();
+                                        timer.Stop();
+                                        Console.WriteLine("Generating WDT took " + timer.ElapsedMilliseconds + "ms");
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Failed to generate WDT: " + e.Message);
+                                    }
                                 }
 
                                 if (Settings.ExportTarget == "Epsilon" && !string.IsNullOrEmpty(Settings.EpsilonDir))
@@ -589,6 +589,16 @@ namespace MapUpconverter
 
         private static void ConvertWDT()
         {
+            if(Settings.TargetVersion >= 927)
+            {
+                var lightWDT = WDT.LightWDT.GenerateForSL(cachedOBJ0ADTs);
+                File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_lgt.wdt"), lightWDT.Serialize());
+            }
+            else
+            {
+                Console.WriteLine("Skipping light WDT generation for target version " + Settings.TargetVersion + ", not supported yet.");
+            }
+
             var wdt = WDT.RootWDT.Generate();
             File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
         }
