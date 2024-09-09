@@ -363,7 +363,10 @@ namespace MapUpconverter
         {
             var path = Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName);
             if (!e.FullPath.ToLowerInvariant().StartsWith(path.ToLowerInvariant()))
+            {
                 Console.WriteLine("Ignoring ADT " + e.FullPath + " because it's not in the map directory " + Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName));
+                return;
+            }
 
             if (!adtQueue.Contains(e.FullPath))
                 adtQueue.Add(e.FullPath);
