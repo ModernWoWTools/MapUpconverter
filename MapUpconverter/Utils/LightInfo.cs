@@ -1,4 +1,6 @@
 ﻿using System.Numerics;
+using Warcraft.NET.Files.Structures;
+using Warcraft.NET.Files.WDT.Entries.Legion;
 
 namespace MapUpconverter.Utils
 {
@@ -29,6 +31,11 @@ namespace MapUpconverter.Utils
         }
     }
 
+    public struct LightManifest
+    {
+        public Dictionary<string, RGBA> ColorMap;
+        public Dictionary<string, MLTAEntry> LightAnims;
+    }
     public struct LightInfoEntry
     {
         public uint Id { get; set; }
