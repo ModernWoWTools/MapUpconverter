@@ -13,68 +13,96 @@ namespace MapUpconverter.ADT
                 Chunks = new Warcraft.NET.Files.ADT.TerrainObject.Zero.MCNK[256]
             };
 
+            // M2
             bfaObj0.ModelPlacementInfo = wotlkRootADT.ModelPlacementInfo;
             for (int i = 0; i < wotlkRootADT.ModelPlacementInfo.MDDFEntries.Count; i++)
             {
                 var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
-                if (Listfile.ReverseMap.TryGetValue(wotlkModelName, out var m2FDID))
+
+                if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
-                    bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = m2FDID;
+                    // Use errorcube scaled to 0 as replacement model for lights.
+                    bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = 166046;
                     bfaObj0.ModelPlacementInfo.MDDFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MDDFFlags.NameIdIsFiledataId;
+                    bfaObj0.ModelPlacementInfo.MDDFEntries[i].ScalingFactor = 0;
+                    continue;
                 }
-                else
+
+                if (!Listfile.ReverseMap.TryGetValue(wotlkModelName, out uint fdid))
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Warning: No FDID found for M2 " + wotlkModelName + ", this might indicate an outdated listfile or outdated downported asset filenames.");
-                    
-                    var baseName = Path.GetFileName(wotlkModelName);
-                    Console.WriteLine("Scanning listfile for files named " + baseName + "...");
-                    var matchingFiles = Listfile.ReverseMap.Where(kv => kv.Key.EndsWith(baseName)).ToList();
-                    if (matchingFiles.Count > 0)
+
+                    if (uint.TryParse(Path.GetFileNameWithoutExtension(wotlkModelName), out fdid))
+                        Console.WriteLine("Using M2 placeholder filename as FDID: " + fdid);
+
+                    if (fdid == 0)
                     {
-                        Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
-                        bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = matchingFiles[0].Value;
-                        bfaObj0.ModelPlacementInfo.MDDFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MDDFFlags.NameIdIsFiledataId;
+                        var baseName = Path.GetFileName(wotlkModelName);
+
+                        Console.WriteLine("Scanning listfile for files named " + baseName + "...");
+                        var matchingFiles = Listfile.ReverseMap.Where(kv => kv.Key.EndsWith(baseName)).ToList();
+                        if (matchingFiles.Count > 0)
+                        {
+                            Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
+                            fdid = matchingFiles[0].Value;
+                        }
                     }
-                    else
+
+                    if (fdid == 0)
                     {
-                        throw new Exception("No FDID found for M2 " + wotlkModelName + " or base name " + baseName);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("No FDID found for M2 " + wotlkModelName + ", using errorcube.m2 instead!");
+                        fdid = 166046;
                     }
+
                     Console.ResetColor();
                 }
+
+                bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = fdid;
+                bfaObj0.ModelPlacementInfo.MDDFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MDDFFlags.NameIdIsFiledataId;
             }
 
+            // WMO
             bfaObj0.WorldModelObjectPlacementInfo = wotlkRootADT.WorldModelObjectPlacementInfo;
             for (int i = 0; i < wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries.Count; i++)
             {
                 var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
-                if (Listfile.ReverseMap.TryGetValue(wotlkModelName, out var wmoFDID))
-                {
-                    bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].NameId = wmoFDID;
-                    bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.NameIdIsFiledataId;
-                    bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
-                }
-                else
+
+                if (!Listfile.ReverseMap.TryGetValue(wotlkModelName, out uint fdid))
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Warning: No FDID found for WMO " + wotlkModelName + ", this might indicate an outdated listfile or outdated downported asset filenames.");
 
-                    var baseName = Path.GetFileName(wotlkModelName);
-                    Console.WriteLine("Scanning listfile for files named " + baseName + "...");
-                    var matchingFiles = Listfile.ReverseMap.Where(kv => kv.Key.EndsWith(baseName)).ToList();
-                    if (matchingFiles.Count > 0)
+                    if (uint.TryParse(Path.GetFileNameWithoutExtension(wotlkModelName), out fdid))
+                        Console.WriteLine("Using WMO placeholder filename as FDID: " + fdid);
+
+                    if (fdid == 0)
                     {
-                        Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
-                        bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].NameId = matchingFiles[0].Value;
-                        bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.NameIdIsFiledataId;
-                        bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
+                        var baseName = Path.GetFileName(wotlkModelName);
+
+                        Console.WriteLine("Scanning listfile for files named " + baseName + "...");
+                        var matchingFiles = Listfile.ReverseMap.Where(kv => kv.Key.EndsWith(baseName)).ToList();
+                        if (matchingFiles.Count > 0)
+                        {
+                            Console.WriteLine("Found " + matchingFiles.Count + " matching files, using first match: " + matchingFiles[0].Key + " -> " + matchingFiles[0].Value);
+                            fdid = matchingFiles[0].Value;
+                        }
                     }
-                    else
+
+                    if (fdid == 0)
                     {
-                        throw new Exception("No FDID found for WMO " + wotlkModelName + " or base name " + baseName);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("No FDID found for WMO " + wotlkModelName + ", using missingwmo.wmo instead!");
+                        fdid = 112521;
                     }
+
                     Console.ResetColor();
                 }
+
+                bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].NameId = fdid;
+                bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.NameIdIsFiledataId;
+                bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
             }
 
             for (int i = 0; i < 256; i++)
