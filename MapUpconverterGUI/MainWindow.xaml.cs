@@ -306,7 +306,8 @@ namespace MapUpconverterGUI
             }
             else
             {
-                MapID.Text = "";
+                if(MapID.Text != "-")
+                    MapID.Text = "";
             }
         }
 

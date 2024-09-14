@@ -38,6 +38,7 @@
                     <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="114,305,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
                     <RadioButton x:Name="ArctiumRadioButton" Content="Arctium" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="185,305,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
                     
+
                     <TextBlock Margin="31,329,221,74">
                         <Bold>Target version</Bold> <LineBreak /> Version to target for upconversion (for point lights only).
                     </TextBlock>
@@ -71,7 +72,7 @@
                     <Label Content="WDT FileDataID" HorizontalAlignment="Left" Margin="15,129,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="WDTFileDataID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="113,133,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="WDTFileDataID_TextChanged" Height="20"/>
                     <Label Content="This is the FileDataID of an existing WDT file to override.&#10;Note that some IDs will behave differently than others,&#10;so follow a tutorial or something to pick a good one." HorizontalAlignment="Left" Margin="113,155,0,0" VerticalAlignment="Top" Width="330"/>
-               </Grid>
+                </Grid>
             </TabItem>
             <TabItem Header="Arctium Settings">
                 <Grid>
@@ -102,7 +103,7 @@
                         </TextBlock>
                     </CheckBox>
                     <Label Content="MapID" HorizontalAlignment="Left" Margin="63,72,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="MapID" PreviewTextInput="WDTFileDataID_PreviewTextInput" HorizontalAlignment="Left" Margin="113,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapID_TextChanged" Height="20"/>
+                    <TextBox x:Name="MapID" HorizontalAlignment="Left" Margin="113,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapID_TextChanged" Height="20"/>
                 </Grid>
             </TabItem>
         </TabControl>
