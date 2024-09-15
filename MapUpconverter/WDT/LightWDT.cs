@@ -1,44 +1,46 @@
 ﻿using System.Collections.Concurrent;
 using System.Numerics;
+using Warcraft.NET.Files.Structures;
+using Warcraft.NET.Files.WDT.Flags;
 
 namespace MapUpconverter.WDT
 {
     public static class LightWDT
     {
-        private static uint ColorNameToBGRA(string color)
+        private static RGBA ColorNameToRGBA(string color)
         {
             switch (color)
             {
-                case "orange": // 0 65 D6 0
-                    return 14050560;
+                case "orange":
+                    return new RGBA(255, 148, 112, 0);
 
-                case "red": // 0 0 255 0
-                    return 16711680;
+                case "red":
+                    return new RGBA(255, 0, 0, 0);
 
-                case "blue": // 255 0 0 0
-                    return 255;
+                case "blue":
+                    return new RGBA(0, 0, 255, 0);
 
-                case "green": // 0 0 128 0
-                    return 32768;
+                case "green":
+                    return new RGBA(0, 128, 0, 0);
 
-                case "purple": // 128 0 128 0
-                    return 8388736;
+                case "purple":
+                    return new RGBA(128, 0, 128, 0);
 
-                case "yellow": // 0 255 255 0
-                    return 16776960;
+                case "yellow":
+                    return new RGBA(255, 255, 0, 0);
 
-                case "dimwhite": // 205 250 255 0
-                    return 16775885;
+                case "dimwhite":
+                    return new RGBA(255, 250, 205, 0);
 
-                case "felgreen": // 0 0 255 0
-                    return 65280;
+                case "felgreen":
+                    return new RGBA(0, 255, 0, 0);
 
                 case "deepskyblue":
-                    return 49151;
+                    return new RGBA(0, 191, 255, 0);
 
                 default:
                     Console.WriteLine("Unknown light color: " + color);
-                    return 0;
+                    return new RGBA(0, 0, 0, 0);
             }
         }
 
@@ -84,11 +86,11 @@ namespace MapUpconverter.WDT
                     {
                         Id = (uint)li,
                         Position = newPos,
-                        Color = ColorNameToBGRA(splitModelName[2].Replace("01", "")),
+                        Color = ColorNameToRGBA(splitModelName[2].Replace("01", "")),
                         Intensity = 2.5f + (0.1f * (m2Entry.ScalingFactor / 1024f)),
                         AttenuationStart = 0.0f,
                         AttenuationEnd = 15.0f + (1 * (m2Entry.ScalingFactor / 1024f)),
-                        Flags = m2Filename.Contains("withshadows") ? (ushort)1 : (ushort)0,
+                        Flags = m2Filename.Contains("withshadows") ? MPL3Flags.Raytraced : 0,
                         Unknown1 = 14336,
                         Unused0 = new Vector3(0, 0, 0),
                         TileX = x,
