@@ -8,6 +8,7 @@ namespace MapUpconverter.Utils
         public static string HeightTextureInfoURL { get; private set; }
         public static string GroundEffectInfoURL { get; private set; }
         public static string ModelBlobURL { get; private set; }
+        public static string LightInfoURL { get; private set; }
 
         private static HttpClient client = new();
 
@@ -22,8 +23,9 @@ namespace MapUpconverter.Utils
             HeightTextureInfoURL = manifest.HeightTextureInfoURL;
             GroundEffectInfoURL = manifest.GroundEffectInfoURL;
             ModelBlobURL = manifest.ModelBlobURL;
+            LightInfoURL = manifest.LightInfoURL;
 
-            if(!Directory.Exists(Path.Combine(toolPath, "meta")))
+            if (!Directory.Exists(Path.Combine(toolPath, "meta")))
                 Directory.CreateDirectory(Path.Combine(toolPath, "meta"));
         }
 
@@ -83,12 +85,27 @@ namespace MapUpconverter.Utils
             return true;
         }
 
+        public async static Task<bool> DownloadLightInfo(string toolPath)
+        {
+            if (string.IsNullOrEmpty(LightInfoURL))
+                throw new Exception("Light info URL is not set or nor empty");
+
+            var lightInfoStream = await client.GetAsync(LightInfoURL);
+            using (var file = File.Create(Path.Combine(toolPath, "meta", "LightInfo.json")))
+            {
+                await lightInfoStream.Content.CopyToAsync(file);
+            }
+
+            return true;
+        }
+
         private struct URLManifest
         {
             public string ListfileURL { get; set; }
             public string HeightTextureInfoURL { get; set; }
             public string GroundEffectInfoURL { get; set; }
             public string ModelBlobURL { get; set; }
+            public string LightInfoURL { get; set; }
         }
     }
 }

@@ -177,6 +177,30 @@ namespace MapUpconverter
             }
 
             totalTimeMS += timer.ElapsedMilliseconds;
+            timer.Restart();
+
+            // Load light information
+            if (!File.Exists(Path.Combine(toolFolder, "meta", "LightInfo.json")))
+            {
+                Console.WriteLine("Downloading light info..");
+                Downloads.DownloadLightInfo(toolFolder).Wait();
+            }
+
+            try
+            {
+                Console.Write("Loading light info..");
+                LightInfo.Initialize(Path.Combine(toolFolder, "meta"));
+                Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to load light info: " + e.Message);
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
+
+            totalTimeMS += timer.ElapsedMilliseconds;
             timer.Stop();
 
 #if DEBUG
