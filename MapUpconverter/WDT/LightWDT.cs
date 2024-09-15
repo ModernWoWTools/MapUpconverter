@@ -75,7 +75,7 @@ namespace MapUpconverter.WDT
 
                     li++;
 
-                    Console.WriteLine("[DEBUG] Adding light for " + Path.GetFileNameWithoutExtension(filename) + " for model " + m2Entry.NameId + " at pos " + lightEntry.Position);
+                    //Console.WriteLine("Adding light for " + Path.GetFileNameWithoutExtension(filename) + " for model " + m2Entry.NameId + " at pos " + lightEntry.Position);
                     lightWDT.PointLights3.Entries.Add(lightEntry);
                 }
             }
