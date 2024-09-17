@@ -39,8 +39,19 @@ namespace MapUpconverter.ADT
                 var wotlkChunk = wotlkRootADT.Chunks[i];
 
                 // Apparently required for Noggit output -- verify if still correct after Noggit ground effect editor is released
-                if (regenGroundEffectMap)
-                    wotlkChunk.FixGroundEffectMap(wotlkFlags.HasFlag(MPHDFlags.BigAlpha));
+                // NOTE: This is crashy if big alpha is somehow wrong, so we wrap it.
+                try
+                {
+                    if (regenGroundEffectMap)
+                        wotlkChunk.FixGroundEffectMap(wotlkFlags.HasFlag(MPHDFlags.BigAlpha));
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error while fixing ground effects for chunk " + i + ": " + ex.Message);
+                    Console.WriteLine("Continuing without fixing ground effects, this likely means groundeffects will be broken for this chunk.");
+                    Console.ResetColor();
+                }
 
                 bfaRoot.Chunks[i] = new Warcraft.NET.Files.ADT.Terrain.BfA.MCNK();
                 bfaRoot.Chunks[i].Header = wotlkChunk.Header;
