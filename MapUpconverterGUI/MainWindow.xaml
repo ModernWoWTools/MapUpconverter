@@ -9,6 +9,11 @@
         Title="MapUpConverterGUI" Height="550" Width="800" Icon="/Icon.png">
     <Grid Background="#FFE5E5E5">
         <TabControl>
+            <TabControl.Resources>
+                <Style TargetType="DockPanel">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                </Style>
+            </TabControl.Resources>
             <TabItem Header="General Settings">
                 <Grid Height="459" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Label Content="Input directory" HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top"/>
@@ -37,7 +42,7 @@
                     <RadioButton x:Name="GenericRadioButton" Content="Generic" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="40,305,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
                     <RadioButton x:Name="EpsilonRadioButton" Content="Epsilon" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="114,305,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
                     <RadioButton x:Name="ArctiumRadioButton" Content="Arctium" GroupName="ExportTarget" HorizontalAlignment="Left" Margin="185,305,0,0" VerticalAlignment="Top" Checked="ExportTarget_Checked"/>
-                    
+
 
                     <TextBlock Margin="31,329,221,74">
                         <Bold>Target version</Bold> <LineBreak /> Version to target for upconversion (for point lights only).
@@ -104,11 +109,27 @@
                     </CheckBox>
                     <Label Content="MapID" HorizontalAlignment="Left" Margin="63,72,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="MapID" HorizontalAlignment="Left" Margin="113,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapID_TextChanged" Height="20"/>
+                    <Label Content="Light base intensity" HorizontalAlignment="Left" Margin="26,169,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Light base attenuation" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="LightBaseIntensity" HorizontalAlignment="Left" Margin="143,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseIntensity_TextChanged" Height="20"/>
+                    <TextBox x:Name="LightBaseAttenuation" HorizontalAlignment="Left" Margin="143,197,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseAttenuation_TextChanged" Height="20"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Presets" Margin="0,0,-210,0" HorizontalAlignment="Right">
+                <Grid>
+                    <TextBox x:Name="PresetName" HorizontalAlignment="Left" Margin="212,12,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="206" TextChanged="PresetName_TextChanged"/>
+                    <ListBox x:Name="AvailablePresets" Margin="10,10,665,128" SelectionChanged="AvailablePresets_Selected"/>
+                    <Button x:Name="SaveSettingsButton" IsEnabled="False" Content="Save" HorizontalAlignment="Left" Margin="423,11,0,0" VerticalAlignment="Top" Width="79" Click="SaveSettingsButton_Click"/>
+                    <Button x:Name="LoadSettingsButton" IsEnabled="False" Content="Load" HorizontalAlignment="Left" VerticalAlignment="Top" Width="52" Margin="12,368,0,0" Click="LoadSettingsButton_Click"/>
+                    <Button x:Name="DeleteSettingsButton" IsEnabled="False" Content="Delete" HorizontalAlignment="Left" Margin="70,368,0,0" VerticalAlignment="Top" Width="48" Click="DeleteSettingsButton_Click"/>
+                    <Label Content="Preset name" HorizontalAlignment="Left" Margin="129,8,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Preset preview" HorizontalAlignment="Left" Margin="151,39,0,0" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="PresetPreview" HorizontalAlignment="Left" Margin="194,70,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="308" Width="568"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="SaveButton" Content="Save settings" IsEnabled="False" HorizontalAlignment="Left" Margin="14,425,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
-        <Button x:Name="StartButton" Content="Save &amp; Start converter" HorizontalAlignment="Left" Margin="539,425,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
+        <Button x:Name="SaveButton" Content="Apply changes" IsEnabled="False" HorizontalAlignment="Left" Margin="14,425,0,0" VerticalAlignment="Top" Height="32" Width="508" Click="SaveButton_Click"/>
+        <Button x:Name="StartButton" Content="Apply &amp; Start converter" HorizontalAlignment="Left" Margin="539,425,0,0" VerticalAlignment="Top" Height="32" Width="222" FontWeight="Bold" Click="StartButton_Click"/>
 
         <TextBlock Margin="0,482,0,-37" HorizontalAlignment="Center">           
     <Hyperlink NavigateUri="https://github.com/ModernWoWTools/MapUpconverter" RequestNavigate="Hyperlink_RequestNavigate">

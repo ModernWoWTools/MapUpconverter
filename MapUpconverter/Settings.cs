@@ -29,9 +29,12 @@ namespace MapUpconverter
 
         public static int TargetVersion = 927;
 
-        public static void Load(string toolFolder)
+        public static float LightBaseIntensity = 1.25f;
+        public static float LightBaseAttenuationEnd = 7.5f;
+
+        public static void Load(string toolFolder, string settingsName = "settings")
         {
-            var jsonPath = Path.Combine(toolFolder, "settings.json");
+            var jsonPath = Path.Combine(toolFolder, settingsName + ".json");
 
             if (!File.Exists(jsonPath))
                 throw new FileNotFoundException("Settings file not found at " + jsonPath + ", cannot continue.");
@@ -89,11 +92,21 @@ namespace MapUpconverter
                 TargetVersion = 927;
             else
                 TargetVersion = settingsJSON.targetVersion;
+
+            if (settingsJSON.lightBaseIntensity == null)
+                LightBaseIntensity = 1.25f;
+            else
+                LightBaseIntensity = settingsJSON.lightBaseIntensity;
+
+            if (settingsJSON.lightBaseAttenuationEnd == null)
+                LightBaseAttenuationEnd = 7.5f;
+            else
+                LightBaseAttenuationEnd = settingsJSON.lightBaseAttenuationEnd;
         }
 
-        public static void Save(string toolFolder)
+        public static void Save(string toolFolder, string settingsName = "settings")
         {
-            var jsonPath = Path.Combine(toolFolder, "settings.json");
+            var jsonPath = Path.Combine(toolFolder, settingsName + ".json");
 
             var settingsJSON = new
             {
@@ -119,7 +132,10 @@ namespace MapUpconverter
                 casRefresh = CASRefresh,
                 mapID = MapID,
 
-                targetVersion = TargetVersion
+                targetVersion = TargetVersion,
+
+                lightBaseIntensity = LightBaseIntensity,
+                lightBaseAttenuationEnd = LightBaseAttenuationEnd
             };
 
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(settingsJSON, Formatting.Indented));

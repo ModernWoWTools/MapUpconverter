@@ -1,5 +1,6 @@
 ﻿using MapUpconverter.Utils;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -43,60 +44,7 @@ namespace MapUpconverterGUI
             try
             {
                 MapUpconverter.Settings.Load(toolFolder);
-
-                InputDir.Text = MapUpconverter.Settings.InputDir;
-                OutputDir.Text = MapUpconverter.Settings.OutputDir;
-
-                GenerateWDTWDLCheckbox.IsChecked = MapUpconverter.Settings.GenerateWDTWDL;
-                ConvertOnSaveCheckbox.IsChecked = MapUpconverter.Settings.ConvertOnSave;
-
-                MapName.Text = MapUpconverter.Settings.MapName;
-
-                EpsilonDir.Text = MapUpconverter.Settings.EpsilonDir;
-                PatchName.Text = MapUpconverter.Settings.EpsilonPatchName;
-
-                LauncherDir.Text = MapUpconverter.Settings.ArctiumDir;
-                ArctiumPatchName.Text = MapUpconverter.Settings.ArctiumPatchName;
-
-                WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
-                ArctiumWDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
-
-                ClientRefreshEnabled.IsChecked = MapUpconverter.Settings.ClientRefresh;
-                CASRefreshEnabled.IsChecked = MapUpconverter.Settings.CASRefresh;
-
-                MapID.Text = MapUpconverter.Settings.MapID.ToString();
-
-                if (MapUpconverter.Settings.ExportTarget == "Epsilon")
-                {
-                    EpsilonRadioButton.IsChecked = true;
-                    //OutputDir.IsEnabled = false;
-                    //OutputDirButton.IsEnabled = false;
-                }
-                else if (MapUpconverter.Settings.ExportTarget == "Arctium")
-                {
-                    ArctiumRadioButton.IsChecked = true;
-                    //OutputDir.IsEnabled = false;
-                    //OutputDirButton.IsEnabled = false;
-                }
-                else
-                {
-                    GenericRadioButton.IsChecked = true;
-                    //OutputDir.IsEnabled = true;
-                    //OutputDirButton.IsEnabled = true;
-                }
-
-                if (MapUpconverter.Settings.TargetVersion == 830)
-                {
-                    BFARadioButton.IsChecked = true;
-                }
-                else if (MapUpconverter.Settings.TargetVersion == 927)
-                {
-                    SLRadioButton.IsChecked = true;
-                }
-                else
-                {
-                    SLRadioButton.IsChecked = true;
-                }
+                ApplySettings();
             }
             catch (Exception ex)
             {
@@ -104,6 +52,7 @@ namespace MapUpconverterGUI
                 Application.Current.Shutdown(1);
             }
 
+            UpdateAvailablePresets();
             SaveButton.IsEnabled = false;
             StartButton.IsEnabled = false;
 
@@ -125,6 +74,76 @@ namespace MapUpconverterGUI
             {
                 MessageBox.Show("Error checking required files: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Application.Current.Shutdown(1);
+            }
+        }
+
+        private void ApplySettings()
+        {
+            InputDir.Text = MapUpconverter.Settings.InputDir;
+            OutputDir.Text = MapUpconverter.Settings.OutputDir;
+
+            GenerateWDTWDLCheckbox.IsChecked = MapUpconverter.Settings.GenerateWDTWDL;
+            ConvertOnSaveCheckbox.IsChecked = MapUpconverter.Settings.ConvertOnSave;
+
+            MapName.Text = MapUpconverter.Settings.MapName;
+
+            EpsilonDir.Text = MapUpconverter.Settings.EpsilonDir;
+            PatchName.Text = MapUpconverter.Settings.EpsilonPatchName;
+
+            LauncherDir.Text = MapUpconverter.Settings.ArctiumDir;
+            ArctiumPatchName.Text = MapUpconverter.Settings.ArctiumPatchName;
+
+            WDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
+            ArctiumWDTFileDataID.Text = MapUpconverter.Settings.RootWDTFileDataID.ToString();
+
+            ClientRefreshEnabled.IsChecked = MapUpconverter.Settings.ClientRefresh;
+            CASRefreshEnabled.IsChecked = MapUpconverter.Settings.CASRefresh;
+
+            MapID.Text = MapUpconverter.Settings.MapID.ToString();
+
+            if (MapUpconverter.Settings.ExportTarget == "Epsilon")
+            {
+                EpsilonRadioButton.IsChecked = true;
+            }
+            else if (MapUpconverter.Settings.ExportTarget == "Arctium")
+            {
+                ArctiumRadioButton.IsChecked = true;
+            }
+            else
+            {
+                GenericRadioButton.IsChecked = true;
+            }
+
+            if (MapUpconverter.Settings.TargetVersion == 830)
+            {
+                BFARadioButton.IsChecked = true;
+            }
+            else if (MapUpconverter.Settings.TargetVersion == 927)
+            {
+                SLRadioButton.IsChecked = true;
+            }
+            else
+            {
+                SLRadioButton.IsChecked = true;
+            }
+
+            LightBaseAttenuation.Text = MapUpconverter.Settings.LightBaseAttenuationEnd.ToString();
+            LightBaseIntensity.Text = MapUpconverter.Settings.LightBaseIntensity.ToString();
+        }
+
+        private void UpdateAvailablePresets()
+        {
+            if (!Directory.Exists("presets"))
+                return;
+
+            var presets = Directory.GetFiles("presets", "*.json");
+
+            AvailablePresets.Items.Clear();
+
+            foreach (var preset in presets)
+            {
+                var presetName = Path.GetFileNameWithoutExtension(preset);
+                AvailablePresets.Items.Add(presetName);
             }
         }
 
@@ -306,8 +325,36 @@ namespace MapUpconverterGUI
             }
             else
             {
-                if(MapID.Text != "-")
+                if (MapID.Text != "-")
                     MapID.Text = "";
+            }
+        }
+
+        private void LightBaseIntensity_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (float.TryParse(LightBaseIntensity.Text.Trim(), out var cleanedIntensity))
+            {
+                LightBaseIntensity.Text = cleanedIntensity.ToString();
+                MapUpconverter.Settings.LightBaseIntensity = cleanedIntensity;
+                ResetSaveButton();
+            }
+            else
+            {
+                LightBaseIntensity.Text = "";
+            }
+        }
+
+        private void LightBaseAttenuation_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (float.TryParse(LightBaseAttenuation.Text.Trim(), out var cleanedAttenuation))
+            {
+                LightBaseAttenuation.Text = cleanedAttenuation.ToString();
+                MapUpconverter.Settings.LightBaseAttenuationEnd = cleanedAttenuation;
+                ResetSaveButton();
+            }
+            else
+            {
+                LightBaseAttenuation.Text = "";
             }
         }
 
@@ -413,7 +460,7 @@ namespace MapUpconverterGUI
 
         private void ResetSaveButton()
         {
-            SaveButton.Content = "Save settings";
+            SaveButton.Content = "Apply changes";
             SaveButton.IsEnabled = true;
         }
 
@@ -638,5 +685,87 @@ namespace MapUpconverterGUI
             CheckRequiredFiles();
         }
 
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists("presets"))
+                Directory.CreateDirectory("presets");
+
+            var presetName = PresetName.Text;
+
+            if (File.Exists(Path.Combine("presets", presetName + ".json")))
+            {
+                var overwritePrompt = MessageBox.Show("Preset with this name already exists, overwrite?", "Overwrite?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (overwritePrompt == MessageBoxResult.No)
+                    return;
+            }
+
+            MapUpconverter.Settings.Save("presets", presetName);
+
+            UpdateAvailablePresets();
+        }
+
+        private void LoadSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var presetName = AvailablePresets.SelectedItem as string;
+
+            if (string.IsNullOrEmpty(presetName))
+                return;
+
+            MapUpconverter.Settings.Load("presets", presetName);
+
+            ApplySettings();
+        }
+
+        private void DeleteSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var presetName = AvailablePresets.SelectedItem as string;
+
+            if (string.IsNullOrEmpty(presetName))
+                return;
+
+            var deletePrompt = MessageBox.Show("Are you sure you want to delete this preset?", "Delete?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (deletePrompt == MessageBoxResult.No)
+                return;
+
+            File.Delete(Path.Combine("presets", presetName + ".json"));
+
+            UpdateAvailablePresets();
+        }
+
+        private void PresetName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            SaveSettingsButton.IsEnabled = PresetName.Text.Length > 0;
+        }
+
+        private void AvailablePresets_Selected(object sender, RoutedEventArgs e)
+        {
+            LoadSettingsButton.IsEnabled = AvailablePresets.SelectedItem != null;
+            DeleteSettingsButton.IsEnabled = AvailablePresets.SelectedItem != null;
+
+            PresetPreview.Text = "";
+            PresetName.Text = AvailablePresets.SelectedItem as string;
+
+            PreviewSettings("presets", AvailablePresets.SelectedItem as string);
+        }
+
+        private void PreviewSettings(string folder, string presetName)
+        {
+            if (string.IsNullOrEmpty(presetName))
+                return;
+
+            var presetPath = Path.Combine(folder, presetName + ".json");
+
+            if (!File.Exists(presetPath))
+                return;
+
+            var presetJSON = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(presetPath));
+
+            PresetPreview.Text = "";
+
+            foreach (var setting in presetJSON)
+            {
+                PresetPreview.Text += setting.Name + ": " + setting.Value + "\n";
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using MapUpconverter.Utils;
 using System.Collections.Concurrent;
 using System.Numerics;
-using Warcraft.NET.Files.Structures;
 using Warcraft.NET.Files.WDT.Flags;
 
 namespace MapUpconverter.WDT
@@ -14,8 +13,10 @@ namespace MapUpconverter.WDT
             {
                 Version = new Warcraft.NET.Files.WDT.Chunks.MVER(20),
                 PointLights3 = new Warcraft.NET.Files.WDT.Chunks.SL.MPL3(),
+                //TextureFileDataIDs = new()
             };
 
+            //lightWDT.TextureFileDataIDs.Entries.Add(3154157);
             var li = 0;
 
             foreach (var filename in Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"))
@@ -43,12 +44,12 @@ namespace MapUpconverter.WDT
                         Id = (uint)li,
                         Position = newPos,
                         Color = LightInfo.GetRGBA(splitModelName[2].Replace("01", "")),
-                        Intensity = 2.5f + (0.1f * (m2Entry.ScalingFactor / 1024f)),
+                        Intensity = Settings.LightBaseIntensity + (0.1f * (m2Entry.ScalingFactor / 1024f)),
                         AttenuationStart = 0.0f,
-                        AttenuationEnd = 15.0f + (1 * (m2Entry.ScalingFactor / 1024f)),
+                        AttenuationEnd = Settings.LightBaseAttenuationEnd + (1 * (m2Entry.ScalingFactor / 1024f)),
                         Flags = m2Filename.Contains("withshadows") ? MPL3Flags.Raytraced : 0,
-                        Unknown1 = 14336,
-                        Unused0 = new Vector3(0, 0, 0),
+                        Scale = 0.5f,
+                        Rotation = new Vector3(0, 0, 0),
                         TileX = x,
                         TileY = y,
                         MLTAIndex = -1,
@@ -57,13 +58,13 @@ namespace MapUpconverter.WDT
 
                     if (m2Filename.Contains("flicker"))
                     {
-                        foreach(var nameSplit in splitModelName)
+                        foreach (var nameSplit in splitModelName)
                         {
                             if (nameSplit.StartsWith("flicker"))
                             {
                                 var cleanSplit = nameSplit.Replace("01", "");
                                 var flickerEntry = LightInfo.GetLightAnim(cleanSplit);
-                                if(flickerEntry != null)
+                                if (flickerEntry != null)
                                 {
                                     lightWDT.LightAnimations ??= new();
                                     lightWDT.LightAnimations.Entries.Add(flickerEntry);

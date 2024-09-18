@@ -27,6 +27,7 @@ namespace MapUpconverter.Utils
             if (ColorMap.TryGetValue(color, out RGBA rgba))
                 return rgba;
 
+            Console.WriteLine("Unknown color: " + color + ", returning 0.");
             return new RGBA(0, 0, 0, 0);
         }
 
