@@ -9,8 +9,6 @@ namespace MetaGen
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("MetaGen - A tool meant to extract meta information from WoW files.");
-
             if (args.Length == 1 && (args[0].ToLower().EndsWith(".m2") || args[0].ToLower().EndsWith(".wmo")))
             {
                 if (args[0].ToLower().EndsWith(".m2"))
@@ -21,6 +19,8 @@ namespace MetaGen
                 Console.ReadLine();
                 return;
             }
+
+            Console.WriteLine("MetaGen - A tool meant to extract meta information from WoW files.");
 
             if (args.Length < 2)
             {
