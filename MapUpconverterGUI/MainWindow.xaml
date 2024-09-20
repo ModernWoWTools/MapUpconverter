@@ -109,10 +109,11 @@
                     </CheckBox>
                     <Label Content="MapID" HorizontalAlignment="Left" Margin="63,72,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="MapID" HorizontalAlignment="Left" Margin="113,75,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapID_TextChanged" Height="20"/>
-                    <Label Content="Light base intensity" HorizontalAlignment="Left" Margin="26,169,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Light base attenuation" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="LightBaseIntensity" HorizontalAlignment="Left" Margin="143,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseIntensity_TextChanged" Height="20"/>
-                    <TextBox x:Name="LightBaseAttenuation" HorizontalAlignment="Left" Margin="143,197,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseAttenuation_TextChanged" Height="20"/>
+                    <Label Content="Light base intensity" HorizontalAlignment="Left" Margin="27,180,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Light base attenuation" HorizontalAlignment="Left" Margin="11,206,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="LightBaseIntensity" HorizontalAlignment="Left" Margin="144,183,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseIntensity_TextChanged" Height="20"/>
+                    <TextBox x:Name="LightBaseAttenuation" HorizontalAlignment="Left" Margin="144,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseAttenuation_TextChanged" Height="20"/>
+                    <Label Content="Light settings" HorizontalAlignment="Left" Margin="11,154,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Presets" Margin="0,0,-210,0" HorizontalAlignment="Right">

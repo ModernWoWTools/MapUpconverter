@@ -714,6 +714,7 @@ namespace MapUpconverterGUI
             MapUpconverter.Settings.Load("presets", presetName);
 
             ApplySettings();
+            SaveSettings();
         }
 
         private void DeleteSettingsButton_Click(object sender, RoutedEventArgs e)
