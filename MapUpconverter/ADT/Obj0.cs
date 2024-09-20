@@ -103,6 +103,10 @@ namespace MapUpconverter.ADT
                 bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].NameId = fdid;
                 bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.NameIdIsFiledataId;
                 bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
+
+                if (bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags.HasFlag(Warcraft.NET.Files.ADT.Flags.MODFFlags.UseDoodadSetsFromMWDS))
+                    bfaObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags &= ~Warcraft.NET.Files.ADT.Flags.MODFFlags.UseDoodadSetsFromMWDS;
+
             }
 
             for (int i = 0; i < 256; i++)
