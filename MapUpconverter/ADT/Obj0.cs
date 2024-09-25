@@ -44,6 +44,18 @@ namespace MapUpconverter.ADT
                             Console.WriteLine("Using last part of M2 placeholder filename as FDID: " + fdid);
                     }
 
+                    if (Listfile.NameMap.TryGetValue(fdid, out var name) && name.ToLowerInvariant().EndsWith(".m2"))
+                    {
+                        Console.WriteLine("Found name for new FDID: " + name);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Detected FDID " + fdid + " is not in listfile or is not an M2, discarding..");
+                        Console.ResetColor();
+                        fdid = 0;
+                    }
+
                     if (fdid == 0)
                     {
                         var baseName = Path.GetFileName(wotlkModelName);
