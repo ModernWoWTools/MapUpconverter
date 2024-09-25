@@ -36,6 +36,14 @@ namespace MapUpconverter.ADT
                     if (uint.TryParse(Path.GetFileNameWithoutExtension(wotlkModelName), out fdid))
                         Console.WriteLine("Using M2 placeholder filename as FDID: " + fdid);
 
+                    if(fdid == 0)
+                    {
+                        var splitModel = Path.GetFileNameWithoutExtension(wotlkModelName).Split("_");
+                        var lastPart = splitModel[splitModel.Length - 1];
+                        if (uint.TryParse(lastPart, out fdid))
+                            Console.WriteLine("Using last part of M2 placeholder filename as FDID: " + fdid);
+                    }
+
                     if (fdid == 0)
                     {
                         var baseName = Path.GetFileName(wotlkModelName);
