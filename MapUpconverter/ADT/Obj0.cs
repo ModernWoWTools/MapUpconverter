@@ -32,6 +32,7 @@ namespace MapUpconverter.ADT
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Warning: No FDID found for M2 " + wotlkModelName + ", this might indicate an outdated listfile or outdated downported asset filenames.");
+                    Console.ResetColor();
 
                     if (uint.TryParse(Path.GetFileNameWithoutExtension(wotlkModelName), out fdid))
                         Console.WriteLine("Using M2 placeholder filename as FDID: " + fdid);
@@ -74,9 +75,8 @@ namespace MapUpconverter.ADT
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("No FDID found for M2 " + wotlkModelName + ", using errorcube.m2 instead!");
                         fdid = 166046;
+                        Console.ResetColor();
                     }
-
-                    Console.ResetColor();
                 }
 
                 bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = fdid;
