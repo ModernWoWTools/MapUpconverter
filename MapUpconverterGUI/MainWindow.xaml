@@ -16,15 +16,15 @@
             </TabControl.Resources>
             <TabItem Header="General Settings">
                 <Grid Height="459" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Label Content="Input directory" HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="InputDir" HorizontalAlignment="Left" Margin="112,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="501" TextChanged="InputDir_TextChanged" Height="20"/>
+                    <Label Content="Input/Noggit project dir" HorizontalAlignment="Left" Margin="19,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="InputDir" HorizontalAlignment="Left" Margin="165,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="448" TextChanged="InputDir_TextChanged" Height="20"/>
                     <Button Content="Select directory" HorizontalAlignment="Left" Margin="619,14,0,0" VerticalAlignment="Top" Click="InputDirButton_Click" Width="102"/>
 
-                    <Label Content="Output directory" HorizontalAlignment="Left" Margin="9,40,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="OutputDir" HorizontalAlignment="Left" Margin="112,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="501" TextChanged="OutputDir_TextChanged" Height="20"/>
+                    <Label Content="Output directory" HorizontalAlignment="Left" Margin="58,40,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="OutputDir" HorizontalAlignment="Left" Margin="165,44,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="448" TextChanged="OutputDir_TextChanged" Height="20"/>
                     <Button x:Name="OutputDirButton" Content="Select directory" HorizontalAlignment="Left" Margin="619,44,0,0" VerticalAlignment="Top" Click="OutputDirButton_Click" Width="102"/>
-                    <Label Content="Map name" HorizontalAlignment="Left" Margin="39,71,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="MapName" HorizontalAlignment="Left" Margin="112,74,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="330" TextChanged="MapName_TextChanged" Height="20"/>
+                    <Label Content="Map name" HorizontalAlignment="Left" Margin="88,71,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="MapName" HorizontalAlignment="Left" Margin="165,74,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="277" TextChanged="MapName_TextChanged" Height="20"/>
                     <CheckBox x:Name="GenerateWDTWDLCheckbox" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" Click="GenerateWDTWDL_Checked">
                         <TextBlock>
                             <Bold>Generate WDT/WDL?</Bold> <LineBreak /> Primarily meant for fully custom maps. If you are editing a partial/existing map and aren't adding -new- ADTs, uncheck this.<LineBreak />If you are adding new ADTs/want to update the WDL (distant mountain heightmap), put all ADTs in the input dir (new or not) and check this.
@@ -115,6 +115,8 @@
                     <TextBox x:Name="LightBaseIntensity" HorizontalAlignment="Left" Margin="144,183,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseIntensity_TextChanged" Height="20"/>
                     <TextBox x:Name="LightBaseAttenuation" HorizontalAlignment="Left" Margin="144,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" TextChanged="LightBaseAttenuation_TextChanged" Height="20"/>
                     <Label Content="Light settings" HorizontalAlignment="Left" Margin="11,154,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <Button x:Name="ManualClientRefresh" Content="Manual client refresh" HorizontalAlignment="Left" Margin="588,38,0,0" VerticalAlignment="Top" Height="39" Width="162" Click="ManualClientRefresh_Click"/>
+                    <Button x:Name="ManualPatchRefresh" Content="Manual patch refresh" HorizontalAlignment="Left" Margin="588,103,0,0" VerticalAlignment="Top" Height="39" Width="162" Click="ManualPatchRefresh_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Presets" Margin="0,0,-210,0" HorizontalAlignment="Right">

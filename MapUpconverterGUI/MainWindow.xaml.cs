@@ -1,4 +1,6 @@
-﻿using MapUpconverter.Utils;
+﻿using MapUpconverter.Arctium;
+using MapUpconverter.Epsilon;
+using MapUpconverter.Utils;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -775,6 +777,46 @@ namespace MapUpconverterGUI
             {
                 PresetPreview.Text += setting.Name + ": " + setting.Value + "\n";
             }
+        }
+
+        private void ManualClientRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            ManualClientRefresh.Content = "Refreshing...";
+            ManualClientRefresh.IsEnabled = false;
+
+            EpsilonConnection.Connect();
+
+            var allTiles = new List<(int TileID, int UpdateFlags)>();
+            for (var x = 0; x < 63; x++)
+            {
+                for (var y = 0; y < 63; y++)
+                {
+                    allTiles.Add((x * 64 + y, 0x7)); // Update root, tex and obj
+                }
+            }
+
+            EpsilonConnection.RequestMapTileUpdate(MapUpconverter.Settings.MapID, allTiles);
+
+            ManualClientRefresh.Content = "Manual client refresh";
+            ManualClientRefresh.IsEnabled = true;
+        }
+
+        private void ManualPatchRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            ManualPatchRefresh.Content = "Refreshing...";
+            ManualPatchRefresh.IsEnabled = false;
+
+            if (MapUpconverter.Settings.ExportTarget == "Epsilon")
+            {
+                PatchManifest.Update();
+            }
+            else if (MapUpconverter.Settings.ExportTarget == "Arctium")
+            {
+                FileMapping.Update();
+            }
+
+            ManualPatchRefresh.Content = "Manual patch refresh";
+            ManualPatchRefresh.IsEnabled = true;
         }
     }
 }
