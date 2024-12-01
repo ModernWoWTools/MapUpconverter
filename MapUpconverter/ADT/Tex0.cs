@@ -21,7 +21,7 @@ namespace MapUpconverter.ADT
 
             foreach (var texture in wotlkRootADT.Textures.Filenames)
             {
-                var diffuseTexture = texture.ToLowerInvariant();
+                var diffuseTexture = texture.ToLowerInvariant().Replace("\\", "/");
 
                 // We prefer _s.blps for MDID
                 if (!diffuseTexture.EndsWith("_s.blp") && Listfile.ReverseMap.TryGetValue(diffuseTexture.Replace(".blp", "_s.blp"), out var diffuseFDID))
