@@ -117,6 +117,11 @@
                     <Label Content="Light settings" HorizontalAlignment="Left" Margin="11,154,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                     <Button x:Name="ManualClientRefresh" Content="Manual client refresh" HorizontalAlignment="Left" Margin="588,38,0,0" VerticalAlignment="Top" Height="39" Width="162" Click="ManualClientRefresh_Click"/>
                     <Button x:Name="ManualPatchRefresh" Content="Manual patch refresh" HorizontalAlignment="Left" Margin="588,103,0,0" VerticalAlignment="Top" Height="39" Width="162" Click="ManualPatchRefresh_Click"/>
+                    <CheckBox x:Name="AdvancedLightConfig" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Click="AdvancedLightConfig_Checked">
+                        <TextBlock>
+                            <Bold>Use advanced light config?</Bold><LineBreak /> Uses advanced light configuration file (meta/AdvancedLight.json) instead of above light settings (advanced users only). 
+                        </TextBlock>
+                    </CheckBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Presets" Margin="0,0,-210,0" HorizontalAlignment="Right">

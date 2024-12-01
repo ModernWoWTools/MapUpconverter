@@ -32,6 +32,8 @@ namespace MapUpconverter
         public static float LightBaseIntensity = 1.25f;
         public static float LightBaseAttenuationEnd = 7.5f;
 
+        public static bool UseAdvancedLightConfig = false;
+
         public static void Load(string toolFolder, string settingsName = "settings")
         {
             var jsonPath = Path.Combine(toolFolder, settingsName + ".json");
@@ -102,6 +104,11 @@ namespace MapUpconverter
                 LightBaseAttenuationEnd = 7.5f;
             else
                 LightBaseAttenuationEnd = settingsJSON.lightBaseAttenuationEnd;
+
+            if (settingsJSON.useAdvancedLightConfig == null)
+                UseAdvancedLightConfig = false;
+            else
+                UseAdvancedLightConfig = settingsJSON.useAdvancedLightConfig;
         }
 
         public static void Save(string toolFolder, string settingsName = "settings")
@@ -135,7 +142,9 @@ namespace MapUpconverter
                 targetVersion = TargetVersion,
 
                 lightBaseIntensity = LightBaseIntensity,
-                lightBaseAttenuationEnd = LightBaseAttenuationEnd
+                lightBaseAttenuationEnd = LightBaseAttenuationEnd,
+
+                useAdvancedLightConfig = UseAdvancedLightConfig
             };
 
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(settingsJSON, Formatting.Indented));

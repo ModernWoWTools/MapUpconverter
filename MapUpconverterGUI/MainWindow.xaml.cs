@@ -1,4 +1,5 @@
-﻿using MapUpconverter.Arctium;
+﻿using MapUpconverter;
+using MapUpconverter.Arctium;
 using MapUpconverter.Epsilon;
 using MapUpconverter.Utils;
 using Microsoft.Win32;
@@ -135,6 +136,8 @@ namespace MapUpconverterGUI
 
             LightBaseAttenuation.Text = MapUpconverter.Settings.LightBaseAttenuationEnd.ToString();
             LightBaseIntensity.Text = MapUpconverter.Settings.LightBaseIntensity.ToString();
+
+            AdvancedLightConfig.IsChecked = Settings.UseAdvancedLightConfig;
         }
 
         private void UpdateAvailablePresets()
@@ -817,6 +820,12 @@ namespace MapUpconverterGUI
 
             ManualPatchRefresh.Content = "Manual patch refresh";
             ManualPatchRefresh.IsEnabled = true;
+        }
+
+        private void AdvancedLightConfig_Checked(object sender, RoutedEventArgs e)
+        {
+            Settings.UseAdvancedLightConfig = AdvancedLightConfig.IsChecked == true;
+            ResetSaveButton();
         }
     }
 }
