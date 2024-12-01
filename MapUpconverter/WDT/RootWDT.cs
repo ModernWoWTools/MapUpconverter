@@ -8,10 +8,14 @@ namespace MapUpconverter.WDT
     {
         public static Warcraft.NET.Files.WDT.Root.WotLK.WorldDataTable GenerateLegion()
         {
-            var wotlkWDTPath = Path.Combine(Settings.InputDir, Settings.MapName + ".wdt");
-            var wotlkFlags = new MPHDFlags();
+            var wdtResults = Directory.GetFiles(Settings.InputDir, Settings.MapName + ".wdt", SearchOption.AllDirectories);
+            if(wdtResults.Length == 0)
+                Console.WriteLine("No input WDT found for map " + Settings.MapName + ", using default flags.");
+
+            var wotlkWDTPath = wdtResults.FirstOrDefault();
             var wotlkWDTExists = File.Exists(wotlkWDTPath);
             Warcraft.NET.Files.WDT.Root.WotLK.WorldDataTable wotlkWDT = new();
+            var wotlkFlags = new MPHDFlags();
 
             if (wotlkWDTExists)
             {
@@ -29,7 +33,6 @@ namespace MapUpconverter.WDT
                 WorldModelObjects = new Warcraft.NET.Files.ADT.Chunks.MWMO(),
                 WorldModelObjectPlacementInfo = new Warcraft.NET.Files.ADT.Chunks.MODF(),
             };
-
 
             rootWDT.Header.Flags = wotlkFlags | MPHDFlags.hasHeightTexturing;
 
@@ -56,17 +59,20 @@ namespace MapUpconverter.WDT
                         rootWDT.Tiles.Entries[x, y].AsyncId = wotlkWDT.Tiles.Entries[x, y].AsyncId;
                     }
                 }
-                // }
             }
             return rootWDT;
         }
 
         public static Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable Generate()
         {
-            var wotlkWDTPath = Path.Combine(Settings.InputDir, Settings.MapName + ".wdt");
-            var wotlkFlags = new MPHDFlags();
+            var wdtResults = Directory.GetFiles(Settings.InputDir, Settings.MapName + ".wdt", SearchOption.AllDirectories);
+            if (wdtResults.Length == 0)
+                Console.WriteLine("No input WDT found for map " + Settings.MapName + ", using default flags.");
+
+            var wotlkWDTPath = wdtResults.FirstOrDefault();
             var wotlkWDTExists = File.Exists(wotlkWDTPath);
             Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable wotlkWDT = new();
+            var wotlkFlags = new MPHDFlags();
 
             if (wotlkWDTExists)
             {
@@ -75,21 +81,6 @@ namespace MapUpconverter.WDT
             }
 
             var currentWDTPath = Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt");
-
-            //if (File.Exists(currentWDTPath))
-            //{
-            //    rootWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable(File.ReadAllBytes(currentWDTPath));
-            //}
-            //else
-            //{
-            // We need to generate an entirely new WDT, oh dear.
-            //Console.ForegroundColor = ConsoleColor.Red;
-            //if (wotlkWDTExists)
-            //    Console.WriteLine("Generating WDT based on WotLK input WDT. This is not fully implemented yet, and will not work as expected.");
-            //else
-            //    Console.WriteLine("Generating an entirely new WDT. This is not fully implemented yet, and will not work as expected.");
-
-            //Console.ResetColor();
 
             var rootWDT = new Warcraft.NET.Files.WDT.Root.BfA.WorldDataTable()
             {
@@ -175,7 +166,6 @@ namespace MapUpconverter.WDT
                         MinimapTextureFileId = hasMinimapTexture ? GetOrAssignFileDataID("world/minimaps/" + Settings.MapName + "/map" + x.ToString().PadLeft(2, '0') + "_" + y.ToString().PadLeft(2, '0') + ".blp") : 0
                     };
                 }
-                // }
             }
 
             return rootWDT;
