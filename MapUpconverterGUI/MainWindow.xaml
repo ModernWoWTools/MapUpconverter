@@ -45,10 +45,11 @@
 
 
                     <TextBlock Margin="31,329,221,74">
-                        <Bold>Target version</Bold> <LineBreak /> Version to target for upconversion (for point lights only).
+                        <Bold>Target version</Bold> <LineBreak /> Version to target for upconversion.
                     </TextBlock>
-                    <RadioButton x:Name="BFARadioButton" Content="8.3.0" GroupName="ExportVersion" HorizontalAlignment="Left" Margin="40,366,0,0" VerticalAlignment="Top" Checked="ExportVersion_Checked"/>
-                    <RadioButton x:Name="SLRadioButton" Content="9.2.7+" GroupName="ExportVersion" HorizontalAlignment="Left" Margin="114,366,0,0" VerticalAlignment="Top" Checked="ExportVersion_Checked"/>
+                    <RadioButton x:Name="LegionRadioButton" Content="7.3.5" GroupName="ExportVersion" HorizontalAlignment="Left" Margin="40,366,0,0" VerticalAlignment="Top" Checked="ExportVersion_Checked"/>
+                    <RadioButton x:Name="BFARadioButton" Content="8.3.0" GroupName="ExportVersion" HorizontalAlignment="Left" Margin="104,366,0,0" VerticalAlignment="Top" Checked="ExportVersion_Checked"/>
+                    <RadioButton x:Name="SLRadioButton" Content="9.2.7+" GroupName="ExportVersion" HorizontalAlignment="Left" Margin="164,366,0,0" VerticalAlignment="Top" Checked="ExportVersion_Checked"/>
 
                     <Label x:Name="ListfileLabel" Content="Listfile exists on disk" HorizontalAlignment="Left" Margin="554,268,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="ListfileButton" Content="Redownload" HorizontalAlignment="Left" Margin="682,271,0,0" VerticalAlignment="Top" Width="79" Click="ListfileButton_Click"/>

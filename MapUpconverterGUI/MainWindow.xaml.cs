@@ -114,7 +114,11 @@ namespace MapUpconverterGUI
                 GenericRadioButton.IsChecked = true;
             }
 
-            if (MapUpconverter.Settings.TargetVersion == 830)
+            if (MapUpconverter.Settings.TargetVersion == 735)
+            {
+                LegionRadioButton.IsChecked = true;
+            }
+            else if (MapUpconverter.Settings.TargetVersion == 830)
             {
                 BFARadioButton.IsChecked = true;
             }
@@ -405,7 +409,11 @@ namespace MapUpconverterGUI
 
         private void ExportVersion_Checked(object sender, RoutedEventArgs e)
         {
-            if (BFARadioButton.IsChecked == true)
+            if (LegionRadioButton.IsChecked == true)
+            {
+                MapUpconverter.Settings.TargetVersion = 735;
+            }
+            else if (BFARadioButton.IsChecked == true)
             {
                 MapUpconverter.Settings.TargetVersion = 830;
             }
