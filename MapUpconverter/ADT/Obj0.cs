@@ -5,6 +5,72 @@ namespace MapUpconverter.ADT
 {
     public static class Obj0
     {
+        public static Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero ConvertLegion(Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
+        {
+            var legionObj0 = new Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero
+            {
+                Version = new MVER(18),
+                Chunks = new Warcraft.NET.Files.ADT.TerrainObject.Zero.MCNK[256],
+                WorldModelObjectIndices = wotlkRootADT.WorldModelObjectIndices,
+                WorldModelObjects = wotlkRootADT.WorldModelObjects,
+                ModelIndices = wotlkRootADT.ModelIndices,
+                Models = wotlkRootADT.Models,
+                ModelPlacementInfo = wotlkRootADT.ModelPlacementInfo,
+                WorldModelObjectPlacementInfo = wotlkRootADT.WorldModelObjectPlacementInfo
+            };
+
+            // M2
+            for (int i = 0; i < wotlkRootADT.ModelPlacementInfo.MDDFEntries.Count; i++)
+            {
+                var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+
+                if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
+                {
+                    // Scaled to 0 and hopefully it works on Legion
+                    Console.WriteLine("Scaling " + wotlkModelName + " to 0");
+                    legionObj0.ModelPlacementInfo.MDDFEntries[i].ScalingFactor = 0;
+                    continue;
+                }
+            }
+
+            // WMO
+            for (int i = 0; i < wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries.Count; i++)
+            {
+                var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+
+                legionObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
+
+                if (legionObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags.HasFlag(Warcraft.NET.Files.ADT.Flags.MODFFlags.UseDoodadSetsFromMWDS))
+                    legionObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags &= ~Warcraft.NET.Files.ADT.Flags.MODFFlags.UseDoodadSetsFromMWDS;
+            }
+
+            for (int i = 0; i < 256; i++)
+            {
+                legionObj0.Chunks[i] = new();
+                if (wotlkRootADT.Chunks[i].Header.ModelReferenceCount > 0 && wotlkRootADT.Chunks[i].ModelReferences != null)
+                {
+                    legionObj0.Chunks[i].ModelReferences = new();
+                    legionObj0.Chunks[i].ModelReferences.ModelReferences = new uint[wotlkRootADT.Chunks[i].Header.ModelReferenceCount];
+                    for (int j = 0; j < wotlkRootADT.Chunks[i].Header.ModelReferenceCount; j++)
+                    {
+                        legionObj0.Chunks[i].ModelReferences.ModelReferences[j] = wotlkRootADT.Chunks[i].ModelReferences.ModelReferences[j];
+                    }
+                }
+
+                if (wotlkRootADT.Chunks[i].Header.WorldModelObjectReferenceCount > 0 && wotlkRootADT.Chunks[i].ModelReferences != null)
+                {
+                    legionObj0.Chunks[i].WorldObjectReferences = new();
+                    legionObj0.Chunks[i].WorldObjectReferences.WorldObjectReferences = new uint[wotlkRootADT.Chunks[i].Header.WorldModelObjectReferenceCount];
+                    for (int j = 0; j < wotlkRootADT.Chunks[i].Header.WorldModelObjectReferenceCount; j++)
+                    {
+                        legionObj0.Chunks[i].WorldObjectReferences.WorldObjectReferences[j] = wotlkRootADT.Chunks[i].ModelReferences.WorldObjectReferences[j];
+                    }
+                }
+            }
+
+            return legionObj0;
+        }
+
         public static Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero Convert(Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
         {
             var bfaObj0 = new Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero

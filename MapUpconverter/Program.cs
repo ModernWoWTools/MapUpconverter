@@ -406,14 +406,14 @@ namespace MapUpconverter
             var adts = Directory.GetFiles(Settings.InputDir, "*.adt", SearchOption.AllDirectories);
 
             Console.Write("Converting " + adts.Length + " adts..");
-//#if !DEBUG
-//            Parallel.ForEach(adts, ConvertWotLKADT);
-//#elif DEBUG
+            //#if !DEBUG
+            //            Parallel.ForEach(adts, ConvertWotLKADT);
+            //#elif DEBUG
             foreach (var adt in adts)
             {
                 ConvertWotLKADT(adt);
             }
-//#endif
+            //#endif
             Console.WriteLine("..done in " + timer.ElapsedMilliseconds + "ms");
 
             totalTimeMS += timer.ElapsedMilliseconds;
@@ -477,14 +477,34 @@ namespace MapUpconverter
                 cachedRootADTs[adtName] = root;
                 WriteADTIfChanged(adtName, "root", rootSerialized);
 
-                var tex0 = ADT.Tex0.Convert(wotlkADT);
-                var tex0Serialized = tex0.Serialize();
-                WriteADTIfChanged(adtName, "tex0", tex0Serialized);
+                if (Settings.TargetVersion == 735)
+                {
+                    var tex0 = ADT.Tex0.ConvertLegion(wotlkADT);
+                    var tex0Serialized = tex0.Serialize();
+                    WriteADTIfChanged(adtName, "tex0", tex0Serialized);
+                }
+                else
+                {
+                    var tex0 = ADT.Tex0.Convert(wotlkADT);
+                    var tex0Serialized = tex0.Serialize();
+                    WriteADTIfChanged(adtName, "tex0", tex0Serialized);
+                }
 
-                var obj0 = ADT.Obj0.Convert(wotlkADT);
-                var obj0Serialized = obj0.Serialize();
-                cachedOBJ0ADTs[adtName.ToLowerInvariant() + "_obj0"] = obj0;
-                WriteADTIfChanged(adtName, "obj0", obj0Serialized);
+                Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero obj0;
+                if (Settings.TargetVersion == 735)
+                {
+                    obj0 = ADT.Obj0.ConvertLegion(wotlkADT);
+                    var obj0Serialized = obj0.Serialize();
+                    cachedOBJ0ADTs[adtName.ToLowerInvariant() + "_obj0"] = obj0;
+                    WriteADTIfChanged(adtName, "obj0", obj0Serialized);
+                }
+                else
+                {
+                    obj0 = ADT.Obj0.Convert(wotlkADT);
+                    var obj0Serialized = obj0.Serialize();
+                    cachedOBJ0ADTs[adtName.ToLowerInvariant() + "_obj0"] = obj0;
+                    WriteADTIfChanged(adtName, "obj0", obj0Serialized);
+                }
 
                 var obj1 = ADT.Obj1.Convert(wotlkADT, obj0);
                 var obj1Serialized = obj1.Serialize();
@@ -529,7 +549,7 @@ namespace MapUpconverter
                         }
                     }
                 }
-                
+
                 return;
             }
 
@@ -613,18 +633,27 @@ namespace MapUpconverter
 
         private static void ConvertWDT()
         {
-            if(Settings.TargetVersion >= 927)
+            if (Settings.TargetVersion >= 927)
             {
                 var lightWDT = WDT.LightWDT.GenerateForSL(cachedOBJ0ADTs);
                 File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_lgt.wdt"), lightWDT.Serialize());
             }
             else
             {
-                Console.WriteLine("Skipping light WDT generation for target version " + Settings.TargetVersion + ", not supported yet.");
+                var lightWDT = WDT.LightWDT.GenerateForLegion(cachedOBJ0ADTs);
+                File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_lgt.wdt"), lightWDT.Serialize());
             }
 
-            var wdt = WDT.RootWDT.Generate();
-            File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
+            if (Settings.TargetVersion == 735)
+            {
+                var wdt = WDT.RootWDT.GenerateLegion();
+                File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
+            }
+            else
+            {
+                var wdt = WDT.RootWDT.Generate();
+                File.WriteAllBytes(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + ".wdt"), wdt.Serialize());
+            }
         }
 
         private static void ConvertMinimaps()
