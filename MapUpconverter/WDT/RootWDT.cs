@@ -36,11 +36,13 @@ namespace MapUpconverter.WDT
 
             rootWDT.Header.Flags = wotlkFlags | MPHDFlags.hasHeightTexturing;
 
+            var availableADTs = Directory.GetFiles(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName), "*.adt", SearchOption.TopDirectoryOnly).Select(x => x.ToLowerInvariant()).ToHashSet();  
+
             for (byte x = 0; x < 64; x++)
             {
                 for (byte y = 0; y < 64; y++)
                 {
-                    var hasADT = File.Exists(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + ".adt"));
+                    var hasADT = availableADTs.Contains(Path.Combine(ExportHelper.GetExportDirectory(), "world", "maps", Settings.MapName, Settings.MapName + "_" + x + "_" + y + ".adt").ToLowerInvariant());
 
                     rootWDT.Tiles.Entries[x, y] = new Warcraft.NET.Files.WDT.Entries.MAINEntry()
                     {
