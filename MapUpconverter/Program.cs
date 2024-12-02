@@ -585,8 +585,8 @@ namespace MapUpconverter
                 if (Settings.ClientRefresh)
                 {
                     var splitType = adtName.Split('_');
-                    var tileX = int.Parse(splitType[1]);
-                    var tileY = int.Parse(splitType[2]);
+                    var tileX = int.Parse(splitType[^2]);
+                    var tileY = int.Parse(splitType[^1]);
 
                     int tileUpdateFlag = 0;
 
