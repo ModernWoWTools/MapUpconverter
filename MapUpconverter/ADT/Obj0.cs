@@ -5,7 +5,7 @@ namespace MapUpconverter.ADT
 {
     public static class Obj0
     {
-        public static Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero ConvertLegion(Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
+        public static Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero ConvertLegion(string tileName, Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
         {
             var legionObj0 = new Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero
             {
@@ -26,6 +26,8 @@ namespace MapUpconverter.ADT
 
                 if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
+                    Program.lightEntries[tileName].Add((Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()), wotlkRootADT.ModelPlacementInfo.MDDFEntries[i]));
+
                     // Scaled to 0 and hopefully it works on Legion
                     Console.WriteLine("Scaling " + wotlkModelName + " to 0");
                     legionObj0.ModelPlacementInfo.MDDFEntries[i].ScalingFactor = 0;
@@ -71,7 +73,7 @@ namespace MapUpconverter.ADT
             return legionObj0;
         }
 
-        public static Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero Convert(Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
+        public static Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero Convert(string tileName, Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain wotlkRootADT)
         {
             var bfaObj0 = new Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero
             {
@@ -87,6 +89,8 @@ namespace MapUpconverter.ADT
 
                 if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
+                    Program.lightEntries[tileName].Add((Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()), wotlkRootADT.ModelPlacementInfo.MDDFEntries[i]));
+
                     // Use errorcube scaled to 0 as replacement model for lights.
                     bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = 166046;
                     bfaObj0.ModelPlacementInfo.MDDFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MDDFFlags.NameIdIsFiledataId;

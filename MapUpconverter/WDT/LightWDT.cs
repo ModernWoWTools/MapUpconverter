@@ -7,6 +7,8 @@ namespace MapUpconverter.WDT
 {
     public static class LightWDT
     {
+        private static object LightLock = new();
+
         public static Warcraft.NET.Files.WDT.Light.Legion.WorldLightTable GenerateForLegion(ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero> cachedOBJ0ADTs)
         {
             var lightWDT = new Warcraft.NET.Files.WDT.Light.Legion.WorldLightTable()
@@ -17,21 +19,40 @@ namespace MapUpconverter.WDT
 
             var li = 0;
 
-            foreach (var filename in Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"))
+            Parallel.ForEach(Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"), filename =>
             {
+                var adtName = Path.GetFileNameWithoutExtension(filename).ToLowerInvariant();
+
+                if(!Program.lightEntries.TryGetValue(adtName, out var lightEntries))
+                {
+                    Console.WriteLine("Cache miss for " + adtName + ", parsing for lights..");
+                    var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
+
+                    Program.lightEntries.TryAdd(adtName, new List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>());
+
+                    if (wotlkADT == null || !wotlkADT.Models.Filenames.Any(x => x.Contains("noggit_light", StringComparison.CurrentCultureIgnoreCase)))
+                        return;
+
+                    foreach (var m2Entry in wotlkADT.ModelPlacementInfo.MDDFEntries)
+                    {
+                        var m2Filename = Path.GetFileNameWithoutExtension(wotlkADT.Models.Filenames[(int)m2Entry.NameId]).ToLower();
+
+                        if (!m2Filename.StartsWith("noggit_light"))
+                            continue;
+
+                        Program.lightEntries[adtName].Add((m2Filename, m2Entry));
+                    }
+                }
+
                 var splitName = filename.Split('_');
 
                 var x = byte.Parse(splitName[^2]);
                 var y = byte.Parse(splitName[^1].Replace(".adt", ""));
 
-                var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
-
-                foreach (var m2Entry in wotlkADT.ModelPlacementInfo.MDDFEntries)
+                foreach (var adtLightEntry in Program.lightEntries[adtName])
                 {
-                    var m2Filename = Path.GetFileNameWithoutExtension(wotlkADT.Models.Filenames[(int)m2Entry.NameId]).ToLower();
-
-                    if (!m2Filename.StartsWith("noggit_light"))
-                        continue;
+                    var m2Filename = adtLightEntry.Item1;
+                    var m2Entry = adtLightEntry.Item2;
 
                     var splitModelName = m2Filename.Split("_");
 
@@ -69,11 +90,13 @@ namespace MapUpconverter.WDT
                         }
                     }
 
-                    li++;
-
-                    lightWDT.PointLights2.Entries.Add(lightEntry);
+                    lock (LightLock)
+                    {
+                        li++;
+                        lightWDT.PointLights2.Entries.Add(lightEntry);
+                    }
                 }
-            }
+            });
 
             return lightWDT;
         }
@@ -88,21 +111,40 @@ namespace MapUpconverter.WDT
 
             var li = 0;
 
-            foreach (var filename in Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"))
+            Parallel.ForEach(Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"), filename =>
             {
+                var adtName = Path.GetFileNameWithoutExtension(filename).ToLowerInvariant();
+
+                if (!Program.lightEntries.TryGetValue(adtName, out var lightEntries))
+                {
+                    Console.WriteLine("Cache miss for " + adtName + ", parsing for lights..");
+                    var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
+
+                    Program.lightEntries.TryAdd(adtName, new List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>());
+
+                    if (wotlkADT == null || !wotlkADT.Models.Filenames.Any(x => x.Contains("noggit_light", StringComparison.CurrentCultureIgnoreCase)))
+                        return;
+
+                    foreach (var m2Entry in wotlkADT.ModelPlacementInfo.MDDFEntries)
+                    {
+                        var m2Filename = Path.GetFileNameWithoutExtension(wotlkADT.Models.Filenames[(int)m2Entry.NameId]).ToLower();
+
+                        if (!m2Filename.StartsWith("noggit_light"))
+                            continue;
+
+                        Program.lightEntries[adtName].Add((m2Filename, m2Entry));
+                    }
+                }
+
                 var splitName = filename.Split('_');
 
                 var x = byte.Parse(splitName[^2]);
                 var y = byte.Parse(splitName[^1].Replace(".adt", ""));
 
-                var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
-
-                foreach (var m2Entry in wotlkADT.ModelPlacementInfo.MDDFEntries)
+                foreach (var adtLightEntry in Program.lightEntries[adtName])
                 {
-                    var m2Filename = Path.GetFileNameWithoutExtension(wotlkADT.Models.Filenames[(int)m2Entry.NameId]).ToLower();
-
-                    if (!m2Filename.StartsWith("noggit_light"))
-                        continue;
+                    var m2Filename = adtLightEntry.Item1;
+                    var m2Entry = adtLightEntry.Item2;
 
                     var splitModelName = m2Filename.Split("_");
 
@@ -142,11 +184,13 @@ namespace MapUpconverter.WDT
                         }
                     }
 
-                    li++;
-
-                    lightWDT.PointLights3.Entries.Add(lightEntry);
+                    lock (LightLock)
+                    {
+                        li++;
+                        lightWDT.PointLights3.Entries.Add(lightEntry);
+                    }
                 }
-            }
+            });
 
             return lightWDT;
         }

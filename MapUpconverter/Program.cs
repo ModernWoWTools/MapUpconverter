@@ -6,6 +6,7 @@ namespace MapUpconverter
 {
     internal class Program
     {
+        public static readonly Dictionary<string, List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>> lightEntries = new();
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.Terrain.BfA.Terrain> cachedRootADTs = [];
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero> cachedOBJ0ADTs = [];
         private static readonly ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.One.TerrainObjectOne> cachedOBJ1ADTs = [];
@@ -473,6 +474,9 @@ namespace MapUpconverter
 
                 var adtName = Path.GetFileNameWithoutExtension(inputADT);
 
+                // Clear light cache for this tile
+                lightEntries[adtName.ToLowerInvariant()] = [];
+
                 var rootSerialized = root.Serialize();
                 cachedRootADTs[adtName] = root;
                 WriteADTIfChanged(adtName, "root", rootSerialized);
@@ -493,14 +497,14 @@ namespace MapUpconverter
                 Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero obj0;
                 if (Settings.TargetVersion == 735)
                 {
-                    obj0 = ADT.Obj0.ConvertLegion(wotlkADT);
+                    obj0 = ADT.Obj0.ConvertLegion(adtName.ToLowerInvariant(), wotlkADT);
                     var obj0Serialized = obj0.Serialize();
                     cachedOBJ0ADTs[adtName.ToLowerInvariant() + "_obj0"] = obj0;
                     WriteADTIfChanged(adtName, "obj0", obj0Serialized);
                 }
                 else
                 {
-                    obj0 = ADT.Obj0.Convert(wotlkADT);
+                    obj0 = ADT.Obj0.Convert(adtName.ToLowerInvariant(), wotlkADT);
                     var obj0Serialized = obj0.Serialize();
                     cachedOBJ0ADTs[adtName.ToLowerInvariant() + "_obj0"] = obj0;
                     WriteADTIfChanged(adtName, "obj0", obj0Serialized);
