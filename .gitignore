@@ -399,3 +399,8 @@ FodyWeavers.xsd
 *.sln.iml
 
 *.exe
+
+# Non-public projects
+M2Upconverter
+FileLoadTest
+MapDownConverter

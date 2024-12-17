@@ -12,12 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DBCD" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CASCLib\CascLib\CascLib.csproj" />
-    <ProjectReference Include="..\DBCD\DBCD\DBCD.csproj" />
     <ProjectReference Include="..\MapUpconverter\MapUpconverter.csproj" />
     <ProjectReference Include="..\Warcraft.NET\Warcraft.NET\Warcraft.NET.csproj" />
   </ItemGroup>
