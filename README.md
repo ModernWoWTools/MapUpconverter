@@ -1,13 +1,13 @@
 # MapUpconverter
 Features:
-- Converts 3.3.5 map-related file formats to modern 8.2.x+ file formats (WDT, WDL, ADT).
+- Converts 3.3.5 map-related file formats to modern 7.3.5, 8.3.x, 9.2.x+ file formats (WDT, WDL, ADT).
 - Adds height texturing information (MTXP).
 - Filename => FileDataID conversions.
 - Convert-on-save mode to convert ADTs as they are saved by e.g. Noggit while mapping [allowing for quick in-game previews](https://marlam.in/u/Wow_y5z4Dte6uZ.mp4).
 - Optionally generates/updates an Epsilon patch for the map (and any other files in the output directory).
 
 ## Status
-This tool is still early in development and will likely not work well for all usecases.
+This tool is still actively in development and might not work for all usecases. For the currently supported usecases and how to set these up, see [this site](https://marlamin.github.io/modern-map-making/).
 
 ## Support
 Please join our [Discord](https://discord.gg/q4tRTwwDEQ) for support, do not DM people but post in the #troubleshooting channel instead.
@@ -18,6 +18,7 @@ You can get the latest release from [the releases page](https://github.com/Moder
 ## Usage
 On Windows, open MapUpconverterGUI.exe and fill in the settings, download the required files and hit start.
 Alternatively or on other platforms, create and fill in settings.json correctly and run MapUpconverter.exe.
+For more information, see [this site](https://marlamin.github.io/modern-map-making/).
 
 ## Settings
 You can use the included MapUpConverterGUI.exe tool (Windows only!) to change these settings. If you want to edit the settings.json/want more information on what things do, read on.
@@ -37,7 +38,12 @@ You can use the included MapUpConverterGUI.exe tool (Windows only!) to change th
   "exportTarget": "Generic",
   "convertOnSave": false,
   "clientRefresh": false,
-  "mapID": -1
+  "casRefresh": false,
+  "mapID": -1,
+  "targetVersion": 927,
+  "lightBaseIntensity": 1.25,
+  "lightBaseAttenuationEnd": 7.5,
+  "useAdvancedLightConfig": false
 }
 ```
 ### Example settings.json file with Epsilon integration
@@ -52,10 +58,15 @@ You can use the included MapUpConverterGUI.exe tool (Windows only!) to change th
   "arctiumPatchName": "",
   "generateWDTWDL": true,
   "rootWDTFileDataID": 1498241,
-  "exportTarget": "Generic",
-  "convertOnSave": false,
-  "clientRefresh": false,
-  "mapID": -1
+  "exportTarget": "Epsilon",
+  "convertOnSave": true,
+  "clientRefresh": true,
+  "casRefresh": false,
+  "mapID": -1,
+  "targetVersion": 927,
+  "lightBaseIntensity": 1.25,
+  "lightBaseAttenuationEnd": 7.5,
+  "useAdvancedLightConfig": false
 }
 ```
 
@@ -93,10 +104,25 @@ If set to false, generates the map once and then exits. This is required the fir
 If set to true, the program will wait for updates in the input directory and convert them as soon as they are saved. This is useful for Noggit users who want to see their changes in-game quickly after they save them.
 
 ### clientRefresh (optional)
-Whether or not to enable client refreshing (experimental), needs external DLL not currently available.
+Whether or not to enable client refreshing (experimental), needs external DLL. Check [this](https://marlamin.github.io/modern-map-making/hot-reloading) for more information.
+
+### casRefresh (optional)
+Whether or not to enable the client refreshing the CAS filesystem, needs external DLL. Check [this](https://marlamin.github.io/modern-map-making/hot-reloading) for more information.
 
 ### mapID (optional)
 Used with client refresh mode, defaults to -1.
+
+### targetVersion (optional)
+Currently supported target versions: 735, 830, 927. More might be added in the future to unlock version-specific features.
+
+### lightBaseIntensity (optional)
+Base intensity of lights to scale with their size.
+
+### lightBaseAttenuationEnd (optional)
+Base attenuation end of lights to scale with their size.
+
+### useAdvancedLightConfig (optional)
+Currently unused setting used in the future for more fine-grained light configuration.
 
 ## License
 Unlike my other projects, this is licensed under GPLv3 instead of MIT to keep compatibility with 3rd-party licenses.
