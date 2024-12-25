@@ -782,40 +782,68 @@ namespace MapUpconverterGUI
             }
         }
 
-        private void ManualClientRefresh_Click(object sender, RoutedEventArgs e)
+        private async void ManualClientRefresh_Click(object sender, RoutedEventArgs e)
         {
             ManualClientRefresh.Content = "Refreshing...";
             ManualClientRefresh.IsEnabled = false;
 
-            EpsilonConnection.Connect();
-
-            var allTiles = new List<(int TileID, int UpdateFlags)>();
-            for (var x = 0; x < 63; x++)
+            try
             {
-                for (var y = 0; y < 63; y++)
+                await Task.Run(() =>
                 {
-                    allTiles.Add((x * 64 + y, 0x7)); // Update root, tex and obj
-                }
-            }
+                    EpsilonConnection.Connect();
 
-            EpsilonConnection.RequestMapTileUpdate(MapUpconverter.Settings.MapID, allTiles);
+                    var allTiles = new List<(int TileID, int UpdateFlags)>();
+                    for (var x = 0; x < 63; x++)
+                    {
+                        for (var y = 0; y < 63; y++)
+                        {
+                            allTiles.Add((x * 64 + y, 0x7)); // Update root, tex and obj
+                        }
+                    }
+
+                    EpsilonConnection.RequestMapTileUpdate(MapUpconverter.Settings.MapID, allTiles);
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error during refresh: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             ManualClientRefresh.Content = "Manual client refresh";
             ManualClientRefresh.IsEnabled = true;
         }
 
-        private void ManualPatchRefresh_Click(object sender, RoutedEventArgs e)
+        private async void ManualPatchRefresh_Click(object sender, RoutedEventArgs e)
         {
             ManualPatchRefresh.Content = "Refreshing...";
             ManualPatchRefresh.IsEnabled = false;
 
-            if (MapUpconverter.Settings.ExportTarget == "Epsilon")
+            try
             {
-                PatchManifest.Update();
+                await Task.Run(() =>
+                {
+                    Downloads.Initialize(toolFolder);
+
+                    if (!File.Exists(Path.Combine(toolFolder, "meta", "listfile.csv")))
+                        throw new FileNotFoundException("Listfile not found, download it first");
+
+                    Listfile.Initialize(toolFolder);
+
+                    if (Settings.ExportTarget == "Epsilon")
+                    {
+                        PatchManifest.ScanUsedFileDataIDs();
+                        PatchManifest.Update();
+                    }
+                    else if (Settings.ExportTarget == "Arctium")
+                    {
+                        FileMapping.Update();
+                    }
+                });
             }
-            else if (MapUpconverter.Settings.ExportTarget == "Arctium")
+            catch (Exception ex)
             {
-                FileMapping.Update();
+                MessageBox.Show("Error during refresh: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             ManualPatchRefresh.Content = "Manual patch refresh";
