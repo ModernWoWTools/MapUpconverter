@@ -34,6 +34,8 @@ namespace MapUpconverter
 
         public static bool UseAdvancedLightConfig = false;
 
+        public static uint BaseCustomFDID = 927_000_000;
+
         public static void Load(string toolFolder, string settingsName = "settings")
         {
             var jsonPath = Path.Combine(toolFolder, settingsName + ".json");
@@ -109,6 +111,11 @@ namespace MapUpconverter
                 UseAdvancedLightConfig = false;
             else
                 UseAdvancedLightConfig = settingsJSON.useAdvancedLightConfig;
+
+            if (settingsJSON.baseCustomFDID == null)
+                BaseCustomFDID = 927_000_000;
+            else
+                BaseCustomFDID = settingsJSON.baseCustomFDID;
         }
 
         public static void Save(string toolFolder, string settingsName = "settings")

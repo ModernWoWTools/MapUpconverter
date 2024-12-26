@@ -5,12 +5,13 @@
         public static Dictionary<uint, string> NameMap = [];
         public static Dictionary<string, uint> ReverseMap = [];
         public static List<uint> customFDIDs = [];
-        private static uint baseCustomFileDataID = 927_000_000;
+        private static uint baseCustomFileDataID;
         private static string ListfileDir = "";
 
         public static void Initialize(string listfileDir)
         {
             ListfileDir = listfileDir;
+            baseCustomFileDataID = Settings.BaseCustomFDID;
 
             var listfilePath = Path.Combine(listfileDir, "meta", "listfile.csv");
             if (!File.Exists(listfilePath))
@@ -49,7 +50,7 @@
 
                     customFDIDs.Add(fdid);
 
-                    if(fdid > 927_000_000 && fdid < 937_000_000 && fdid > baseCustomFileDataID)
+                    if(fdid > Settings.BaseCustomFDID && fdid < (Settings.BaseCustomFDID + 1_000_000) && fdid > baseCustomFileDataID)
                         baseCustomFileDataID = fdid;
                 }
             }

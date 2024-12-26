@@ -119,9 +119,11 @@
                     <Button x:Name="ManualPatchRefresh" Content="Manual patch refresh" HorizontalAlignment="Left" Margin="588,103,0,0" VerticalAlignment="Top" Height="39" Width="162" Click="ManualPatchRefresh_Click"/>
                     <CheckBox x:Name="AdvancedLightConfig" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Click="AdvancedLightConfig_Checked">
                         <TextBlock>
-                            <Bold>Use advanced light config?</Bold><LineBreak /> Uses advanced light configuration file (meta/AdvancedLight.json) instead of above light settings (advanced users only). 
+                            <Bold>Use advanced light config?</Bold><LineBreak /> Uses advanced light configuration file (meta/AdvancedLight.json) instead of above light settings (advanced users only).
                         </TextBlock>
                     </CheckBox>
+                    <Label Content="Custom FileDataID start" HorizontalAlignment="Left" Margin="11,281,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="BaseCustomFDID" HorizontalAlignment="Left" Margin="148,284,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="188" TextChanged="BaseCustomFDID_TextChanged" Height="20"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Presets" Margin="0,0,-210,0" HorizontalAlignment="Right">

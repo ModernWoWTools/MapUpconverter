@@ -138,6 +138,8 @@ namespace MapUpconverterGUI
             LightBaseIntensity.Text = MapUpconverter.Settings.LightBaseIntensity.ToString();
 
             AdvancedLightConfig.IsChecked = Settings.UseAdvancedLightConfig;
+
+            BaseCustomFDID.Text = MapUpconverter.Settings.BaseCustomFDID.ToString();
         }
 
         private void UpdateAvailablePresets()
@@ -854,6 +856,20 @@ namespace MapUpconverterGUI
         {
             Settings.UseAdvancedLightConfig = AdvancedLightConfig.IsChecked == true;
             ResetSaveButton();
+        }
+
+        private void BaseCustomFDID_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (uint.TryParse(BaseCustomFDID.Text.Trim(), out var cleanedBaseCustomFDID))
+            {
+                BaseCustomFDID.Text = cleanedBaseCustomFDID.ToString();
+                MapUpconverter.Settings.BaseCustomFDID = cleanedBaseCustomFDID;
+                ResetSaveButton();
+            }
+            else
+            {
+                BaseCustomFDID.Text = "";
+            }
         }
     }
 }
