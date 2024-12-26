@@ -2,6 +2,7 @@
 using MetaGen.Services;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using static MapUpconverter.Utils.BoundingBoxInfo;
 
 namespace MetaGen
 {
@@ -9,12 +10,24 @@ namespace MetaGen
     {
         static void Main(string[] args)
         {
-            if (args.Length == 1 && (args[0].ToLower().EndsWith(".m2") || args[0].ToLower().EndsWith(".wmo")))
+            if (args.Length == 1 && (args[0].ToLower().EndsWith(".m2") || args[0].ToLower().EndsWith(".wmo") || Directory.Exists(args[0])))
             {
                 if (args[0].ToLower().EndsWith(".m2"))
-                    Console.WriteLine(JsonConvert.SerializeObject(MapUpconverter.Utils.BoundingBoxInfo.ProcessM2(File.ReadAllBytes(args[0])), Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(ProcessM2(File.ReadAllBytes(args[0])), Formatting.Indented));
                 else if (args[0].ToLower().EndsWith(".wmo"))
-                    Console.WriteLine(JsonConvert.SerializeObject(MapUpconverter.Utils.BoundingBoxInfo.ProcessWMO(File.ReadAllBytes(args[0])), Formatting.Indented));
+                    Console.WriteLine(JsonConvert.SerializeObject(ProcessWMO(File.ReadAllBytes(args[0])), Formatting.Indented));
+                else if (Directory.Exists(args[0]))
+                {
+                    var boundingBoxBlobDict = new Dictionary<string, JSONCAaBox>();
+
+                    foreach (var file in Directory.GetFiles(args[0], "*.m2"))
+                        boundingBoxBlobDict.Add(Path.GetFileName(file), ProcessM2(File.ReadAllBytes(file)));
+
+                    foreach (var file in Directory.GetFiles(args[0], "*.wmo"))
+                        boundingBoxBlobDict.Add(Path.GetFileName(file), ProcessWMO(File.ReadAllBytes(file)));
+
+                    Console.WriteLine(JsonConvert.SerializeObject(boundingBoxBlobDict, Formatting.Indented));
+                }
 
                 Console.ReadLine();
                 return;
