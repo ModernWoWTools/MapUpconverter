@@ -28,7 +28,10 @@ namespace MapUpconverter.WDT
                     Console.WriteLine("Cache miss for " + adtName + ", parsing for lights..");
                     var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
 
-                    Program.lightEntries.TryAdd(adtName, new List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>());
+                    lock (LightLock)
+                    {
+                        Program.lightEntries.TryAdd(adtName, new List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>());
+                    }
 
                     if (wotlkADT == null || !wotlkADT.Models.Filenames.Any(x => x.Contains("noggit_light", StringComparison.CurrentCultureIgnoreCase)))
                         return;
@@ -40,7 +43,10 @@ namespace MapUpconverter.WDT
                         if (!m2Filename.StartsWith("noggit_light"))
                             continue;
 
-                        Program.lightEntries[adtName].Add((m2Filename, m2Entry));
+                        lock (LightLock)
+                        {
+                            Program.lightEntries[adtName].Add((m2Filename, m2Entry));
+                        }
                     }
                 }
 
@@ -120,7 +126,10 @@ namespace MapUpconverter.WDT
                     Console.WriteLine("Cache miss for " + adtName + ", parsing for lights..");
                     var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
 
-                    Program.lightEntries.TryAdd(adtName, new List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>());
+                    lock (LightLock)
+                    {
+                        Program.lightEntries.TryAdd(adtName, []);
+                    }
 
                     if (wotlkADT == null || !wotlkADT.Models.Filenames.Any(x => x.Contains("noggit_light", StringComparison.CurrentCultureIgnoreCase)))
                         return;
@@ -132,7 +141,10 @@ namespace MapUpconverter.WDT
                         if (!m2Filename.StartsWith("noggit_light"))
                             continue;
 
-                        Program.lightEntries[adtName].Add((m2Filename, m2Entry));
+                        lock (LightLock)
+                        {
+                            Program.lightEntries[adtName].Add((m2Filename, m2Entry));
+                        }
                     }
                 }
 
