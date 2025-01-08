@@ -19,13 +19,13 @@ namespace MapUpconverter.WDL
                     continue;
 
                 var filename = Path.GetFileNameWithoutExtension(file).ToLowerInvariant();
-                
-                if(!filename.StartsWith(Settings.MapName.ToLowerInvariant()))
+
+                if (!filename.StartsWith(Settings.MapName.ToLowerInvariant()))
                 {
                     Console.WriteLine(filename + " does not belong to " + Settings.MapName + ", skipping it in WDL generation...");
                     continue;
                 }
-                
+
                 var splitName = filename.Split('_');
 
                 var x = byte.Parse(splitName[^2]);
@@ -136,6 +136,41 @@ namespace MapUpconverter.WDL
                             newEntry.Radius = 17066 * 2;
                             mlmxEntries.Add(bigWMO.UniqueID, newEntry);
                             wdl.LevelWorldObjectDetail.MLMDEntries.Add(bigWMO);
+                        }
+
+                        wdl.MapAreaHoles[aj * 64 + ai] = MAHO.CreateEmpty();
+
+                        if (rootADT.Water != null)
+                        {
+                            // Note: While this 'works' for all water, Blizzard only does this for ocean.
+                            // Water placed at non-ocean levels will probably look funky...
+                            // ...but since this is distance stuff, this is good enough for now.
+                            var maoe = new MAOE
+                            {
+                                Data = new byte[32]
+                            };
+
+                            var bitArray = new System.Collections.BitArray(maoe.Data);
+
+                            using (var ms = new MemoryStream(rootADT.Water.data))
+                            using (var br = new BinaryReader(ms))
+                            {
+                                for (var x2 = 0; x2 < 16; x2++)
+                                {
+                                    for (var y2 = 0; y2 < 16; y2++)
+                                    {
+                                        br.BaseStream.Position += 4;
+                                        var layerCount = br.ReadUInt32();
+                                        br.BaseStream.Position += 4;
+
+                                        bitArray[x2 * 16 + y2] = layerCount >= 1;
+                                    }
+                                }
+                            }
+
+                            bitArray.CopyTo(maoe.Data, 0);
+
+                            wdl.MapAreaOcean[aj * 64 + ai] = maoe;
                         }
                     }
                 }
