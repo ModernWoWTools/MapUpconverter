@@ -1,5 +1,6 @@
 ﻿using MapUpconverter.Utils;
 using Warcraft.NET.Files.ADT.Chunks;
+using Warcraft.NET.Files.ADT.Entries;
 
 namespace MapUpconverter.ADT
 {
@@ -26,7 +27,15 @@ namespace MapUpconverter.ADT
 
                 if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
-                    Program.lightEntries[tileName].Add((Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()), wotlkRootADT.ModelPlacementInfo.MDDFEntries[i]));
+                    // We need to make a copy as we edit it later
+                    Program.lightEntries[tileName].Add((Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()), new MDDFEntry()
+                    {
+                        Flags = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].Flags,
+                        NameId = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId,
+                        Position = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].Position,
+                        Rotation = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].Rotation,
+                        ScalingFactor = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].ScalingFactor
+                    }));
 
                     // Scaled to 0 and hopefully it works on Legion
                     Console.WriteLine("Scaling " + wotlkModelName + " to 0");
@@ -89,7 +98,15 @@ namespace MapUpconverter.ADT
 
                 if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
-                    Program.lightEntries[tileName].Add((Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()), wotlkRootADT.ModelPlacementInfo.MDDFEntries[i]));
+                    // We need to make a copy as we edit it later
+                    Program.lightEntries[tileName].Add((Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()), new MDDFEntry()
+                    {
+                        Flags = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].Flags,
+                        NameId = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId,
+                        Position = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].Position,
+                        Rotation = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].Rotation,
+                        ScalingFactor = wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].ScalingFactor
+                    }));
 
                     // Use errorcube scaled to 0 as replacement model for lights.
                     bfaObj0.ModelPlacementInfo.MDDFEntries[i].NameId = 166046;
