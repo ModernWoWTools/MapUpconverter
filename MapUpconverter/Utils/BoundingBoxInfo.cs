@@ -6,6 +6,7 @@ namespace MapUpconverter.Utils
     public static class BoundingBoxInfo
     {
         public static Dictionary<string, Warcraft.NET.Files.Structures.BoundingBox> boundingBoxBlobDict = [];
+        public static Dictionary<string, Warcraft.NET.Files.Structures.BoundingBox> customBoundingBoxBlobDict = [];
 
         public static void Initialize(string configFolder)
         {
@@ -21,7 +22,7 @@ namespace MapUpconverter.Utils
                 });
             }
 
-            if(File.Exists(Path.Combine(configFolder, "custom-blob.json")))
+            if (File.Exists(Path.Combine(configFolder, "custom-blob.json")))
             {
                 var customBlob = JsonConvert.DeserializeObject<Dictionary<string, JSONCAaBox>>(File.ReadAllText(Path.Combine(configFolder, "custom-blob.json"))) ?? throw new Exception("Failed to parse custom bounding box info JSON");
 
@@ -32,32 +33,115 @@ namespace MapUpconverter.Utils
                         Minimum = bb.Value.BottomCorner,
                         Maximum = bb.Value.TopCorner
                     };
+
+                    customBoundingBoxBlobDict[bb.Key] = new()
+                    {
+                        Minimum = bb.Value.BottomCorner,
+                        Maximum = bb.Value.TopCorner
+                    };
                 }
             }
         }
 
+        public async static Task UpdateBoundingBoxesForPatch(string toolFolder)
+        {
+            if (boundingBoxBlobDict.Count == 0)
+                Initialize(Path.Combine(toolFolder, "meta"));
+
+            if (Listfile.NameMap.Count == 0)
+                Listfile.Initialize(toolFolder);
+
+            var baseDir = ExportHelper.GetExportDirectory();
+
+            var badWMOExtensions = new List<string>();
+            for (int i = 0; i < 999; i++)
+                badWMOExtensions.Add($"_{i:D3}.wmo");
+
+            foreach (var wmo in Directory.GetFiles(baseDir, "*.wmo", SearchOption.AllDirectories))
+            {
+                // Skip group WMOs
+                if (badWMOExtensions.Any(x => wmo.EndsWith(x, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
+                var bytes = await File.ReadAllBytesAsync(wmo);
+                var boundingBox = ProcessWMO(bytes);
+                var listfileName = wmo.Replace(baseDir, "").Replace('\\', '/').TrimStart('/').ToLowerInvariant();
+
+                if (!Listfile.ReverseMap.TryGetValue(listfileName, out var fdid))
+                    throw new Exception("Failed to find WMO " + listfileName + " in listfile, cannot continue. Make sure you've run patch generation at least once.");
+
+                customBoundingBoxBlobDict[fdid.ToString()] = new()
+                {
+                    Minimum = boundingBox.BottomCorner,
+                    Maximum = boundingBox.TopCorner
+                };
+            }
+
+            foreach (var m2 in Directory.GetFiles(baseDir, "*.m2", SearchOption.AllDirectories))
+            {
+                var bytes = await File.ReadAllBytesAsync(m2);
+                var boundingBox = ProcessM2(bytes);
+                var listfileName = m2.Replace(baseDir, "").Replace('\\', '/').TrimStart('/').ToLowerInvariant();
+
+                if (!Listfile.ReverseMap.TryGetValue(listfileName, out var fdid))
+                    throw new Exception("Failed to find M2 " + listfileName + " in listfile, cannot continue. Make sure you've run patch generation at least once.");
+
+                customBoundingBoxBlobDict[fdid.ToString()] = new()
+                {
+                    Minimum = boundingBox.BottomCorner,
+                    Maximum = boundingBox.TopCorner
+                };
+            }
+
+            WriteCustomBoundingBoxBlob(toolFolder);
+        }
+
+        private static void WriteCustomBoundingBoxBlob(string toolFolder)
+        {
+            var tempDict = new Dictionary<string, JSONCAaBox>(customBoundingBoxBlobDict.Count);
+            foreach (var kvp in customBoundingBoxBlobDict)
+            {
+                tempDict[kvp.Key] = new JSONCAaBox(kvp.Value.Minimum, kvp.Value.Maximum);
+            }
+
+            var json = JsonConvert.SerializeObject(tempDict, Formatting.Indented);
+            File.WriteAllText(Path.Combine(toolFolder, "meta", "custom-blob.json"), json);
+        }
+
         public static JSONCAaBox ProcessM2(byte[] bytes)
         {
-            var m2 = new Warcraft.NET.Files.M2.Model(bytes);
+            var rawBoundingBox = new JSONCAaBox();
 
-            var boundingBox = new JSONCAaBox
+            using (var ms = new MemoryStream(bytes))
+            using (var bin = new BinaryReader(ms))
             {
-                BottomCorner = new Vector3
-                {
-                    X = m2.ModelInformation.BoundingBox.Minimum.X,
-                    Y = m2.ModelInformation.BoundingBox.Minimum.Y,
-                    Z = m2.ModelInformation.BoundingBox.Minimum.Z
-                },
+                var md21Magic = new string(bin.ReadChars(4));
+                if (md21Magic != "MD21")
+                    throw new Exception("Invalid M2 file, expected MD21 magic, got " + md21Magic);
+                var md21Size = bin.ReadUInt32();
 
-                TopCorner = new Vector3
-                {
-                    X = m2.ModelInformation.BoundingBox.Maximum.X,
-                    Y = m2.ModelInformation.BoundingBox.Maximum.Y,
-                    Z = m2.ModelInformation.BoundingBox.Maximum.Z
-                }
-            };
+                var md20Magfc = new string(bin.ReadChars(4));
+                if (md20Magfc != "MD20")
+                    throw new Exception("Invalid M2 file, expected MD20 magic, got " + md20Magfc);
 
-            return boundingBox;
+                bin.BaseStream.Seek(168, SeekOrigin.Begin); // Skip to bounding box
+
+                rawBoundingBox.BottomCorner = new Vector3
+                {
+                    X = bin.ReadSingle(),
+                    Y = bin.ReadSingle(),
+                    Z = bin.ReadSingle()
+                };
+
+                rawBoundingBox.TopCorner = new Vector3
+                {
+                    X = bin.ReadSingle(),
+                    Y = bin.ReadSingle(),
+                    Z = bin.ReadSingle()
+                };
+            }
+
+            return rawBoundingBox;
         }
 
         public static JSONCAaBox ProcessWMO(byte[] bytes)

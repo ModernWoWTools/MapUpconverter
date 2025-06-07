@@ -851,6 +851,22 @@ namespace MapUpconverterGUI
             ManualPatchRefresh.Content = "Manual patch refresh";
             ManualPatchRefresh.IsEnabled = true;
         }
+        
+        private async void ManualBlobRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            ManualBlobRefresh.Content = "Refreshing...";
+            ManualBlobRefresh.IsEnabled = false;
+            try
+            {
+                await BoundingBoxInfo.UpdateBoundingBoxesForPatch(toolFolder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error during blob refresh: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            ManualBlobRefresh.Content = "Manual blob refresh";
+            ManualBlobRefresh.IsEnabled = true;
+        }
 
         private void AdvancedLightConfig_Checked(object sender, RoutedEventArgs e)
         {
