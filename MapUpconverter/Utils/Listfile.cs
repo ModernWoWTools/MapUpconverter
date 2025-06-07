@@ -71,10 +71,11 @@
 
             filename = filename.ToLower();
 
-            if (NameMap.ContainsKey(fileDataID))
-                Console.WriteLine("File data ID " + fileDataID + " is already assigned to " + NameMap[fileDataID] + " , skipping addition of " + filename + ".");
-
-            NameMap[fileDataID] = filename;
+            if (NameMap.TryGetValue(fileDataID, out string? existingName))
+            {
+                Console.WriteLine("File data ID " + fileDataID + " is already assigned to " + existingName + " , skipping addition of " + filename + ".");
+                return;
+            }
 
             if (!ReverseMap.TryGetValue(filename, out var currentFilename))
             {
@@ -82,9 +83,11 @@
             }
             else
             {
-                Console.WriteLine("Warning: File data ID " + fileDataID + " (" + filename + ") is already assigned to ID " + currentFilename + " ,skipping.");
+                Console.WriteLine("Warning: File data ID " + fileDataID + " (" + filename + ") is already assigned to ID " + currentFilename + ", skipping.");
+                return;
             }
-            
+
+            NameMap[fileDataID] = filename;
             customFDIDs.Add(fileDataID);
 
             // Update custom-listfile.csv
