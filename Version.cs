@@ -1,4 +1,4 @@
 public static class Version
 {
-    public const string SharedVersion = "0.9.5";
+    public const string SharedVersion = "0.9.6";
 }
