@@ -7,7 +7,7 @@ namespace MapUpconverter.WDT
 {
     public static class LightWDT
     {
-        private static object LightLock = new();
+        private static readonly Lock LightLock = new();
 
         public static Warcraft.NET.Files.WDT.Light.Legion.WorldLightTable GenerateForLegion(ConcurrentDictionary<string, Warcraft.NET.Files.ADT.TerrainObject.Zero.TerrainObjectZero> cachedOBJ0ADTs)
         {
@@ -17,21 +17,17 @@ namespace MapUpconverter.WDT
                 PointLights2 = new Warcraft.NET.Files.WDT.Chunks.Legion.MPL2(),
             };
 
-            var li = 0;
-
             Parallel.ForEach(Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"), filename =>
             {
                 var adtName = Path.GetFileNameWithoutExtension(filename).ToLowerInvariant();
 
-                if(!Program.lightEntries.TryGetValue(adtName, out var lightEntries))
+                if (!Program.lightEntries.TryGetValue(adtName, out var lightEntries))
                 {
                     Console.WriteLine("Cache miss for " + adtName + ", parsing for lights..");
                     var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
 
                     lock (LightLock)
-                    {
                         Program.lightEntries.TryAdd(adtName, new List<(string, Warcraft.NET.Files.ADT.Entries.MDDFEntry)>());
-                    }
 
                     if (wotlkADT == null || !wotlkADT.Models.Filenames.Any(x => x.Contains("noggit_light", StringComparison.CurrentCultureIgnoreCase)))
                         return;
@@ -44,12 +40,16 @@ namespace MapUpconverter.WDT
                             continue;
 
                         lock (LightLock)
-                        {
                             Program.lightEntries[adtName].Add((m2Filename, m2Entry));
-                        }
                     }
                 }
+            });
 
+            uint li = 0;
+
+            foreach (var filename in Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"))
+            {
+                var adtName = Path.GetFileNameWithoutExtension(filename).ToLowerInvariant();
                 var splitName = filename.Split('_');
 
                 var x = byte.Parse(splitName[^2]);
@@ -65,7 +65,7 @@ namespace MapUpconverter.WDT
                     var newPos = new Vector3((m2Entry.Position.Z - 17066.666f) * -1, (m2Entry.Position.X - 17066.666f) * -1, m2Entry.Position.Y);
                     var lightEntry = new Warcraft.NET.Files.WDT.Entries.Legion.MPL2Entry()
                     {
-                        Id = (uint)li,
+                        Id = li++,
                         Position = newPos,
                         Color = LightInfo.GetRGBA(splitModelName[2].Replace("01", "")),
                         Intensity = Settings.LightBaseIntensity + (0.1f * (m2Entry.ScalingFactor / 1024f)),
@@ -96,13 +96,9 @@ namespace MapUpconverter.WDT
                         }
                     }
 
-                    lock (LightLock)
-                    {
-                        li++;
-                        lightWDT.PointLights2.Entries.Add(lightEntry);
-                    }
+                    lightWDT.PointLights2.Entries.Add(lightEntry);
                 }
-            });
+            }
 
             return lightWDT;
         }
@@ -115,8 +111,6 @@ namespace MapUpconverter.WDT
                 PointLights3 = new Warcraft.NET.Files.WDT.Chunks.SL.MPL3(),
             };
 
-            var li = 0;
-
             Parallel.ForEach(Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"), filename =>
             {
                 var adtName = Path.GetFileNameWithoutExtension(filename).ToLowerInvariant();
@@ -127,9 +121,7 @@ namespace MapUpconverter.WDT
                     var wotlkADT = new Warcraft.NET.Files.ADT.Terrain.Wotlk.Terrain(File.ReadAllBytes(filename));
 
                     lock (LightLock)
-                    {
                         Program.lightEntries.TryAdd(adtName, []);
-                    }
 
                     if (wotlkADT == null || !wotlkADT.Models.Filenames.Any(x => x.Contains("noggit_light", StringComparison.CurrentCultureIgnoreCase)))
                         return;
@@ -142,12 +134,15 @@ namespace MapUpconverter.WDT
                             continue;
 
                         lock (LightLock)
-                        {
                             Program.lightEntries[adtName].Add((m2Filename, m2Entry));
-                        }
                     }
                 }
+            });
 
+            uint li = 0;
+            foreach (var filename in Directory.GetFiles(Path.Combine(Settings.InputDir, "world", "maps", Settings.MapName), "*.adt"))
+            {
+                var adtName = Path.GetFileNameWithoutExtension(filename).ToLowerInvariant();
                 var splitName = filename.Split('_');
 
                 var x = byte.Parse(splitName[^2]);
@@ -163,7 +158,7 @@ namespace MapUpconverter.WDT
                     var newPos = new Vector3((m2Entry.Position.Z - 17066.666f) * -1, (m2Entry.Position.X - 17066.666f) * -1, m2Entry.Position.Y);
                     var lightEntry = new Warcraft.NET.Files.WDT.Entries.SL.MPL3Entry()
                     {
-                        Id = (uint)li,
+                        Id = li++,
                         Position = newPos,
                         Color = LightInfo.GetRGBA(splitModelName[2].Replace("01", "")),
                         Intensity = Settings.LightBaseIntensity + (0.1f * (m2Entry.ScalingFactor / 1024f)),
@@ -196,13 +191,9 @@ namespace MapUpconverter.WDT
                         }
                     }
 
-                    lock (LightLock)
-                    {
-                        li++;
-                        lightWDT.PointLights3.Entries.Add(lightEntry);
-                    }
+                    lightWDT.PointLights3.Entries.Add(lightEntry);
                 }
-            });
+            }
 
             return lightWDT;
         }
