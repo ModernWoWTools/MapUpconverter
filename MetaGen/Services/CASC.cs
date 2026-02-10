@@ -21,7 +21,7 @@ namespace MetaGen.Services
             }
             else if(wowFolderOrCDNHost.StartsWith("http://") || wowFolderOrCDNHost.StartsWith("https://"))
             {
-                CASCConfig.OverrideCDNHost = wowFolderOrCDNHost;
+                CASCConfig.CDNHostOverride = wowFolderOrCDNHost;
                 Console.WriteLine("Initializing CASC from CDN with host " + wowFolderOrCDNHost + " and program " + program + " and locale " + locale);
                 cascHandler = CASCHandler.OpenOnlineStorage(program, "eu");
             }
