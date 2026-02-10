@@ -62,7 +62,7 @@ namespace MapUpconverter.ADT
 
                 if (Settings.TargetVersion == 735)
                 {
-                    var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+                    var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/").Replace(".mdx", ".m2");
                     if (!Listfile.ReverseMap.TryGetValue(wotlkModelName.ToLower(), out uint fdid))
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -166,7 +166,7 @@ namespace MapUpconverter.ADT
 
                 if (Settings.TargetVersion == 735)
                 {
-                    var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+                    var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/").Replace(".mdx", ".m2");
 
                     if (!Listfile.ReverseMap.TryGetValue(wotlkModelName.ToLower(), out uint fdid))
                     {

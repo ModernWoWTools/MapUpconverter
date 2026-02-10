@@ -23,7 +23,7 @@ namespace MapUpconverter.ADT
             // M2
             for (int i = 0; i < wotlkRootADT.ModelPlacementInfo.MDDFEntries.Count; i++)
             {
-                var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+                var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/").Replace(".mdx", ".m2");
 
                 if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
@@ -47,7 +47,7 @@ namespace MapUpconverter.ADT
             // WMO
             for (int i = 0; i < wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries.Count; i++)
             {
-                var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+                var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/").Replace(".mdx", ".m2");
 
                 legionObj0.WorldModelObjectPlacementInfo.MODFEntries[i].Flags |= Warcraft.NET.Files.ADT.Flags.MODFFlags.HasScale;
 
@@ -94,7 +94,7 @@ namespace MapUpconverter.ADT
             bfaObj0.ModelPlacementInfo = wotlkRootADT.ModelPlacementInfo;
             for (int i = 0; i < wotlkRootADT.ModelPlacementInfo.MDDFEntries.Count; i++)
             {
-                var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+                var wotlkModelName = wotlkRootADT.Models.Filenames[(int)wotlkRootADT.ModelPlacementInfo.MDDFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/").Replace(".mdx", ".m2");
 
                 if (Path.GetFileNameWithoutExtension(wotlkModelName.ToLower()).StartsWith("noggit"))
                 {
@@ -174,7 +174,7 @@ namespace MapUpconverter.ADT
             bfaObj0.WorldModelObjectPlacementInfo = wotlkRootADT.WorldModelObjectPlacementInfo;
             for (int i = 0; i < wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries.Count; i++)
             {
-                var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/");
+                var wotlkModelName = wotlkRootADT.WorldModelObjects.Filenames[(int)wotlkRootADT.WorldModelObjectPlacementInfo.MODFEntries[i].NameId].ToLowerInvariant().Replace("\\", "/").Replace(".mdx", ".m2");
 
                 if (!Listfile.ReverseMap.TryGetValue(wotlkModelName, out uint fdid))
                 {
