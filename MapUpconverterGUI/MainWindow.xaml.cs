@@ -597,27 +597,43 @@ namespace MapUpconverterGUI
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            var settingsSaved = SaveSettings();
-
-            if (!settingsSaved)
-                return;
-
-            if (isRunning)
+            try
             {
-                MessageBox.Show("Converter is already running, please close the existing instance first.", "Already running", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var settingsSaved = SaveSettings();
+
+                if (!settingsSaved)
+                    return;
+
+                if (isRunning)
+                {
+                    MessageBox.Show("Converter is already running, please close the existing instance first.", "Already running", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving settings: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            var converter = Process.Start(new ProcessStartInfo() { UseShellExecute = true, FileName = Path.Combine(toolFolder, "MapUpconverter.exe") });
-
-            converter!.EnableRaisingEvents = true;
-
-            isRunning = true;
-
-            converter.Exited += (s, e) =>
+            try
             {
-                isRunning = false;
-            };
+                var converter = Process.Start(new ProcessStartInfo() { UseShellExecute = true, FileName = Path.Combine(toolFolder, "MapUpconverter.exe") });
+
+                converter!.EnableRaisingEvents = true;
+
+                isRunning = true;
+
+                converter.Exited += (s, e) =>
+                {
+                    isRunning = false;
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error starting converter (path " + Path.Combine(toolFolder, "MapUpconverter.exe") + "): " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             e.Handled = true;
         }
@@ -851,7 +867,7 @@ namespace MapUpconverterGUI
             ManualPatchRefresh.Content = "Manual patch refresh";
             ManualPatchRefresh.IsEnabled = true;
         }
-        
+
         private async void ManualBlobRefresh_Click(object sender, RoutedEventArgs e)
         {
             ManualBlobRefresh.Content = "Refreshing...";
